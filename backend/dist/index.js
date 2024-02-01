@@ -13,6 +13,8 @@ const type_graphql_1 = require("type-graphql");
 const hello_1 = require("./resolvers/hello");
 const organization_1 = require("./resolvers/organization");
 const path_1 = __importDefault(require("path"));
+const User_1 = require("./entities/User");
+const user_1 = require("./resolvers/user");
 const main = async () => {
     const conn = await (0, typeorm_1.createConnection)({
         type: "postgres",
@@ -22,12 +24,12 @@ const main = async () => {
         logging: !constants_1.__prod__,
         synchronize: true,
         migrations: [path_1.default.join(__dirname, "./migrations/*")],
-        entities: [Organization_1.Organization],
+        entities: [Organization_1.Organization, User_1.User],
     });
     const app = (0, express_1.default)();
     const apolloServer = new apollo_server_express_1.ApolloServer({
         schema: await (0, type_graphql_1.buildSchema)({
-            resolvers: [hello_1.HelloResolver, organization_1.OrganizationResolver],
+            resolvers: [hello_1.HelloResolver, organization_1.OrganizationResolver, user_1.UserResolver],
             validate: false,
         }),
         context: () => ({}),
