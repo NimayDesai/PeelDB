@@ -136,7 +136,6 @@ let UserResolver = class UserResolver {
             };
         }
         req.session.userId = user.id;
-        console.log("bob");
         return {
             user,
         };
