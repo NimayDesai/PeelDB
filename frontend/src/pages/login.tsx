@@ -15,7 +15,7 @@ import { useRouter } from 'next/router'
 import { forwardRef, useEffect, useRef, useState } from 'react'
 import { InputField } from '../components/InputField'
 import { PasswordField } from '../components/PasswordField'
-import { useLoginMutation, useRegisterMutation } from '../gql/generated/graphql'
+import { MeDocument, MeQuery, useLoginMutation, useRegisterMutation } from '../gql/generated/graphql'
 import { toErrorMap } from '../utils/toErrorMap'
 import NextLink from 'next/link';
 
@@ -49,7 +49,19 @@ const Login = forwardRef<{}>(({ }) => {
                             borderRadius={{ base: 'none', sm: 'xl' }}
                         >
                             <Formik initialValues={{ username: "", password: "" }} onSubmit={async (values, { setErrors }) => {
-                                const response = await login({ variables: { options: values } });
+                                const response = await login({
+                                    variables: { options: values },
+                                    update: (cache, { data }) => {
+                                        cache.writeQuery<MeQuery>({
+                                            query: MeDocument,
+                                            data: {
+                                                __typename: "Query",
+                                                me: data?.login.user,
+                                            },
+                                        });
+                                        cache.evict({ fieldName: "posts:{}" });
+                                    },
+                                });
                                 if (response.data?.login.errors) {
                                     setErrors(toErrorMap(response.data.login.errors));
                                 } else if (response.data?.login.user) {
@@ -60,7 +72,7 @@ const Login = forwardRef<{}>(({ }) => {
                                     <Form>
                                         <Stack spacing="6">
                                             <Stack spacing="5">
-                                                <InputField name='username' placeholder='Username' label='Username'></InputField>
+                                                <InputField name='username' placeholder='Harold M. Brathwaitte S.S' label='School Name'></InputField>
                                                 <PasswordField name='password' placeholder='Password' label='Password' />
                                             </Stack>
                                             <HStack justify="space-between">

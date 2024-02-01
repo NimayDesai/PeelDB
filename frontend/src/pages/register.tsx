@@ -19,7 +19,7 @@ import { forwardRef, useEffect, useRef, useState } from 'react'
 import { PasswordField } from '../components/PasswordField'
 import { InputField } from '../components/InputField'
 import { gql, useMutation } from '@apollo/client'
-import { useRegisterMutation } from '../gql/generated/graphql'
+import { MeDocument, MeQuery, useRegisterMutation } from '../gql/generated/graphql'
 import { toErrorMap } from '../utils/toErrorMap'
 import { useRouter } from 'next/router'
 import NextLink from 'next/link';
@@ -58,7 +58,18 @@ const Register = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
                                 borderRadius={{ base: 'none', sm: 'xl' }}
                             >
                                 <Formik initialValues={{ username: "", password: "" }} onSubmit={async (values, { setErrors }) => {
-                                    const response = await register({ variables: values });
+                                    const response = await register({
+                                        variables: values,
+                                        update: (cache, { data }) => {
+                                            cache.writeQuery<MeQuery>({
+                                                query: MeDocument,
+                                                data: {
+                                                    __typename: "Query",
+                                                    me: data?.register.user,
+                                                },
+                                            });
+                                        },
+                                    });
                                     if (response.data?.register.errors) {
                                         setErrors(toErrorMap(response.data.register.errors));
                                     } else if (response.data?.register.user) {
@@ -69,7 +80,7 @@ const Register = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
                                         <Form>
                                             <Stack spacing="6">
                                                 <Stack spacing="5">
-                                                    <InputField name='username' placeholder='Username' label='Username'></InputField>
+                                                    <InputField name='username' placeholder='Harold M. Brathwaitte S.S' label='School Name'></InputField>
                                                     <PasswordField name='password' placeholder='Password' label='Password' />
                                                 </Stack>
                                                 <HStack justify="space-between">
