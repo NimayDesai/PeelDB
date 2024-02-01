@@ -59,6 +59,13 @@ UserResponse = __decorate([
     (0, type_graphql_1.ObjectType)()
 ], UserResponse);
 let UserResolver = class UserResolver {
+    async me({ req }) {
+        if (!req.session.userId) {
+            return null;
+        }
+        const user = await User_1.User.findOne({ where: { id: req.session.userId } });
+        return user;
+    }
     async register(options) {
         if (options.username.length <= 2) {
             return {
@@ -104,7 +111,7 @@ let UserResolver = class UserResolver {
             user,
         };
     }
-    async login(options) {
+    async login(options, { req }) {
         const user = await User_1.User.findOne({ where: { username: options.username } });
         if (!user) {
             return {
@@ -127,12 +134,20 @@ let UserResolver = class UserResolver {
                 ],
             };
         }
+        req.session.userId = user.id;
         return {
             user,
         };
     }
 };
 exports.UserResolver = UserResolver;
+__decorate([
+    (0, type_graphql_1.Query)(() => User_1.User, { nullable: true }),
+    __param(0, (0, type_graphql_1.Ctx)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], UserResolver.prototype, "me", null);
 __decorate([
     (0, type_graphql_1.Mutation)(() => UserResponse),
     __param(0, (0, type_graphql_1.Arg)("options")),
@@ -143,8 +158,9 @@ __decorate([
 __decorate([
     (0, type_graphql_1.Mutation)(() => UserResponse),
     __param(0, (0, type_graphql_1.Arg)("options")),
+    __param(1, (0, type_graphql_1.Ctx)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [UsernamePasswordInput]),
+    __metadata("design:paramtypes", [UsernamePasswordInput, Object]),
     __metadata("design:returntype", Promise)
 ], UserResolver.prototype, "login", null);
 exports.UserResolver = UserResolver = __decorate([
