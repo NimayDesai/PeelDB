@@ -50,14 +50,14 @@ const main = async () => {
         maxAge: 1000 * 60 * 60 * 24 * 365 * 10,
         httpOnly: true,
         secure: __prod__,
-        sameSite: "none",
+        sameSite: "lax",
       },
       resave: false, // required: force lightweight session keep alive (touch)
       saveUninitialized: false, // recommended: only save session when data exists
       secret: "qwaasqwdqweqwadqwdaa",
     }),
     cors<cors.CorsRequest>({
-      origin: "https://studio.apollographql.com",
+      origin: "http://localhost:3000",
       credentials: true,
     })
   );
@@ -74,7 +74,10 @@ const main = async () => {
   await apolloServer.start();
   apolloServer.applyMiddleware({
     app,
-    cors: false,
+    cors: {
+      origin: ["http://localhost:3000"],
+      credentials: true,
+    },
   });
 
   app.listen(4000, () => {

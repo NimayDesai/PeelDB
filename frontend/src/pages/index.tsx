@@ -7,16 +7,23 @@ import {
   ListItem,
 } from "@chakra-ui/react";
 import { CheckCircleIcon, LinkIcon } from "@chakra-ui/icons";
+import { NavBar } from "../components/NavBar";
+import { useState, useEffect } from "react";
 
-import { Hero } from "../components/Hero";
-import { Container } from "../components/Container";
-import { Main } from "../components/Main";
-import { DarkModeSwitch } from "../components/DarkModeSwitch";
-import { CTA } from "../components/CTA";
-import { Footer } from "../components/Footer";
+const Index = () => {
+  const [domLoaded, setDomLoaded] = useState(false);
 
-const Index = () => (
-  <div>aaa</div>
-);
+  useEffect(() => {
+    setDomLoaded(true);
+  }, []);
+  return (
+    <>
+      {domLoaded ?
+        <>
+          <div>aaa</div>
+        </> : null}
+    </>
+  )
+};
 
 export default Index;

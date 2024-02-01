@@ -43,13 +43,13 @@ const main = async () => {
             maxAge: 1000 * 60 * 60 * 24 * 365 * 10,
             httpOnly: true,
             secure: constants_1.__prod__,
-            sameSite: "none",
+            sameSite: "lax",
         },
         resave: false,
         saveUninitialized: false,
         secret: "qwaasqwdqweqwadqwdaa",
     }), (0, cors_1.default)({
-        origin: "https://studio.apollographql.com",
+        origin: "http://localhost:3000",
         credentials: true,
     }));
     app.set("trust proxy", 1);
@@ -63,7 +63,10 @@ const main = async () => {
     await apolloServer.start();
     apolloServer.applyMiddleware({
         app,
-        cors: false,
+        cors: {
+            origin: ["http://localhost:3000"],
+            credentials: true,
+        },
     });
     app.listen(4000, () => {
         console.log("server started on localhost:4000");
