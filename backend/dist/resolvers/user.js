@@ -66,7 +66,7 @@ let UserResolver = class UserResolver {
         const user = await User_1.User.findOne({ where: { id: req.session.userId } });
         return user;
     }
-    async register(options) {
+    async register(options, { req }) {
         if (options.username.length <= 2) {
             return {
                 errors: [
@@ -107,6 +107,7 @@ let UserResolver = class UserResolver {
                 };
             }
         }
+        req.session.userId = user.id;
         return {
             user,
         };
@@ -135,6 +136,7 @@ let UserResolver = class UserResolver {
             };
         }
         req.session.userId = user.id;
+        console.log("bob");
         return {
             user,
         };
@@ -151,8 +153,9 @@ __decorate([
 __decorate([
     (0, type_graphql_1.Mutation)(() => UserResponse),
     __param(0, (0, type_graphql_1.Arg)("options")),
+    __param(1, (0, type_graphql_1.Ctx)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [UsernamePasswordInput]),
+    __metadata("design:paramtypes", [UsernamePasswordInput, Object]),
     __metadata("design:returntype", Promise)
 ], UserResolver.prototype, "register", null);
 __decorate([
