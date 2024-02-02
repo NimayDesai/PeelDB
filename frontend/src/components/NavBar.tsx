@@ -2,8 +2,11 @@ import React, { useEffect, useState } from "react";
 import { Link, Box, Flex, Text, Button, Stack, Heading } from "@chakra-ui/react";
 import { DarkModeSwitch } from "./DarkModeSwitch";
 import NextLink from 'next/link';
-import { useMeQuery } from "../gql/generated/graphql";
+import { useLogoutMutation, useMeQuery } from "../gql/generated/graphql";
 import { CgProfile } from "react-icons/cg";
+import { useApolloClient } from "@apollo/client";
+import { withApollo } from "../utils/withApollo";
+import { isServer } from "../utils/isServer";
 
 
 
@@ -77,7 +80,11 @@ const MenuItem = ({ children, isLast, to = "/", ...rest }: any) => {
 };
 
 const MenuLinks = ({ isOpen }: any) => {
-    const { loading, error, data } = useMeQuery();
+    const [logout, { loading: logoutLoading }] = useLogoutMutation();
+    const { loading, error, data } = useMeQuery({
+        skip: isServer(),
+    });
+    const apolloClient = useApolloClient();
     let body = null;
 
     if (loading) {
@@ -99,6 +106,11 @@ const MenuLinks = ({ isOpen }: any) => {
                 </Box>
                 <Box><CgProfile size={40} /></Box>
                 <Button
+                    onClick={async () => {
+                        await logout();
+                        await apolloClient.resetStore();
+                    }}
+                    isLoading={logoutLoading}
                     size="md"
                     ml={2}
                     rounded="md"
@@ -153,3 +165,6 @@ const NavBarContainer = ({ children, ...props }: any) => {
         </Flex>
     );
 };
+
+
+

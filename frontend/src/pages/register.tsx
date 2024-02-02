@@ -23,6 +23,7 @@ import { MeDocument, MeQuery, useRegisterMutation } from '../gql/generated/graph
 import { toErrorMap } from '../utils/toErrorMap'
 import { useRouter } from 'next/router'
 import NextLink from 'next/link';
+import { withApollo } from '../utils/withApollo'
 
 const Register = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
     const { isOpen, onToggle } = useDisclosure()
@@ -98,4 +99,4 @@ const Register = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
     )
 })
 
-export default Register
+export default Register;

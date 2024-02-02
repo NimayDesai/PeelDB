@@ -18,6 +18,7 @@ import { PasswordField } from '../components/PasswordField'
 import { MeDocument, MeQuery, useLoginMutation, useRegisterMutation } from '../gql/generated/graphql'
 import { toErrorMap } from '../utils/toErrorMap'
 import NextLink from 'next/link';
+import { withApollo } from '../utils/withApollo'
 
 const Login = forwardRef<{}>(({ }) => {
     const [login,] = useLoginMutation();

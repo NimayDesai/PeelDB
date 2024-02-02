@@ -1,0 +1,12 @@
+query Organizations {
+  organizations {
+    id
+    createdAt
+    updatedAt
+    typeOfOrganization
+    name
+    email
+    phoneNumber
+    address
+  }
+}

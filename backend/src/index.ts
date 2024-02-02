@@ -31,6 +31,13 @@ const main = async () => {
     migrations: [path.join(__dirname, "./migrations/*")],
     entities: [Organization, User],
   });
+  // await Organization.create({
+  //   name: "bob",
+  //   email: "bob@bob.com",
+  //   typeOfOrganization: "non profit",
+  //   address: "2 Seasame Street",
+  //   phoneNumber: "1234567890",
+  // }).save();
 
   //   await conn.runMigrations();
   const app = express();
@@ -50,14 +57,14 @@ const main = async () => {
         maxAge: 1000 * 60 * 60 * 24 * 365 * 10,
         httpOnly: true,
         secure: __prod__,
-        sameSite: "lax",
+        sameSite: "none",
       },
       resave: false, // required: force lightweight session keep alive (touch)
       saveUninitialized: false, // recommended: only save session when data exists
       secret: "qwaasqwdqweqwadqwdaa",
     }),
     cors<cors.CorsRequest>({
-      origin: "http://localhost:3000",
+      origin: ["http://localhost:3000", "https://studio.apollographql.com"],
       credentials: true,
     })
   );
@@ -75,7 +82,7 @@ const main = async () => {
   apolloServer.applyMiddleware({
     app,
     cors: {
-      origin: ["http://localhost:3000"],
+      origin: ["http://localhost:3000", "https://studio.apollographql.com"],
       credentials: true,
     },
   });

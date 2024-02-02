@@ -17,6 +17,7 @@
     "framer-motion": "^6.3.0",
     "graphql": "^16.8.1",
     "next": "latest",
+    "next-apollo": "^5.0.8",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-icons": "^5.0.1"

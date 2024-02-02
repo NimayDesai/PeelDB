@@ -43,13 +43,13 @@ const main = async () => {
             maxAge: 1000 * 60 * 60 * 24 * 365 * 10,
             httpOnly: true,
             secure: constants_1.__prod__,
-            sameSite: "lax",
+            sameSite: "none",
         },
         resave: false,
         saveUninitialized: false,
         secret: "qwaasqwdqweqwadqwdaa",
     }), (0, cors_1.default)({
-        origin: "http://localhost:3000",
+        origin: ["http://localhost:3000", "https://studio.apollographql.com"],
         credentials: true,
     }));
     app.set("trust proxy", 1);
@@ -64,7 +64,7 @@ const main = async () => {
     apolloServer.applyMiddleware({
         app,
         cors: {
-            origin: ["http://localhost:3000"],
+            origin: ["http://localhost:3000", "https://studio.apollographql.com"],
             credentials: true,
         },
     });
