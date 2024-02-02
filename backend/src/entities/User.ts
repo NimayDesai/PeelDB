@@ -6,7 +6,9 @@ import {
   UpdateDateColumn,
   Column,
   BaseEntity,
+  OneToMany,
 } from "typeorm";
+import { Organization } from "./Organization";
 
 @ObjectType()
 @Entity()
@@ -29,4 +31,7 @@ export class User extends BaseEntity {
 
   @Column()
   password!: string;
+
+  @OneToMany(() => Organization, (organization) => organization.creator)
+  organizations: Organization[];
 }

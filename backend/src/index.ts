@@ -31,6 +31,7 @@ const main = async () => {
     migrations: [path.join(__dirname, "./migrations/*")],
     entities: [Organization, User],
   });
+
   // await Organization.create({
   //   name: "bob",
   //   email: "bob@bob.com",

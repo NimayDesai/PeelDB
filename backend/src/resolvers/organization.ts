@@ -1,5 +1,31 @@
+import { MyContext } from "../types";
 import { Organization } from "../entities/Organization";
-import { Arg, Int, Mutation, Query, Resolver } from "type-graphql";
+import {
+  Arg,
+  Ctx,
+  Field,
+  InputType,
+  Int,
+  Mutation,
+  Query,
+  Resolver,
+  UseMiddleware,
+} from "type-graphql";
+import { isAuth } from "../middleware/isAuth";
+
+@InputType()
+class OrganizationInput {
+  @Field()
+  name: string;
+  @Field()
+  email: string;
+  @Field()
+  typeOfOrganization: string;
+  @Field()
+  address: string;
+  @Field()
+  phoneNumber: string;
+}
 
 @Resolver()
 export class OrganizationResolver {
@@ -12,19 +38,14 @@ export class OrganizationResolver {
     return Organization.findOne({ where: { id } });
   }
   @Mutation(() => Organization)
+  @UseMiddleware(isAuth)
   async addOrganization(
-    @Arg("name", () => String) name: string,
-    @Arg("email", () => String) email: string,
-    @Arg("address", () => String) address: string,
-    @Arg("phoneNumber", () => String) phoneNumber: string,
-    @Arg("typeOfOrganization", () => String) typeOfOrganization: string
-  ): Promise<Organization | null> {
+    @Arg("input") input: OrganizationInput,
+    @Ctx() { req }: MyContext
+  ): Promise<Organization> {
     const organization = Organization.create({
-      name,
-      email,
-      address,
-      phoneNumber,
-      typeOfOrganization,
+      ...input,
+      creatorId: req.session.userId,
     }).save();
     return organization;
   }

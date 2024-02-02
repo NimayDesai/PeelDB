@@ -15,6 +15,32 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.OrganizationResolver = void 0;
 const Organization_1 = require("../entities/Organization");
 const type_graphql_1 = require("type-graphql");
+const isAuth_1 = require("../middleware/isAuth");
+let OrganizationInput = class OrganizationInput {
+};
+__decorate([
+    (0, type_graphql_1.Field)(),
+    __metadata("design:type", String)
+], OrganizationInput.prototype, "name", void 0);
+__decorate([
+    (0, type_graphql_1.Field)(),
+    __metadata("design:type", String)
+], OrganizationInput.prototype, "email", void 0);
+__decorate([
+    (0, type_graphql_1.Field)(),
+    __metadata("design:type", String)
+], OrganizationInput.prototype, "typeOfOrganization", void 0);
+__decorate([
+    (0, type_graphql_1.Field)(),
+    __metadata("design:type", String)
+], OrganizationInput.prototype, "address", void 0);
+__decorate([
+    (0, type_graphql_1.Field)(),
+    __metadata("design:type", String)
+], OrganizationInput.prototype, "phoneNumber", void 0);
+OrganizationInput = __decorate([
+    (0, type_graphql_1.InputType)()
+], OrganizationInput);
 let OrganizationResolver = class OrganizationResolver {
     organizations() {
         return Organization_1.Organization.find();
@@ -22,14 +48,8 @@ let OrganizationResolver = class OrganizationResolver {
     organization(id) {
         return Organization_1.Organization.findOne({ where: { id } });
     }
-    async addOrganization(name, email, address, phoneNumber, typeOfOrganization) {
-        const organization = Organization_1.Organization.create({
-            name,
-            email,
-            address,
-            phoneNumber,
-            typeOfOrganization,
-        }).save();
+    async addOrganization(input, { req }) {
+        const organization = Organization_1.Organization.create(Object.assign(Object.assign({}, input), { creatorId: req.session.userId })).save();
         return organization;
     }
     async updateOrganization(name, email, id, address, phoneNumber, typeOfOrganization) {
@@ -76,13 +96,11 @@ __decorate([
 ], OrganizationResolver.prototype, "organization", null);
 __decorate([
     (0, type_graphql_1.Mutation)(() => Organization_1.Organization),
-    __param(0, (0, type_graphql_1.Arg)("name", () => String)),
-    __param(1, (0, type_graphql_1.Arg)("email", () => String)),
-    __param(2, (0, type_graphql_1.Arg)("address", () => String)),
-    __param(3, (0, type_graphql_1.Arg)("phoneNumber", () => String)),
-    __param(4, (0, type_graphql_1.Arg)("typeOfOrganization", () => String)),
+    (0, type_graphql_1.UseMiddleware)(isAuth_1.isAuth),
+    __param(0, (0, type_graphql_1.Arg)("input")),
+    __param(1, (0, type_graphql_1.Ctx)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, String, String, String, String]),
+    __metadata("design:paramtypes", [OrganizationInput, Object]),
     __metadata("design:returntype", Promise)
 ], OrganizationResolver.prototype, "addOrganization", null);
 __decorate([
