@@ -104,6 +104,7 @@ const MenuLinks = ({ isOpen }: any) => {
                 <Box>
 
                     {data.me.username}
+                    {data.me.id}
                 </Box>
                 <Box><CgProfile size={40} /></Box>
                 <Button

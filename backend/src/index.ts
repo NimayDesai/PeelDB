@@ -15,6 +15,7 @@ import session from "express-session";
 import Redis from "ioredis";
 import { MyContext } from "./types";
 import cors from "cors";
+import { Star } from "./entities/Stars";
 
 // Initialize client.
 
@@ -29,7 +30,7 @@ const main = async () => {
     logging: !__prod__,
     synchronize: true,
     migrations: [path.join(__dirname, "./migrations/*")],
-    entities: [Organization, User],
+    entities: [Organization, User, Star],
   });
 
   // await Organization.create({
@@ -40,7 +41,7 @@ const main = async () => {
   //   phoneNumber: "1234567890",
   // }).save();
 
-  //   await conn.runMigrations();
+  // await conn.runMigrations();
   const app = express();
 
   const redis = new Redis();

@@ -7,6 +7,7 @@ import {
   Container,
   Flex,
   Heading,
+  IconButton,
   Link,
   Stack,
   StackDivider,
@@ -16,12 +17,19 @@ import { useEffect, useState } from "react";
 import { useOrganizationsQuery } from "../gql/generated/graphql";
 import { withApollo } from "../utils/withApollo";
 import { Wrapper } from "../components/Wrapper";
+import { StarIcon } from '@chakra-ui/icons'
 import NextLink from 'next/link';
 import Head from "next/head";
+import { StarSection } from "../components/StarSection";
 
 const Index = () => {
   const [domLoaded, setDomLoaded] = useState(false);
-  const { data } = useOrganizationsQuery();
+  const { data, error, loading, fetchMore, variables } = useOrganizationsQuery({
+    variables: {
+      limit: 10,
+      cursor: null
+    }
+  });
   console.log(data);
   useEffect(() => {
     setDomLoaded(true);
@@ -32,10 +40,17 @@ const Index = () => {
       {domLoaded ?
         <Box mt={8}>
           <Stack spacing={8}>
-            {!data ? null : data?.organizations.map(o => (
+            {!data ? null : data?.organizations.organizations.map(o => (
               <Card key={o.id}>
-                <CardHeader>
-                  <Heading size='md'>Name: {o.name}</Heading>
+
+                <CardHeader flexDirection={"row"}>
+                  <Flex align={"center"}>
+                    <Heading size='lg'>Name: {o.name}</Heading>
+                    <StarSection organization={o} />
+                  </Flex>
+
+                  <Heading size='sm' mt={2}>Added by: {o.creator.username}</Heading>
+
                 </CardHeader>
 
                 <CardBody>
@@ -72,6 +87,17 @@ const Index = () => {
               </Card>
             )
             )}</Stack>
+          {data && data.organizations.hasMore ?
+            <Flex mt={8}>
+              <Button my={8} m="auto" onClick={() => {
+                fetchMore({
+                  variables: {
+                    limit: variables?.limit,
+                    cursor: data.organizations.organizations[data.organizations.organizations.length - 1].createdAt
+                  }
+                })
+              }}>Load More</Button>
+            </Flex> : null}
         </Box> : null
       }
     </Wrapper >

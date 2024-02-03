@@ -1,0 +1,16 @@
+fragment OrganizationSnippet on Organization {
+  id
+  createdAt
+  updatedAt
+  typeOfOrganization
+  name
+  email
+  phoneNumber
+  address
+  points
+  creator {
+    id
+    username
+    email
+  }
+}

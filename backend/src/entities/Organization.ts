@@ -5,10 +5,12 @@ import {
   CreateDateColumn,
   Entity,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
 import { User } from "./User";
+import { Star } from "./Stars";
 
 @ObjectType()
 @Entity()
@@ -31,28 +33,32 @@ export class Organization extends BaseEntity {
 
   @Field(() => String)
   @Column()
-  typeOfOrganization: string;
+  typeOfOrganization!: string;
 
   @Field(() => String)
   @Column()
-  phoneNumber: string;
+  phoneNumber!: string;
 
   @Field(() => String)
   @Column()
-  address: string;
+  address!: string;
 
   @Field(() => String)
   @Column()
-  email: string;
+  email!: string;
 
   @Field()
   @Column({ type: "int", default: 0 })
-  stars!: number;
+  points!: number;
 
+  @Field()
   @ManyToOne(() => User, (user) => user.organizations)
   creator: User;
 
   @Field()
   @Column()
-  creatorId: number;
+  creatorId!: number;
+
+  @OneToMany(() => Star, (star) => star.organization)
+  stars: Star[];
 }

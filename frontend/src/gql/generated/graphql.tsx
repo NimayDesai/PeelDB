@@ -31,6 +31,7 @@ export type Mutation = {
   logout: Scalars['Boolean']['output'];
   register: UserResponse;
   updateOrganization?: Maybe<Organization>;
+  vote: Scalars['Boolean']['output'];
 };
 
 
@@ -63,16 +64,22 @@ export type MutationUpdateOrganizationArgs = {
   typeOfOrganization?: InputMaybe<Scalars['String']['input']>;
 };
 
+
+export type MutationVoteArgs = {
+  organizationId: Scalars['Int']['input'];
+};
+
 export type Organization = {
   __typename?: 'Organization';
   address: Scalars['String']['output'];
   createdAt: Scalars['String']['output'];
+  creator: User;
   creatorId: Scalars['Float']['output'];
   email: Scalars['String']['output'];
   id: Scalars['Float']['output'];
   name: Scalars['String']['output'];
   phoneNumber: Scalars['String']['output'];
-  stars: Scalars['Float']['output'];
+  points: Scalars['Float']['output'];
   typeOfOrganization: Scalars['String']['output'];
   updatedAt: Scalars['String']['output'];
 };
@@ -85,17 +92,29 @@ export type OrganizationInput = {
   typeOfOrganization: Scalars['String']['input'];
 };
 
+export type PaginatedOrganizations = {
+  __typename?: 'PaginatedOrganizations';
+  hasMore: Scalars['Boolean']['output'];
+  organizations: Array<Organization>;
+};
+
 export type Query = {
   __typename?: 'Query';
   hello: Scalars['String']['output'];
   me?: Maybe<User>;
   organization?: Maybe<Organization>;
-  organizations: Array<Organization>;
+  organizations: PaginatedOrganizations;
 };
 
 
 export type QueryOrganizationArgs = {
   id: Scalars['Int']['input'];
+};
+
+
+export type QueryOrganizationsArgs = {
+  cursor?: InputMaybe<Scalars['String']['input']>;
+  limit: Scalars['Int']['input'];
 };
 
 export type RegisterInput = {
@@ -124,6 +143,8 @@ export type UsernamePasswordInput = {
   password: Scalars['String']['input'];
   usernameOrEmail: Scalars['String']['input'];
 };
+
+export type OrganizationSnippetFragment = { __typename?: 'Organization', id: number, createdAt: string, updatedAt: string, typeOfOrganization: string, name: string, email: string, phoneNumber: string, address: string, points: number, creator: { __typename?: 'User', id: number, username: string, email: string } };
 
 export type RegularUserFragment = { __typename?: 'User', username: string, email: string, id: number };
 
@@ -156,16 +177,44 @@ export type RegisterMutationVariables = Exact<{
 
 export type RegisterMutation = { __typename?: 'Mutation', register: { __typename?: 'UserResponse', errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null, user?: { __typename?: 'User', username: string, email: string, id: number } | null } };
 
+export type VoteMutationVariables = Exact<{
+  organizationId: Scalars['Int']['input'];
+}>;
+
+
+export type VoteMutation = { __typename?: 'Mutation', vote: boolean };
+
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type MeQuery = { __typename?: 'Query', me?: { __typename?: 'User', username: string, email: string, id: number } | null };
 
-export type OrganizationsQueryVariables = Exact<{ [key: string]: never; }>;
+export type OrganizationsQueryVariables = Exact<{
+  limit: Scalars['Int']['input'];
+  cursor?: InputMaybe<Scalars['String']['input']>;
+}>;
 
 
-export type OrganizationsQuery = { __typename?: 'Query', organizations: Array<{ __typename?: 'Organization', id: number, createdAt: string, updatedAt: string, typeOfOrganization: string, name: string, email: string, phoneNumber: string, address: string }> };
+export type OrganizationsQuery = { __typename?: 'Query', organizations: { __typename?: 'PaginatedOrganizations', hasMore: boolean, organizations: Array<{ __typename?: 'Organization', id: number, createdAt: string, updatedAt: string, typeOfOrganization: string, name: string, email: string, phoneNumber: string, address: string, points: number, creator: { __typename?: 'User', id: number, username: string, email: string } }> } };
 
+export const OrganizationSnippetFragmentDoc = gql`
+    fragment OrganizationSnippet on Organization {
+  id
+  createdAt
+  updatedAt
+  typeOfOrganization
+  name
+  email
+  phoneNumber
+  address
+  points
+  creator {
+    id
+    username
+    email
+  }
+}
+    `;
 export const RegularUserFragmentDoc = gql`
     fragment RegularUser on User {
   username
@@ -326,6 +375,37 @@ export function useRegisterMutation(baseOptions?: Apollo.MutationHookOptions<Reg
 export type RegisterMutationHookResult = ReturnType<typeof useRegisterMutation>;
 export type RegisterMutationResult = Apollo.MutationResult<RegisterMutation>;
 export type RegisterMutationOptions = Apollo.BaseMutationOptions<RegisterMutation, RegisterMutationVariables>;
+export const VoteDocument = gql`
+    mutation Vote($organizationId: Int!) {
+  vote(organizationId: $organizationId)
+}
+    `;
+export type VoteMutationFn = Apollo.MutationFunction<VoteMutation, VoteMutationVariables>;
+
+/**
+ * __useVoteMutation__
+ *
+ * To run a mutation, you first call `useVoteMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useVoteMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [voteMutation, { data, loading, error }] = useVoteMutation({
+ *   variables: {
+ *      organizationId: // value for 'organizationId'
+ *   },
+ * });
+ */
+export function useVoteMutation(baseOptions?: Apollo.MutationHookOptions<VoteMutation, VoteMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<VoteMutation, VoteMutationVariables>(VoteDocument, options);
+      }
+export type VoteMutationHookResult = ReturnType<typeof useVoteMutation>;
+export type VoteMutationResult = Apollo.MutationResult<VoteMutation>;
+export type VoteMutationOptions = Apollo.BaseMutationOptions<VoteMutation, VoteMutationVariables>;
 export const MeDocument = gql`
     query Me {
   me {
@@ -366,19 +446,15 @@ export type MeLazyQueryHookResult = ReturnType<typeof useMeLazyQuery>;
 export type MeSuspenseQueryHookResult = ReturnType<typeof useMeSuspenseQuery>;
 export type MeQueryResult = Apollo.QueryResult<MeQuery, MeQueryVariables>;
 export const OrganizationsDocument = gql`
-    query Organizations {
-  organizations {
-    id
-    createdAt
-    updatedAt
-    typeOfOrganization
-    name
-    email
-    phoneNumber
-    address
+    query Organizations($limit: Int!, $cursor: String) {
+  organizations(limit: $limit, cursor: $cursor) {
+    hasMore
+    organizations {
+      ...OrganizationSnippet
+    }
   }
 }
-    `;
+    ${OrganizationSnippetFragmentDoc}`;
 
 /**
  * __useOrganizationsQuery__
@@ -392,10 +468,12 @@ export const OrganizationsDocument = gql`
  * @example
  * const { data, loading, error } = useOrganizationsQuery({
  *   variables: {
+ *      limit: // value for 'limit'
+ *      cursor: // value for 'cursor'
  *   },
  * });
  */
-export function useOrganizationsQuery(baseOptions?: Apollo.QueryHookOptions<OrganizationsQuery, OrganizationsQueryVariables>) {
+export function useOrganizationsQuery(baseOptions: Apollo.QueryHookOptions<OrganizationsQuery, OrganizationsQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<OrganizationsQuery, OrganizationsQueryVariables>(OrganizationsDocument, options);
       }

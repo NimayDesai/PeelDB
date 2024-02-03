@@ -4,14 +4,19 @@ import {
   Arg,
   Ctx,
   Field,
+  FieldResolver,
+  Info,
   InputType,
   Int,
   Mutation,
+  ObjectType,
   Query,
   Resolver,
   UseMiddleware,
 } from "type-graphql";
 import { isAuth } from "../middleware/isAuth";
+import { getConnection } from "typeorm";
+import { Star } from "../entities/Stars";
 
 @InputType()
 class OrganizationInput {
@@ -27,11 +32,72 @@ class OrganizationInput {
   phoneNumber: string;
 }
 
+@ObjectType()
+class PaginatedOrganizations {
+  @Field(() => [Organization])
+  organizations: Organization[];
+  @Field()
+  hasMore: boolean;
+}
+
 @Resolver()
 export class OrganizationResolver {
-  @Query(() => [Organization])
-  organizations(): Promise<Organization[]> {
-    return Organization.find();
+  @UseMiddleware(isAuth)
+  @Mutation(() => Boolean)
+  async vote(
+    @Arg("organizationId", () => Int) organizationId: number,
+    @Ctx() { req }: MyContext
+  ) {
+    const { userId } = req.session;
+    await getConnection().query(
+      `
+    START TRANSACTION;
+
+    insert into star ("userId", "organizationId")
+    values (${userId},${organizationId});
+
+    update organization
+    set points = points + 1
+    where id = ${organizationId};
+
+    COMMIT;
+    `
+    );
+    return true;
+  }
+  @Query(() => PaginatedOrganizations)
+  async organizations(
+    @Arg("limit", () => Int) limit: number,
+    @Arg("cursor", () => String, { nullable: true }) cursor: string | null
+  ): Promise<PaginatedOrganizations> {
+    const realLimit = Math.min(50, limit);
+    const realLimitPlusOne = realLimit + 1;
+    const replacements: any[] = [realLimitPlusOne];
+
+    if (cursor) {
+      replacements.push(new Date(parseInt(cursor)));
+    }
+    const organizations = await getConnection().query(
+      `
+    select o.*, 
+    json_build_object(
+      'username', u.username,
+      'id', u.id,
+      'email', u.email
+      ) creator
+    from organization o
+    inner join public.user u on u.id = o."creatorId"
+    ${cursor ? `o."createdAt" < $2` : ""}
+    order by o."createdAt" DESC
+    limit $1
+    `,
+      replacements
+    );
+
+    return {
+      organizations: organizations.slice(0, realLimit),
+      hasMore: organizations.length === realLimitPlusOne,
+    };
   }
   @Query(() => Organization, { nullable: true })
   organization(@Arg("id", () => Int) id: number): Promise<Organization | null> {

@@ -1,12 +1,8 @@
-query Organizations {
-  organizations {
-    id
-    createdAt
-    updatedAt
-    typeOfOrganization
-    name
-    email
-    phoneNumber
-    address
+query Organizations($limit: Int!, $cursor: String) {
+  organizations(limit: $limit, cursor: $cursor) {
+    hasMore
+    organizations {
+      ...OrganizationSnippet
+    }
   }
 }

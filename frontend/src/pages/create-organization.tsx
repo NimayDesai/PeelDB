@@ -19,7 +19,12 @@ const CreateOrganization: React.FC<{}> = ({ }) => {
                 initialValues={{ name: "", typeOfOrganization: "", email: "", address: "", phoneNumber: "", }}
                 onSubmit={async (values, { setErrors }) => {
                     console.log(values);
-                    const { errors } = await addOrganization({ variables: { input: values } });
+                    const { errors } = await addOrganization({
+                        variables: { input: values },
+                        update: (cache) => {
+                            cache.evict({ fieldName: "organizations:{}" });
+                        },
+                    });
                     if (!errors) {
                         router.push('/');
                     }

@@ -9,6 +9,7 @@ import {
   OneToMany,
 } from "typeorm";
 import { Organization } from "./Organization";
+import { Star } from "./Stars";
 
 @ObjectType()
 @Entity()
@@ -38,4 +39,7 @@ export class User extends BaseEntity {
 
   @OneToMany(() => Organization, (organization) => organization.creator)
   organizations: Organization[];
+
+  @OneToMany(() => Star, (star) => star.user)
+  stars: Star[];
 }
