@@ -1,9 +1,12 @@
-import { BaseEntity, Entity, ManyToOne, PrimaryColumn } from "typeorm";
+import { BaseEntity, Column, Entity, ManyToOne, PrimaryColumn } from "typeorm";
 import { Organization } from "./Organization";
 import { User } from "./User";
 
 @Entity()
 export class Star extends BaseEntity {
+  @Column({ type: "int" })
+  value: number;
+
   @PrimaryColumn()
   userId: number;
 

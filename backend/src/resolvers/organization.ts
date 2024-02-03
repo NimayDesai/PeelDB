@@ -46,48 +46,93 @@ export class OrganizationResolver {
   @Mutation(() => Boolean)
   async vote(
     @Arg("organizationId", () => Int) organizationId: number,
+    @Arg("value", () => Int) value: number,
     @Ctx() { req }: MyContext
   ) {
+    const isStar = value !== -1;
+    const realValue = isStar ? 1 : -1;
     const { userId } = req.session;
-    await getConnection().query(
-      `
-    START TRANSACTION;
 
-    insert into star ("userId", "organizationId")
-    values (${userId},${organizationId});
+    const star = await Star.findOne({ where: { organizationId, userId } });
 
-    update organization
-    set points = points + 1
-    where id = ${organizationId};
-
-    COMMIT;
-    `
-    );
+    if (star && star.value !== realValue) {
+      await getConnection().transaction(async (tm) => {
+        await tm.query(
+          `
+        update star
+        set value = $1
+        where "organizationId" = $2 and "userId" = $3
+        `,
+          [realValue, organizationId, userId]
+        );
+        await tm.query(
+          `
+        update organization
+        set points = points + $1
+        where id = $2
+        `,
+          [realValue, organizationId]
+        );
+      });
+    } else if (!star) {
+      await getConnection().transaction(async (tm) => {
+        await tm.query(
+          `
+        insert into star ("userId", "organizationId", value)
+        values ($1, $2, $3)
+        `,
+          [userId, organizationId, realValue]
+        );
+        await tm.query(
+          `
+        update organization
+        set points = points + $1
+        where id = $2
+        `,
+          [realValue, organizationId]
+        );
+      });
+    }
     return true;
   }
   @Query(() => PaginatedOrganizations)
   async organizations(
     @Arg("limit", () => Int) limit: number,
-    @Arg("cursor", () => String, { nullable: true }) cursor: string | null
+    @Arg("cursor", () => String, { nullable: true }) cursor: string | null,
+    @Ctx() { req }: MyContext
   ): Promise<PaginatedOrganizations> {
     const realLimit = Math.min(50, limit);
     const realLimitPlusOne = realLimit + 1;
     const replacements: any[] = [realLimitPlusOne];
 
+    if (req.session.userId) {
+      replacements.push(req.session.userId);
+    }
+
+    let cursorIndex = 99;
+
     if (cursor) {
       replacements.push(new Date(parseInt(cursor)));
+      cursorIndex = replacements.length;
     }
     const organizations = await getConnection().query(
       `
-    select o.*, 
+    select o.*,
     json_build_object(
       'username', u.username,
       'id', u.id,
-      'email', u.email
-      ) creator
+      'email', u.email,
+      'createdAt', u."createdAt",
+      'updatedAt', u."updatedAt"
+      ) creator,
+    ${
+      req.session.userId
+        ? '(select value from star where "userId" = $2 and "organizationId" = o.id) "voteStatus"'
+        : 'null as "voteStatus"'
+    }
     from organization o
     inner join public.user u on u.id = o."creatorId"
-    ${cursor ? `o."createdAt" < $2` : ""}
+    ${cursor ? `where o."createdAt" < $${cursorIndex}` : ""}
     order by o."createdAt" DESC
     limit $1
     `,

@@ -67,6 +67,7 @@ export type MutationUpdateOrganizationArgs = {
 
 export type MutationVoteArgs = {
   organizationId: Scalars['Int']['input'];
+  value: Scalars['Int']['input'];
 };
 
 export type Organization = {
@@ -82,6 +83,7 @@ export type Organization = {
   points: Scalars['Float']['output'];
   typeOfOrganization: Scalars['String']['output'];
   updatedAt: Scalars['String']['output'];
+  voteStatus?: Maybe<Scalars['Int']['output']>;
 };
 
 export type OrganizationInput = {
@@ -144,7 +146,7 @@ export type UsernamePasswordInput = {
   usernameOrEmail: Scalars['String']['input'];
 };
 
-export type OrganizationSnippetFragment = { __typename?: 'Organization', id: number, createdAt: string, updatedAt: string, typeOfOrganization: string, name: string, email: string, phoneNumber: string, address: string, points: number, creator: { __typename?: 'User', id: number, username: string, email: string } };
+export type OrganizationSnippetFragment = { __typename?: 'Organization', id: number, createdAt: string, updatedAt: string, typeOfOrganization: string, name: string, email: string, phoneNumber: string, address: string, points: number, voteStatus?: number | null, creator: { __typename?: 'User', id: number, username: string, email: string } };
 
 export type RegularUserFragment = { __typename?: 'User', username: string, email: string, id: number };
 
@@ -179,6 +181,7 @@ export type RegisterMutation = { __typename?: 'Mutation', register: { __typename
 
 export type VoteMutationVariables = Exact<{
   organizationId: Scalars['Int']['input'];
+  value: Scalars['Int']['input'];
 }>;
 
 
@@ -195,7 +198,7 @@ export type OrganizationsQueryVariables = Exact<{
 }>;
 
 
-export type OrganizationsQuery = { __typename?: 'Query', organizations: { __typename?: 'PaginatedOrganizations', hasMore: boolean, organizations: Array<{ __typename?: 'Organization', id: number, createdAt: string, updatedAt: string, typeOfOrganization: string, name: string, email: string, phoneNumber: string, address: string, points: number, creator: { __typename?: 'User', id: number, username: string, email: string } }> } };
+export type OrganizationsQuery = { __typename?: 'Query', organizations: { __typename?: 'PaginatedOrganizations', hasMore: boolean, organizations: Array<{ __typename?: 'Organization', id: number, createdAt: string, updatedAt: string, typeOfOrganization: string, name: string, email: string, phoneNumber: string, address: string, points: number, voteStatus?: number | null, creator: { __typename?: 'User', id: number, username: string, email: string } }> } };
 
 export const OrganizationSnippetFragmentDoc = gql`
     fragment OrganizationSnippet on Organization {
@@ -208,6 +211,7 @@ export const OrganizationSnippetFragmentDoc = gql`
   phoneNumber
   address
   points
+  voteStatus
   creator {
     id
     username
@@ -376,8 +380,8 @@ export type RegisterMutationHookResult = ReturnType<typeof useRegisterMutation>;
 export type RegisterMutationResult = Apollo.MutationResult<RegisterMutation>;
 export type RegisterMutationOptions = Apollo.BaseMutationOptions<RegisterMutation, RegisterMutationVariables>;
 export const VoteDocument = gql`
-    mutation Vote($organizationId: Int!) {
-  vote(organizationId: $organizationId)
+    mutation Vote($organizationId: Int!, $value: Int!) {
+  vote(organizationId: $organizationId, value: $value)
 }
     `;
 export type VoteMutationFn = Apollo.MutationFunction<VoteMutation, VoteMutationVariables>;
@@ -396,6 +400,7 @@ export type VoteMutationFn = Apollo.MutationFunction<VoteMutation, VoteMutationV
  * const [voteMutation, { data, loading, error }] = useVoteMutation({
  *   variables: {
  *      organizationId: // value for 'organizationId'
+ *      value: // value for 'value'
  *   },
  * });
  */
