@@ -1,5 +1,5 @@
-import { Request, Response, Express } from "express";
-import session, { Session, SessionData } from "express-session";
+import { Request, Response } from "express";
+import session from "express-session";
 
 export type ContactInfo = {
   phoneNumber: string;

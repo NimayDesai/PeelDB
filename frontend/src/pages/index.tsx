@@ -1,9 +1,13 @@
 import {
   Box,
+  Button,
   Card,
   CardBody,
   CardHeader,
+  Container,
+  Flex,
   Heading,
+  Link,
   Stack,
   StackDivider,
   Text
@@ -12,6 +16,8 @@ import { useEffect, useState } from "react";
 import { useOrganizationsQuery } from "../gql/generated/graphql";
 import { withApollo } from "../utils/withApollo";
 import { Wrapper } from "../components/Wrapper";
+import NextLink from 'next/link';
+import Head from "next/head";
 
 const Index = () => {
   const [domLoaded, setDomLoaded] = useState(false);
@@ -22,50 +28,53 @@ const Index = () => {
   }, []);
   return (
     <Wrapper>
+      <Heading size="xl">Organizations: </Heading>
       {domLoaded ?
-        <>
-          {!data ? null : data?.organizations.map(o => (
-            <Card key={o.id}>
-              <CardHeader>
-                <Heading size='md'>{o.name}</Heading>
-              </CardHeader>
+        <Box mt={8}>
+          <Stack spacing={8}>
+            {!data ? null : data?.organizations.map(o => (
+              <Card key={o.id}>
+                <CardHeader>
+                  <Heading size='md'>Name: {o.name}</Heading>
+                </CardHeader>
 
-              <CardBody>
-                <Stack divider={<StackDivider />} spacing='4'>
-                  <Box>
-                    <Heading size='xs' textTransform='uppercase'>
-                      Type of Organization
-                    </Heading>
-                    <Text pt='2' fontSize='sm'>
-                      {o.typeOfOrganization}
-                    </Text>
-                  </Box>
-                  <Box>
-                    <Heading size='xs' textTransform='uppercase'>
-                      Email
-                    </Heading>
-                    <Text pt='2' fontSize='sm'>
-                      {o.email}
-                    </Text>
-                  </Box>
-                  <Box>
-                    <Heading size='xs' textTransform='uppercase'>
-                      Contact Info
-                    </Heading>
-                    <Text pt='2' fontSize='sm'>
-                      {o.phoneNumber}
-                    </Text>
-                    <Text pt='2' fontSize='sm'>
-                      {o.address}
-                    </Text>
-                  </Box>
-                </Stack>
-              </CardBody>
-            </Card>
-          )
-          )}
-        </> : null}
-    </Wrapper>
+                <CardBody>
+                  <Stack divider={<StackDivider />} spacing='4'>
+                    <Box>
+                      <Heading size='xs' textTransform='uppercase'>
+                        Type of Organization
+                      </Heading>
+                      <Text pt='2' fontSize='sm'>
+                        {o.typeOfOrganization}
+                      </Text>
+                    </Box>
+                    <Box>
+                      <Heading size='xs' textTransform='uppercase'>
+                        Email
+                      </Heading>
+                      <Text pt='2' fontSize='sm'>
+                        {o.email}
+                      </Text>
+                    </Box>
+                    <Box>
+                      <Heading size='xs' textTransform='uppercase'>
+                        Contact Info
+                      </Heading>
+                      <Text pt='2' fontSize='sm'>
+                        {o.phoneNumber}
+                      </Text>
+                      <Text pt='2' fontSize='sm'>
+                        {o.address}
+                      </Text>
+                    </Box>
+                  </Stack>
+                </CardBody>
+              </Card>
+            )
+            )}</Stack>
+        </Box> : null
+      }
+    </Wrapper >
   )
 };
 

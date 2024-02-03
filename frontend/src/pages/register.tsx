@@ -58,7 +58,7 @@ const Register = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
                                 boxShadow={{ base: 'none', sm: 'md' }}
                                 borderRadius={{ base: 'none', sm: 'xl' }}
                             >
-                                <Formik initialValues={{ username: "", password: "" }} onSubmit={async (values, { setErrors }) => {
+                                <Formik initialValues={{ username: "", password: "", confirmPassword: "", }} onSubmit={async (values, { setErrors }) => {
                                     const response = await register({
                                         variables: values,
                                         update: (cache, { data }) => {
@@ -83,6 +83,7 @@ const Register = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
                                                 <Stack spacing="5">
                                                     <InputField name='username' placeholder='Harold M. Brathwaitte S.S' label='School Name'></InputField>
                                                     <PasswordField name='password' placeholder='Password' label='Password' />
+                                                    <PasswordField name='confirmPassword' placeholder='Confirm Password' label='Confirm Password' />
                                                 </Stack>
                                                 <HStack justify="space-between">
                                                 </HStack>

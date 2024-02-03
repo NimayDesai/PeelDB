@@ -1,5 +1,5 @@
 import "reflect-metadata";
-import { Or, createConnection } from "typeorm";
+import { createConnection } from "typeorm";
 import { __prod__ } from "./constants";
 import { Organization } from "./entities/Organization";
 import express from "express";
@@ -58,7 +58,7 @@ const main = async () => {
         maxAge: 1000 * 60 * 60 * 24 * 365 * 10,
         httpOnly: true,
         secure: __prod__,
-        sameSite: "none",
+        sameSite: "lax",
       },
       resave: false, // required: force lightweight session keep alive (touch)
       saveUninitialized: false, // recommended: only save session when data exists

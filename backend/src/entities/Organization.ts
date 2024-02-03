@@ -1,5 +1,4 @@
-import { ContactInfo } from "src/types";
-import { Field, Int, ObjectType } from "type-graphql";
+import { Field, ObjectType } from "type-graphql";
 import {
   BaseEntity,
   Column,

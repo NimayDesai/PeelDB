@@ -20,6 +20,15 @@ class UsernamePasswordInput {
   password: string;
 }
 
+@InputType()
+class RegisterInput {
+  @Field()
+  username: string;
+  @Field()
+  password: string;
+  @Field()
+  confirmPassword: string;
+}
 @ObjectType()
 class FieldError {
   @Field()
@@ -57,7 +66,7 @@ export class UserResolver {
   }
   @Mutation(() => UserResponse)
   async register(
-    @Arg("options") options: UsernamePasswordInput,
+    @Arg("options") options: RegisterInput,
     @Ctx() { req }: MyContext
   ): Promise<UserResponse> {
     if (options.username.length <= 2) {
@@ -76,6 +85,16 @@ export class UserResolver {
           {
             field: "password",
             message: "Length Must be greater than 2",
+          },
+        ],
+      };
+    }
+    if (options.password !== options.confirmPassword) {
+      return {
+        errors: [
+          {
+            field: "confirmPassword",
+            message: "Passwords do not match",
           },
         ],
       };

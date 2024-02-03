@@ -35,11 +35,7 @@ export type Mutation = {
 
 
 export type MutationAddOrganizationArgs = {
-  address: Scalars['String']['input'];
-  email: Scalars['String']['input'];
-  name: Scalars['String']['input'];
-  phoneNumber: Scalars['String']['input'];
-  typeOfOrganization: Scalars['String']['input'];
+  input: OrganizationInput;
 };
 
 
@@ -54,7 +50,7 @@ export type MutationLoginArgs = {
 
 
 export type MutationRegisterArgs = {
-  options: UsernamePasswordInput;
+  options: RegisterInput;
 };
 
 
@@ -71,12 +67,22 @@ export type Organization = {
   __typename?: 'Organization';
   address: Scalars['String']['output'];
   createdAt: Scalars['String']['output'];
+  creatorId: Scalars['Float']['output'];
   email: Scalars['String']['output'];
   id: Scalars['Float']['output'];
   name: Scalars['String']['output'];
   phoneNumber: Scalars['String']['output'];
+  stars: Scalars['Float']['output'];
   typeOfOrganization: Scalars['String']['output'];
   updatedAt: Scalars['String']['output'];
+};
+
+export type OrganizationInput = {
+  address: Scalars['String']['input'];
+  email: Scalars['String']['input'];
+  name: Scalars['String']['input'];
+  phoneNumber: Scalars['String']['input'];
+  typeOfOrganization: Scalars['String']['input'];
 };
 
 export type Query = {
@@ -90,6 +96,12 @@ export type Query = {
 
 export type QueryOrganizationArgs = {
   id: Scalars['Int']['input'];
+};
+
+export type RegisterInput = {
+  confirmPassword: Scalars['String']['input'];
+  password: Scalars['String']['input'];
+  username: Scalars['String']['input'];
 };
 
 export type User = {
@@ -113,6 +125,13 @@ export type UsernamePasswordInput = {
 
 export type RegularUserFragment = { __typename?: 'User', username: string, id: number };
 
+export type AddOrganizationMutationVariables = Exact<{
+  input: OrganizationInput;
+}>;
+
+
+export type AddOrganizationMutation = { __typename?: 'Mutation', addOrganization: { __typename?: 'Organization', id: number, createdAt: string, updatedAt: string, name: string, phoneNumber: string, address: string, email: string, typeOfOrganization: string } };
+
 export type LoginMutationVariables = Exact<{
   options: UsernamePasswordInput;
 }>;
@@ -128,6 +147,7 @@ export type LogoutMutation = { __typename?: 'Mutation', logout: boolean };
 export type RegisterMutationVariables = Exact<{
   username: Scalars['String']['input'];
   password: Scalars['String']['input'];
+  confirmPassword: Scalars['String']['input'];
 }>;
 
 
@@ -149,6 +169,46 @@ export const RegularUserFragmentDoc = gql`
   id
 }
     `;
+export const AddOrganizationDocument = gql`
+    mutation addOrganization($input: OrganizationInput!) {
+  addOrganization(input: $input) {
+    id
+    createdAt
+    updatedAt
+    name
+    phoneNumber
+    address
+    email
+    typeOfOrganization
+  }
+}
+    `;
+export type AddOrganizationMutationFn = Apollo.MutationFunction<AddOrganizationMutation, AddOrganizationMutationVariables>;
+
+/**
+ * __useAddOrganizationMutation__
+ *
+ * To run a mutation, you first call `useAddOrganizationMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddOrganizationMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [addOrganizationMutation, { data, loading, error }] = useAddOrganizationMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useAddOrganizationMutation(baseOptions?: Apollo.MutationHookOptions<AddOrganizationMutation, AddOrganizationMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<AddOrganizationMutation, AddOrganizationMutationVariables>(AddOrganizationDocument, options);
+      }
+export type AddOrganizationMutationHookResult = ReturnType<typeof useAddOrganizationMutation>;
+export type AddOrganizationMutationResult = Apollo.MutationResult<AddOrganizationMutation>;
+export type AddOrganizationMutationOptions = Apollo.BaseMutationOptions<AddOrganizationMutation, AddOrganizationMutationVariables>;
 export const LoginDocument = gql`
     mutation Login($options: UsernamePasswordInput!) {
   login(options: $options) {
@@ -219,8 +279,10 @@ export type LogoutMutationHookResult = ReturnType<typeof useLogoutMutation>;
 export type LogoutMutationResult = Apollo.MutationResult<LogoutMutation>;
 export type LogoutMutationOptions = Apollo.BaseMutationOptions<LogoutMutation, LogoutMutationVariables>;
 export const RegisterDocument = gql`
-    mutation Register($username: String!, $password: String!) {
-  register(options: {username: $username, password: $password}) {
+    mutation Register($username: String!, $password: String!, $confirmPassword: String!) {
+  register(
+    options: {username: $username, password: $password, confirmPassword: $confirmPassword}
+  ) {
     errors {
       field
       message
@@ -248,6 +310,7 @@ export type RegisterMutationFn = Apollo.MutationFunction<RegisterMutation, Regis
  *   variables: {
  *      username: // value for 'username'
  *      password: // value for 'password'
+ *      confirmPassword: // value for 'confirmPassword'
  *   },
  * });
  */
