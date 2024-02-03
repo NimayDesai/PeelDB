@@ -49,7 +49,7 @@ const Login = forwardRef<{}>(({ }) => {
                             boxShadow={{ base: 'none', sm: 'md' }}
                             borderRadius={{ base: 'none', sm: 'xl' }}
                         >
-                            <Formik initialValues={{ username: "", password: "" }} onSubmit={async (values, { setErrors }) => {
+                            <Formik initialValues={{ usernameOrEmail: "", password: "" }} onSubmit={async (values, { setErrors }) => {
                                 const response = await login({
                                     variables: { options: values },
                                     update: (cache, { data }) => {
@@ -77,7 +77,7 @@ const Login = forwardRef<{}>(({ }) => {
                                     <Form>
                                         <Stack spacing="6">
                                             <Stack spacing="5">
-                                                <InputField name='username' placeholder='Harold M. Brathwaitte S.S' label='School Name'></InputField>
+                                                <InputField name='usernameOrEmail' placeholder='Harold M. Brathwaitte S.S or bob@bob.com' label='School Name or Email'></InputField>
                                                 <PasswordField name='password' placeholder='Password' label='Password' />
                                             </Stack>
                                             <HStack justify="space-between">

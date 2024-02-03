@@ -15,7 +15,7 @@ import { MyContext } from "src/types";
 @InputType()
 class UsernamePasswordInput {
   @Field()
-  username: string;
+  usernameOrEmail: string;
   @Field()
   password: string;
 }
@@ -24,6 +24,8 @@ class UsernamePasswordInput {
 class RegisterInput {
   @Field()
   username: string;
+  @Field()
+  email: string;
   @Field()
   password: string;
   @Field()
@@ -79,6 +81,16 @@ export class UserResolver {
         ],
       };
     }
+    if (!options.email.includes("@")) {
+      return {
+        errors: [
+          {
+            field: "email",
+            message: "Email must include at sign",
+          },
+        ],
+      };
+    }
     if (options.password.length <= 2) {
       return {
         errors: [
@@ -99,10 +111,22 @@ export class UserResolver {
         ],
       };
     }
+
+    if (options.username.includes("@")) {
+      return {
+        errors: [
+          {
+            field: "username",
+            message: "Username cannot include at sign",
+          },
+        ],
+      };
+    }
     const hashedPassword = await argon2.hash(options.password);
     const user = User.create({
       username: options.username,
       password: hashedPassword,
+      email: options.email,
     });
     try {
       await user.save();
@@ -129,12 +153,16 @@ export class UserResolver {
     @Arg("options") options: UsernamePasswordInput,
     @Ctx() { req }: MyContext
   ): Promise<UserResponse> {
-    const user = await User.findOne({ where: { username: options.username } });
+    const user = await User.findOne({
+      where: options.usernameOrEmail.includes("@")
+        ? { email: options.usernameOrEmail }
+        : { username: options.usernameOrEmail },
+    });
     if (!user) {
       return {
         errors: [
           {
-            field: "username",
+            field: "usernameOrEmail",
             message: "That School does not exist",
           },
         ],

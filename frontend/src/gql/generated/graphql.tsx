@@ -100,6 +100,7 @@ export type QueryOrganizationArgs = {
 
 export type RegisterInput = {
   confirmPassword: Scalars['String']['input'];
+  email: Scalars['String']['input'];
   password: Scalars['String']['input'];
   username: Scalars['String']['input'];
 };
@@ -107,6 +108,7 @@ export type RegisterInput = {
 export type User = {
   __typename?: 'User';
   createdAt: Scalars['String']['output'];
+  email: Scalars['String']['output'];
   id: Scalars['Float']['output'];
   updatedAt: Scalars['String']['output'];
   username: Scalars['String']['output'];
@@ -120,10 +122,10 @@ export type UserResponse = {
 
 export type UsernamePasswordInput = {
   password: Scalars['String']['input'];
-  username: Scalars['String']['input'];
+  usernameOrEmail: Scalars['String']['input'];
 };
 
-export type RegularUserFragment = { __typename?: 'User', username: string, id: number };
+export type RegularUserFragment = { __typename?: 'User', username: string, email: string, id: number };
 
 export type AddOrganizationMutationVariables = Exact<{
   input: OrganizationInput;
@@ -137,7 +139,7 @@ export type LoginMutationVariables = Exact<{
 }>;
 
 
-export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'UserResponse', errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null, user?: { __typename?: 'User', username: string, id: number } | null } };
+export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'UserResponse', errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null, user?: { __typename?: 'User', username: string, email: string, id: number } | null } };
 
 export type LogoutMutationVariables = Exact<{ [key: string]: never; }>;
 
@@ -148,15 +150,16 @@ export type RegisterMutationVariables = Exact<{
   username: Scalars['String']['input'];
   password: Scalars['String']['input'];
   confirmPassword: Scalars['String']['input'];
+  email: Scalars['String']['input'];
 }>;
 
 
-export type RegisterMutation = { __typename?: 'Mutation', register: { __typename?: 'UserResponse', errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null, user?: { __typename?: 'User', username: string, id: number } | null } };
+export type RegisterMutation = { __typename?: 'Mutation', register: { __typename?: 'UserResponse', errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null, user?: { __typename?: 'User', username: string, email: string, id: number } | null } };
 
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type MeQuery = { __typename?: 'Query', me?: { __typename?: 'User', username: string, id: number } | null };
+export type MeQuery = { __typename?: 'Query', me?: { __typename?: 'User', username: string, email: string, id: number } | null };
 
 export type OrganizationsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -166,6 +169,7 @@ export type OrganizationsQuery = { __typename?: 'Query', organizations: Array<{ 
 export const RegularUserFragmentDoc = gql`
     fragment RegularUser on User {
   username
+  email
   id
 }
     `;
@@ -279,9 +283,9 @@ export type LogoutMutationHookResult = ReturnType<typeof useLogoutMutation>;
 export type LogoutMutationResult = Apollo.MutationResult<LogoutMutation>;
 export type LogoutMutationOptions = Apollo.BaseMutationOptions<LogoutMutation, LogoutMutationVariables>;
 export const RegisterDocument = gql`
-    mutation Register($username: String!, $password: String!, $confirmPassword: String!) {
+    mutation Register($username: String!, $password: String!, $confirmPassword: String!, $email: String!) {
   register(
-    options: {username: $username, password: $password, confirmPassword: $confirmPassword}
+    options: {username: $username, password: $password, confirmPassword: $confirmPassword, email: $email}
   ) {
     errors {
       field
@@ -311,6 +315,7 @@ export type RegisterMutationFn = Apollo.MutationFunction<RegisterMutation, Regis
  *      username: // value for 'username'
  *      password: // value for 'password'
  *      confirmPassword: // value for 'confirmPassword'
+ *      email: // value for 'email'
  *   },
  * });
  */

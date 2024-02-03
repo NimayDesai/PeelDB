@@ -2,12 +2,14 @@ mutation Register(
   $username: String!
   $password: String!
   $confirmPassword: String!
+  $email: String!
 ) {
   register(
     options: {
       username: $username
       password: $password
       confirmPassword: $confirmPassword
+      email: $email
     }
   ) {
     errors {
