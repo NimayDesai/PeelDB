@@ -10,10 +10,12 @@ const dataSource = new DataSource({
   database: "school-app2",
   username: "postgres",
   password: "postgres",
+
   logging: !__prod__,
   synchronize: true,
   migrations: [path.join(__dirname, "./migrations/*")],
   entities: [Organization, User, Star],
 });
+dataSource.initialize();
 
 export default dataSource;

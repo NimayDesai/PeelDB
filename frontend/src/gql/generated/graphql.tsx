@@ -41,7 +41,7 @@ export type MutationAddOrganizationArgs = {
 
 
 export type MutationDeleteOrganizationArgs = {
-  id: Scalars['Float']['input'];
+  id: Scalars['Int']['input'];
 };
 
 
@@ -156,6 +156,13 @@ export type AddOrganizationMutationVariables = Exact<{
 
 
 export type AddOrganizationMutation = { __typename?: 'Mutation', addOrganization: { __typename?: 'Organization', id: number, createdAt: string, updatedAt: string, name: string, phoneNumber: string, address: string, email: string, typeOfOrganization: string } };
+
+export type DeleteOrganizationMutationVariables = Exact<{
+  id: Scalars['Int']['input'];
+}>;
+
+
+export type DeleteOrganizationMutation = { __typename?: 'Mutation', deleteOrganization: boolean };
 
 export type LoginMutationVariables = Exact<{
   options: UsernamePasswordEmailInput;
@@ -273,6 +280,37 @@ export function useAddOrganizationMutation(baseOptions?: Apollo.MutationHookOpti
 export type AddOrganizationMutationHookResult = ReturnType<typeof useAddOrganizationMutation>;
 export type AddOrganizationMutationResult = Apollo.MutationResult<AddOrganizationMutation>;
 export type AddOrganizationMutationOptions = Apollo.BaseMutationOptions<AddOrganizationMutation, AddOrganizationMutationVariables>;
+export const DeleteOrganizationDocument = gql`
+    mutation DeleteOrganization($id: Int!) {
+  deleteOrganization(id: $id)
+}
+    `;
+export type DeleteOrganizationMutationFn = Apollo.MutationFunction<DeleteOrganizationMutation, DeleteOrganizationMutationVariables>;
+
+/**
+ * __useDeleteOrganizationMutation__
+ *
+ * To run a mutation, you first call `useDeleteOrganizationMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteOrganizationMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteOrganizationMutation, { data, loading, error }] = useDeleteOrganizationMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeleteOrganizationMutation(baseOptions?: Apollo.MutationHookOptions<DeleteOrganizationMutation, DeleteOrganizationMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteOrganizationMutation, DeleteOrganizationMutationVariables>(DeleteOrganizationDocument, options);
+      }
+export type DeleteOrganizationMutationHookResult = ReturnType<typeof useDeleteOrganizationMutation>;
+export type DeleteOrganizationMutationResult = Apollo.MutationResult<DeleteOrganizationMutation>;
+export type DeleteOrganizationMutationOptions = Apollo.BaseMutationOptions<DeleteOrganizationMutation, DeleteOrganizationMutationVariables>;
 export const LoginDocument = gql`
     mutation Login($options: UsernamePasswordEmailInput!) {
   login(options: $options) {

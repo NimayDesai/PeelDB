@@ -15,6 +15,7 @@ import {
 import { isAuth } from "../middleware/isAuth";
 import { Star } from "../entities/Stars";
 import dataSource from "../db.config";
+import { DataSource, getConnection } from "typeorm";
 
 @InputType()
 class OrganizationInput {
@@ -192,8 +193,12 @@ export class OrganizationResolver {
   }
 
   @Mutation(() => Boolean)
-  async deleteOrganization(@Arg("id") id: number) {
-    await Organization.delete({ id });
+  @UseMiddleware(isAuth)
+  async deleteOrganization(
+    @Arg("id", () => Int) id: number,
+    @Ctx() { req }: MyContext
+  ): Promise<boolean> {
+    await Organization.delete({ id, creatorId: req.session.userId });
     return true;
   }
 }

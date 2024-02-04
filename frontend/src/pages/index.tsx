@@ -15,6 +15,7 @@ import {
 import { FaGithub } from 'react-icons/fa';
 import NextLink from 'next/link'
 import { useMeQuery } from '../gql/generated/graphql';
+import { useRouter } from 'next/router';
 
 const features = [
     {
@@ -103,6 +104,10 @@ const features = [
 const Index = () => {
     const { data } = useMeQuery();
     const [domLoaded, setDomLoaded] = useState(false);
+    const router = useRouter();
+    if (data?.me) {
+        router.replace('/app')
+    }
     useEffect(() => {
         setDomLoaded(true);
     }, []);

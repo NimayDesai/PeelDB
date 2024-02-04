@@ -17,7 +17,7 @@ import { useEffect, useState } from "react";
 import { useOrganizationsQuery } from "../gql/generated/graphql";
 import { withApollo } from "../utils/withApollo";
 import { Wrapper } from "../components/Wrapper";
-import { StarIcon } from '@chakra-ui/icons'
+import { DeleteIcon, StarIcon } from '@chakra-ui/icons'
 import NextLink from 'next/link';
 import Head from "next/head";
 import { StarSection } from "../components/StarSection";
@@ -51,6 +51,7 @@ const Index = () => {
                       </Link>
                     </NextLink>
                     <StarSection organization={o} />
+                    <IconButton icon={<DeleteIcon />} aria-label="Delete Organization" />
                   </Flex>
 
                   <Heading size='sm' mt={2}>Added by: {o.creator.username}</Heading>

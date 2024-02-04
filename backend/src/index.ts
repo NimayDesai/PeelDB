@@ -1,5 +1,5 @@
 import "reflect-metadata";
-import { DataSource } from "typeorm";
+import { DataSource, createConnection } from "typeorm";
 import { __prod__ } from "./constants";
 import { Organization } from "./entities/Organization";
 import express from "express";
@@ -16,25 +16,13 @@ import Redis from "ioredis";
 import { MyContext } from "./types";
 import cors from "cors";
 import { Star } from "./entities/Stars";
+import dataSource from "./db.config";
 
 // Initialize client.
 
 // Initialize store.
 
 const main = async () => {
-  const dataSource = new DataSource({
-    type: "postgres",
-    database: "school-app2",
-    username: "postgres",
-    password: "postgres",
-    logging: !__prod__,
-    synchronize: true,
-    migrations: [path.join(__dirname, "./migrations/*")],
-    entities: [Organization, User, Star],
-  });
-
-  dataSource.initialize();
-
   // await Organization.create({
   //   name: "bob",
   //   email: "bob@bob.com",
