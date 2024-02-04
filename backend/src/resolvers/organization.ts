@@ -4,8 +4,6 @@ import {
   Arg,
   Ctx,
   Field,
-  FieldResolver,
-  Info,
   InputType,
   Int,
   Mutation,
@@ -15,8 +13,8 @@ import {
   UseMiddleware,
 } from "type-graphql";
 import { isAuth } from "../middleware/isAuth";
-import { getConnection } from "typeorm";
 import { Star } from "../entities/Stars";
+import dataSource from "../db.config";
 
 @InputType()
 class OrganizationInput {
@@ -56,7 +54,7 @@ export class OrganizationResolver {
     const star = await Star.findOne({ where: { organizationId, userId } });
 
     if (star && star.value !== realValue) {
-      await getConnection().transaction(async (tm) => {
+      await dataSource.transaction(async (tm) => {
         await tm.query(
           `
         update star
@@ -75,7 +73,7 @@ export class OrganizationResolver {
         );
       });
     } else if (!star) {
-      await getConnection().transaction(async (tm) => {
+      await dataSource.transaction(async (tm) => {
         await tm.query(
           `
         insert into star ("userId", "organizationId", value)
@@ -115,7 +113,7 @@ export class OrganizationResolver {
       replacements.push(new Date(parseInt(cursor)));
       cursorIndex = replacements.length;
     }
-    const organizations = await getConnection().query(
+    const organizations = await dataSource.query(
       `
     select o.*,
     json_build_object(
@@ -146,7 +144,7 @@ export class OrganizationResolver {
   }
   @Query(() => Organization, { nullable: true })
   organization(@Arg("id", () => Int) id: number): Promise<Organization | null> {
-    return Organization.findOne({ where: { id } });
+    return Organization.findOne({ where: { id }, relations: ["creator"] });
   }
   @Mutation(() => Organization)
   @UseMiddleware(isAuth)

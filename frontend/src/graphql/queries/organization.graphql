@@ -1,0 +1,18 @@
+query Organization($id: Int!) {
+  organization(id: $id) {
+    id
+    createdAt
+    updatedAt
+    typeOfOrganization
+    name
+    email
+    phoneNumber
+    address
+    points
+    creator {
+      id
+      username
+      email
+    }
+  }
+}

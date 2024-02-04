@@ -100,11 +100,8 @@ const MenuLinks = ({ isOpen }: any) => {
     } else {
         body = (
             <Stack direction={"row"} align={"center"} spacing={4}>
-
                 <Box>
-
                     {data.me.username}
-                    {data.me.id}
                 </Box>
                 <Box><CgProfile size={40} /></Box>
                 <Button
@@ -139,11 +136,11 @@ const MenuLinks = ({ isOpen }: any) => {
                 direction={["column", "row", "row", "row"]}
                 pt={[4, 4, 0, 0]}
             >
-                <NextLink href="/create-organization">
+                {data?.me ? <NextLink href="/create-organization">
                     <Link ml="auto">
                         <Button ml={"auto"}>Create Organization</Button>
                     </Link>
-                </NextLink>
+                </NextLink> : null}
                 <MenuItem size isLast={false} to="/">Home</MenuItem>
 
                 {body}

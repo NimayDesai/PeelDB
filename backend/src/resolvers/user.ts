@@ -15,7 +15,7 @@ import argon2 from "argon2";
 import { MyContext } from "src/types";
 
 @InputType()
-class UsernamePasswordInput {
+class UsernamePasswordEmailInput {
   @Field()
   usernameOrEmail: string;
   @Field()
@@ -160,7 +160,7 @@ export class UserResolver {
   }
   @Mutation(() => UserResponse)
   async login(
-    @Arg("options") options: UsernamePasswordInput,
+    @Arg("options") options: UsernamePasswordEmailInput,
     @Ctx() { req }: MyContext
   ): Promise<UserResponse> {
     const user = await User.findOne({

@@ -1,5 +1,5 @@
 import "reflect-metadata";
-import { createConnection } from "typeorm";
+import { DataSource } from "typeorm";
 import { __prod__ } from "./constants";
 import { Organization } from "./entities/Organization";
 import express from "express";
@@ -22,7 +22,7 @@ import { Star } from "./entities/Stars";
 // Initialize store.
 
 const main = async () => {
-  const conn = await createConnection({
+  const dataSource = new DataSource({
     type: "postgres",
     database: "school-app2",
     username: "postgres",
@@ -32,6 +32,8 @@ const main = async () => {
     migrations: [path.join(__dirname, "./migrations/*")],
     entities: [Organization, User, Star],
   });
+
+  dataSource.initialize();
 
   // await Organization.create({
   //   name: "bob",

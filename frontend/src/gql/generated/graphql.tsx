@@ -46,7 +46,7 @@ export type MutationDeleteOrganizationArgs = {
 
 
 export type MutationLoginArgs = {
-  options: UsernamePasswordInput;
+  options: UsernamePasswordEmailInput;
 };
 
 
@@ -141,7 +141,7 @@ export type UserResponse = {
   user?: Maybe<User>;
 };
 
-export type UsernamePasswordInput = {
+export type UsernamePasswordEmailInput = {
   password: Scalars['String']['input'];
   usernameOrEmail: Scalars['String']['input'];
 };
@@ -158,7 +158,7 @@ export type AddOrganizationMutationVariables = Exact<{
 export type AddOrganizationMutation = { __typename?: 'Mutation', addOrganization: { __typename?: 'Organization', id: number, createdAt: string, updatedAt: string, name: string, phoneNumber: string, address: string, email: string, typeOfOrganization: string } };
 
 export type LoginMutationVariables = Exact<{
-  options: UsernamePasswordInput;
+  options: UsernamePasswordEmailInput;
 }>;
 
 
@@ -191,6 +191,13 @@ export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type MeQuery = { __typename?: 'Query', me?: { __typename?: 'User', username: string, email: string, id: number } | null };
+
+export type OrganizationQueryVariables = Exact<{
+  id: Scalars['Int']['input'];
+}>;
+
+
+export type OrganizationQuery = { __typename?: 'Query', organization?: { __typename?: 'Organization', id: number, createdAt: string, updatedAt: string, typeOfOrganization: string, name: string, email: string, phoneNumber: string, address: string, points: number, creator: { __typename?: 'User', id: number, username: string, email: string } } | null };
 
 export type OrganizationsQueryVariables = Exact<{
   limit: Scalars['Int']['input'];
@@ -267,7 +274,7 @@ export type AddOrganizationMutationHookResult = ReturnType<typeof useAddOrganiza
 export type AddOrganizationMutationResult = Apollo.MutationResult<AddOrganizationMutation>;
 export type AddOrganizationMutationOptions = Apollo.BaseMutationOptions<AddOrganizationMutation, AddOrganizationMutationVariables>;
 export const LoginDocument = gql`
-    mutation Login($options: UsernamePasswordInput!) {
+    mutation Login($options: UsernamePasswordEmailInput!) {
   login(options: $options) {
     errors {
       field
@@ -450,6 +457,59 @@ export type MeQueryHookResult = ReturnType<typeof useMeQuery>;
 export type MeLazyQueryHookResult = ReturnType<typeof useMeLazyQuery>;
 export type MeSuspenseQueryHookResult = ReturnType<typeof useMeSuspenseQuery>;
 export type MeQueryResult = Apollo.QueryResult<MeQuery, MeQueryVariables>;
+export const OrganizationDocument = gql`
+    query Organization($id: Int!) {
+  organization(id: $id) {
+    id
+    createdAt
+    updatedAt
+    typeOfOrganization
+    name
+    email
+    phoneNumber
+    address
+    points
+    creator {
+      id
+      username
+      email
+    }
+  }
+}
+    `;
+
+/**
+ * __useOrganizationQuery__
+ *
+ * To run a query within a React component, call `useOrganizationQuery` and pass it any options that fit your needs.
+ * When your component renders, `useOrganizationQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useOrganizationQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useOrganizationQuery(baseOptions: Apollo.QueryHookOptions<OrganizationQuery, OrganizationQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<OrganizationQuery, OrganizationQueryVariables>(OrganizationDocument, options);
+      }
+export function useOrganizationLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<OrganizationQuery, OrganizationQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<OrganizationQuery, OrganizationQueryVariables>(OrganizationDocument, options);
+        }
+export function useOrganizationSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<OrganizationQuery, OrganizationQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<OrganizationQuery, OrganizationQueryVariables>(OrganizationDocument, options);
+        }
+export type OrganizationQueryHookResult = ReturnType<typeof useOrganizationQuery>;
+export type OrganizationLazyQueryHookResult = ReturnType<typeof useOrganizationLazyQuery>;
+export type OrganizationSuspenseQueryHookResult = ReturnType<typeof useOrganizationSuspenseQuery>;
+export type OrganizationQueryResult = Apollo.QueryResult<OrganizationQuery, OrganizationQueryVariables>;
 export const OrganizationsDocument = gql`
     query Organizations($limit: Int!, $cursor: String) {
   organizations(limit: $limit, cursor: $cursor) {
