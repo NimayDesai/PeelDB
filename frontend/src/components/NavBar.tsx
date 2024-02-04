@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, Box, Flex, Text, Button, Stack, Heading } from "@chakra-ui/react";
+import { Link, Box, Flex, Text, Button, Stack, Heading, chakra } from "@chakra-ui/react";
 import { DarkModeSwitch } from "./DarkModeSwitch";
 import NextLink from 'next/link';
 import { useLogoutMutation, useMeQuery } from "../gql/generated/graphql";
@@ -24,8 +24,11 @@ export const NavBar = (props: any) => {
         <>
             {domLoaded ?
                 <NavBarContainer {...props}>
-
-                    <Heading size={"xl"}>SchoolDB</Heading>
+                    <chakra.span bgGradient="linear(to-br, #74d680, #378b29)" bgClip="text">
+                        <Heading size={"xl"}>
+                            {' '}
+                            SchoolDB{' '}</Heading>
+                    </chakra.span>{' '}
                     <Flex ml="auto">
                         <MenuToggle toggle={toggle} isOpen={isOpen} />
                         <MenuLinks isOpen={isOpen} />

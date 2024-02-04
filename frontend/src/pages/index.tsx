@@ -19,7 +19,7 @@ import { useMeQuery } from '../gql/generated/graphql';
 const features = [
     {
         title: 'Free and open source',
-        detail: 'All components have MIT license, you can use in any project',
+        detail: 'This website is completely free, and avaiblible on GitHub, with absoultely not paid plans or ads, and without tracking',
         icon: (
             <svg
                 aria-hidden="true"
@@ -46,8 +46,8 @@ const features = [
         )
     },
     {
-        title: 'TypeScript based',
-        detail: 'Build type safe applications, all components and hooks export types',
+        title: 'Secure',
+        detail: 'With SchoolDB, your data will always be safe, with the latest encryption techniques on your accounts to make sure your account never gets compromised',
         icon: (
             <svg
                 aria-hidden="true"
@@ -72,8 +72,8 @@ const features = [
         )
     },
     {
-        title: 'Easy to customize',
-        detail: 'Build type safe applications, all components and hooks export types',
+        title: 'Easy to Use',
+        detail: 'The Website is easy to use, even for novice users, with every function being clearly labeled',
         icon: (
             <svg
                 aria-hidden="true"
@@ -113,12 +113,12 @@ const Index = () => {
                     <Stack direction={{ base: 'column', md: 'row' }}>
                         <Stack direction="column" spacing={10} justifyContent="center">
                             <chakra.h1 fontSize="5xl" lineHeight={1} fontWeight="bold" textAlign="left">
-                                Production-ready
+                                Have all your board's busines partners in
                                 <chakra.span bgGradient="linear(to-br, #74d680, #378b29)" bgClip="text">
                                     {' '}
-                                    Projects and Components{' '}
+                                    One Place{' '}
                                 </chakra.span>{' '}
-                                <br /> built on top of Chakra UI
+                                <br /> with SchoolDB
                             </chakra.h1>
                             <Text
                                 color={useColorModeValue('gray.500', 'gray.400')}
