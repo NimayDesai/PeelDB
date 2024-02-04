@@ -1,5 +1,5 @@
-query Organizations($limit: Int!, $cursor: String) {
-  organizations(limit: $limit, cursor: $cursor) {
+query Organizations($limit: Int!, $cursor: String, $searchOptions: String!) {
+  organizations(limit: $limit, cursor: $cursor, searchOptions: $searchOptions) {
     hasMore
     organizations {
       ...OrganizationSnippet

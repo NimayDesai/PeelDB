@@ -16,6 +16,8 @@ export class Star extends BaseEntity {
   @PrimaryColumn()
   organizationId: number;
 
-  @ManyToOne(() => Organization, (organization) => organization.stars)
+  @ManyToOne(() => Organization, (organization) => organization.stars, {
+    onDelete: "CASCADE",
+  })
   organization: Organization;
 }

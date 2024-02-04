@@ -9,6 +9,7 @@ fragment OrganizationSnippet on Organization {
   address
   points
   voteStatus
+  creatorId
   creator {
     id
     username

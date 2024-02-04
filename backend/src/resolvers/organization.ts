@@ -97,6 +97,7 @@ export class OrganizationResolver {
   @Query(() => PaginatedOrganizations)
   async organizations(
     @Arg("limit", () => Int) limit: number,
+    @Arg("searchOptions", () => String) searchOptions: string,
     @Arg("cursor", () => String, { nullable: true }) cursor: string | null,
     @Ctx() { req }: MyContext
   ): Promise<PaginatedOrganizations> {
@@ -129,9 +130,11 @@ export class OrganizationResolver {
         ? '(select value from star where "userId" = $2 and "organizationId" = o.id) "voteStatus"'
         : 'null as "voteStatus"'
     }
-    from organization o
+    from organization o 
     inner join public.user u on u.id = o."creatorId"
-    ${cursor ? `where o."createdAt" < $${cursorIndex}` : ""}
+    where LOWER(o.name) LIKE '%${searchOptions}%'
+
+    ${cursor ? `and o."createdAt" < $${cursorIndex}` : ""}
     order by o."createdAt" DESC
     limit $1
     `,

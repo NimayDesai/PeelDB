@@ -31,7 +31,6 @@ const main = async () => {
   //   phoneNumber: "1234567890",
   // }).save();
 
-  // await conn.runMigrations();
   const app = express();
 
   const redis = new Redis();

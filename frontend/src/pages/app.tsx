@@ -1,35 +1,40 @@
+import { DeleteIcon, SearchIcon } from '@chakra-ui/icons';
 import {
   Box,
   Button,
   Card,
   CardBody,
   CardHeader,
-  Container,
   Flex,
   Heading,
   IconButton,
+  InputGroup,
+  InputRightAddon,
   Link,
   Stack,
   StackDivider,
   Text
 } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
-import { useOrganizationsQuery } from "../gql/generated/graphql";
-import { withApollo } from "../utils/withApollo";
-import { Wrapper } from "../components/Wrapper";
-import { DeleteIcon, StarIcon } from '@chakra-ui/icons'
+import { Form, Formik } from "formik";
 import NextLink from 'next/link';
-import Head from "next/head";
+import { useEffect, useState } from "react";
+import { InputField } from "../components/InputField";
 import { StarSection } from "../components/StarSection";
+import { Wrapper } from "../components/Wrapper";
+import { useDeleteOrganizationMutation, useMeQuery, useOrganizationsQuery } from "../gql/generated/graphql";
+import { withApollo } from "../utils/withApollo";
 
 const Index = () => {
   const [domLoaded, setDomLoaded] = useState(false);
-  const { data, error, loading, fetchMore, variables } = useOrganizationsQuery({
+  const { data, error, loading, fetchMore, variables, refetch } = useOrganizationsQuery({
     variables: {
       limit: 10,
-      cursor: null
+      cursor: null,
+      searchOptions: ""
     }
   });
+  const { data: meData } = useMeQuery()
+  const [deleteOrganization,] = useDeleteOrganizationMutation();
   console.log(data);
   useEffect(() => {
     setDomLoaded(true);
@@ -37,6 +42,25 @@ const Index = () => {
   return (
     <Wrapper>
       <Heading size="xl">Organizations: </Heading>
+      <br />
+      <Formik onSubmit={async (values) => {
+        await refetch({
+          searchOptions: values.searchOptions.toLowerCase()
+        })
+      }} initialValues={{ searchOptions: "", }}>
+        <Form>
+
+          <InputGroup>
+            <InputField name="searchOptions" placeholder="search" />
+
+            <InputRightAddon>
+              <IconButton icon={<SearchIcon />} aria-label="Search" type="submit" onClick={() => {
+
+              }} />
+            </InputRightAddon>
+          </InputGroup>
+        </Form>
+      </Formik>
       {domLoaded ?
         <Box mt={8}>
           <Stack spacing={8}>
@@ -45,13 +69,20 @@ const Index = () => {
 
                 <CardHeader flexDirection={"row"}>
                   <Flex align={"center"}>
+
                     <NextLink href="/organization/[id]" as={`/organization/${o.id}`}>
                       <Link>
                         <Heading size='lg'>Name: {o.name}</Heading>
                       </Link>
                     </NextLink>
                     <StarSection organization={o} />
-                    <IconButton icon={<DeleteIcon />} aria-label="Delete Organization" />
+                    {meData?.me?.id === o.creatorId ?
+                      <IconButton icon={<DeleteIcon />} aria-label="Delete Organization" onClick={() => {
+                        deleteOrganization({
+                          variables: { id: o.id },
+                          update: (cache) => cache.evict({ id: "Organization:" + o.id })
+                        })
+                      }} /> : null}
                   </Flex>
 
                   <Heading size='sm' mt={2}>Added by: {o.creator.username}</Heading>
