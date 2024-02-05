@@ -63,11 +63,11 @@ class UserResponse {
 
 @Resolver(User)
 export class UserResolver {
-  // Return this Field Resolver when a program fetches the email
+  // Return this FieldResolver when the program fetches the email
   @FieldResolver(() => String)
   email(@Root() user: User, @Ctx() { req }: MyContext) {
     if (req.session.userId === user.id) {
-      // Check If the email of the user logged in is the same as the email fetched
+      // Check if the email of the user logged in is the same as the email fetched
       return user.email;
     }
 
@@ -80,8 +80,7 @@ export class UserResolver {
       return null;
     }
 
-    const user = await User.findOne({ where: { id: req.session.userId } }); // Return the user of the currently logged in user
-    return user;
+    const user = await User.findOne({ where: { id: req.session.userId } }); // Return the user currently logged in
   }
   @Mutation(() => UserResponse)
   async register(
@@ -89,7 +88,7 @@ export class UserResolver {
     @Ctx() { req }: MyContext
   ): Promise<UserResponse> {
     if (options.username.length <= 2) {
-      // Check if username is too short
+      // Check if the username is too short
       return {
         errors: [
           {

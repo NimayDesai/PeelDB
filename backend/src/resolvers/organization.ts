@@ -51,7 +51,7 @@ export class OrganizationResolver {
   ) {
     const isStar = value !== -1;
     const realValue = isStar ? 1 : -1; // Cap the vote to 1 or -1 (when unstarring a post)
-    const { userId } = req.session;
+    const { userId } = req.session; // Get the current userId
 
     const star = await Star.findOne({ where: { organizationId, userId } }); // Find the star object using the organizationId and UserId
 

@@ -7,7 +7,6 @@ import Redis from "ioredis";
 import "reflect-metadata";
 import { buildSchema } from "type-graphql";
 import { __prod__ } from "./constants";
-import { HelloResolver } from "./resolvers/hello";
 import { OrganizationResolver } from "./resolvers/organization";
 import { UserResolver } from "./resolvers/user";
 import { MyContext } from "./types";
@@ -47,7 +46,7 @@ const main = async () => {
   const apolloServer = new ApolloServer({
     // Create Apolo Server
     schema: await buildSchema({
-      resolvers: [HelloResolver, OrganizationResolver, UserResolver],
+      resolvers: [OrganizationResolver, UserResolver],
       validate: false,
     }),
     context: ({ req, res }): MyContext => ({ req, res }), // Add Context with request and response
