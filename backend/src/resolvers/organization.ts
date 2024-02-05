@@ -16,7 +16,7 @@ import { Star } from "../entities/Stars";
 import { isAuth } from "../middleware/isAuth";
 import { MyContext } from "../types";
 
-// Create an input Type used for the user inptu when Adding and Organization
+// Create an inputType used for the user input when adding an organization
 @InputType()
 class OrganizationInput {
   @Field()
