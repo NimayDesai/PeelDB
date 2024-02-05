@@ -118,6 +118,7 @@ export type QueryOrganizationsArgs = {
   cursor?: InputMaybe<Scalars['String']['input']>;
   limit: Scalars['Int']['input'];
   searchOptions: Scalars['String']['input'];
+  searchValue: Scalars['String']['input'];
 };
 
 export type RegisterInput = {
@@ -211,6 +212,7 @@ export type OrganizationsQueryVariables = Exact<{
   limit: Scalars['Int']['input'];
   cursor?: InputMaybe<Scalars['String']['input']>;
   searchOptions: Scalars['String']['input'];
+  searchValue: Scalars['String']['input'];
 }>;
 
 
@@ -552,8 +554,13 @@ export type OrganizationLazyQueryHookResult = ReturnType<typeof useOrganizationL
 export type OrganizationSuspenseQueryHookResult = ReturnType<typeof useOrganizationSuspenseQuery>;
 export type OrganizationQueryResult = Apollo.QueryResult<OrganizationQuery, OrganizationQueryVariables>;
 export const OrganizationsDocument = gql`
-    query Organizations($limit: Int!, $cursor: String, $searchOptions: String!) {
-  organizations(limit: $limit, cursor: $cursor, searchOptions: $searchOptions) {
+    query Organizations($limit: Int!, $cursor: String, $searchOptions: String!, $searchValue: String!) {
+  organizations(
+    limit: $limit
+    cursor: $cursor
+    searchOptions: $searchOptions
+    searchValue: $searchValue
+  ) {
     hasMore
     organizations {
       ...OrganizationSnippet
@@ -577,6 +584,7 @@ export const OrganizationsDocument = gql`
  *      limit: // value for 'limit'
  *      cursor: // value for 'cursor'
  *      searchOptions: // value for 'searchOptions'
+ *      searchValue: // value for 'searchValue'
  *   },
  * });
  */

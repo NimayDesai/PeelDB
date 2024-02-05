@@ -61,7 +61,7 @@ const Register = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
                                 <Formik initialValues={{ username: "", password: "", confirmPassword: "", email: "", }} onSubmit={async (values, { setErrors }) => {
                                     const response = await register({
                                         variables: values,
-                                        update: (cache, { data }) => {
+                                        update: (cache, { data }) => { // Update Cache 
                                             cache.writeQuery<MeQuery>({
                                                 query: MeDocument,
                                                 data: {
@@ -71,10 +71,10 @@ const Register = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
                                             });
                                         },
                                     });
-                                    if (response.data?.register.errors) {
+                                    if (response.data?.register.errors) { // If there are errors map through them
                                         setErrors(toErrorMap(response.data.register.errors));
-                                    } else if (response.data?.register.user) {
-                                        router.push('/')
+                                    } else if (response.data?.register.user) { // The user registered sucesfully
+                                        router.push('/') // Go to main page
                                     }
                                 }}>
                                     {({ isSubmitting }) => (

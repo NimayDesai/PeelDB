@@ -35,7 +35,7 @@ export class User extends BaseEntity {
   username!: string;
 
   @Column()
-  password!: string;
+  password!: string; // Keep Password Hidden from Graphql
 
   @OneToMany(() => Organization, (organization) => organization.creator)
   organizations: Organization[];

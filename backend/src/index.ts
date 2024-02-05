@@ -1,39 +1,21 @@
-import "reflect-metadata";
-import { DataSource, createConnection } from "typeorm";
-import { __prod__ } from "./constants";
-import { Organization } from "./entities/Organization";
-import express from "express";
 import { ApolloServer } from "apollo-server-express";
-import { buildSchema } from "type-graphql";
-import { HelloResolver } from "./resolvers/hello";
-import { OrganizationResolver } from "./resolvers/organization";
-import path from "path";
-import { User } from "./entities/User";
-import { UserResolver } from "./resolvers/user";
 import RedisStore from "connect-redis";
+import cors from "cors";
+import express from "express";
 import session from "express-session";
 import Redis from "ioredis";
+import "reflect-metadata";
+import { buildSchema } from "type-graphql";
+import { __prod__ } from "./constants";
+import { HelloResolver } from "./resolvers/hello";
+import { OrganizationResolver } from "./resolvers/organization";
+import { UserResolver } from "./resolvers/user";
 import { MyContext } from "./types";
-import cors from "cors";
-import { Star } from "./entities/Stars";
-import dataSource from "./db.config";
-
-// Initialize client.
-
-// Initialize store.
 
 const main = async () => {
-  // await Organization.create({
-  //   name: "bob",
-  //   email: "bob@bob.com",
-  //   typeOfOrganization: "non profit",
-  //   address: "2 Seasame Street",
-  //   phoneNumber: "1234567890",
-  // }).save();
-
   const app = express();
 
-  const redis = new Redis();
+  const redis = new Redis(process.env.REDIS_URL); // Create Redis Store
   let redisStore = new RedisStore({
     client: redis,
     disableTouch: true,
@@ -45,40 +27,44 @@ const main = async () => {
       name: "qid",
       store: redisStore,
       cookie: {
-        maxAge: 1000 * 60 * 60 * 24 * 365 * 10,
+        maxAge: 1000 * 60 * 60 * 24 * 365 * 10, // Max age for 10 Year
         httpOnly: true,
-        secure: __prod__,
+        secure: __prod__, // Only use secure cookies in production
+        domain: __prod__ ? ".peeldb.me" : undefined,
         sameSite: "lax",
       },
       resave: false, // required: force lightweight session keep alive (touch)
       saveUninitialized: false, // recommended: only save session when data exists
-      secret: "qwaasqwdqweqwadqwdaa",
+      secret: process.env.SESSION_SECRET,
     }),
     cors<cors.CorsRequest>({
-      origin: ["http://localhost:3000", "https://studio.apollographql.com"],
+      origin: [process.env.CORS_ORIGIN, "https://studio.apollographql.com"], // Add frontend to cors
       credentials: true,
     })
   );
   app.set("trust proxy", 1);
 
   const apolloServer = new ApolloServer({
+    // Create Apolo Server
     schema: await buildSchema({
       resolvers: [HelloResolver, OrganizationResolver, UserResolver],
       validate: false,
     }),
-    context: ({ req, res }): MyContext => ({ req, res }),
+    context: ({ req, res }): MyContext => ({ req, res }), // Add Context with request and response
   });
 
   await apolloServer.start();
   apolloServer.applyMiddleware({
+    // Add the app to apollo
     app,
     cors: {
-      origin: ["http://localhost:3000", "https://studio.apollographql.com"],
+      origin: [process.env.CORS_ORIGIN, "https://studio.apollographql.com"],
       credentials: true,
     },
   });
 
-  app.listen(4000, () => {
+  app.listen(parseInt(process.env.PORT), () => {
+    // Start the server on port 4000
     console.log("server started on localhost:4000");
   });
 };

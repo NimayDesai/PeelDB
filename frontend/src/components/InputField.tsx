@@ -6,6 +6,7 @@ import {
     Input,
     InputGroup,
     InputRightElement,
+    Select,
     useDisclosure
 } from '@chakra-ui/react'
 import { useField } from 'formik'

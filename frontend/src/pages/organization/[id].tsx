@@ -19,11 +19,11 @@ const Organization: React.FC<{}> = ({ }) => {
         }
     })
 
-    if (error) {
+    if (error) { // If Error
         return <div>{error.message}</div>
     }
 
-    if (!data?.organization) {
+    if (!data?.organization) { // Else if no data
         return <div>Could Not Find that Post</div>
     }
     return (

@@ -105,7 +105,7 @@ const Index = () => {
     const { data } = useMeQuery();
     const [domLoaded, setDomLoaded] = useState(false);
     const router = useRouter();
-    if (data?.me) {
+    if (data?.me) { // If user is logged in, take them to app
         router.replace('/app')
     }
     useEffect(() => {

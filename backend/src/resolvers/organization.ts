@@ -1,5 +1,3 @@
-import { MyContext } from "../types";
-import { Organization } from "../entities/Organization";
 import {
   Arg,
   Ctx,
@@ -12,11 +10,13 @@ import {
   Resolver,
   UseMiddleware,
 } from "type-graphql";
-import { isAuth } from "../middleware/isAuth";
-import { Star } from "../entities/Stars";
 import dataSource from "../db.config";
-import { DataSource, getConnection } from "typeorm";
+import { Organization } from "../entities/Organization";
+import { Star } from "../entities/Stars";
+import { isAuth } from "../middleware/isAuth";
+import { MyContext } from "../types";
 
+// Create an input Type used for the user inptu when Adding and Organization
 @InputType()
 class OrganizationInput {
   @Field()
@@ -41,22 +41,25 @@ class PaginatedOrganizations {
 
 @Resolver()
 export class OrganizationResolver {
+  // Make sure user is logged in
   @UseMiddleware(isAuth)
   @Mutation(() => Boolean)
   async vote(
-    @Arg("organizationId", () => Int) organizationId: number,
+    @Arg("organizationId", () => Int) organizationId: number, // Take in organizationId and value
     @Arg("value", () => Int) value: number,
     @Ctx() { req }: MyContext
   ) {
     const isStar = value !== -1;
-    const realValue = isStar ? 1 : -1;
+    const realValue = isStar ? 1 : -1; // Cap the vote to 1 or -1 (when unstarring a post)
     const { userId } = req.session;
 
-    const star = await Star.findOne({ where: { organizationId, userId } });
+    const star = await Star.findOne({ where: { organizationId, userId } }); // Find the star object using the organizationId and UserId
 
     if (star && star.value !== realValue) {
+      // Check if user has already starred and is changing his vote
       await dataSource.transaction(async (tm) => {
         await tm.query(
+          // Update star with new value
           `
         update star
         set value = $1
@@ -65,6 +68,7 @@ export class OrganizationResolver {
           [realValue, organizationId, userId]
         );
         await tm.query(
+          // Add the new value to the points
           `
         update organization
         set points = points + $1
@@ -76,6 +80,7 @@ export class OrganizationResolver {
     } else if (!star) {
       await dataSource.transaction(async (tm) => {
         await tm.query(
+          // Add a new row of star
           `
         insert into star ("userId", "organizationId", value)
         values ($1, $2, $3)
@@ -83,6 +88,7 @@ export class OrganizationResolver {
           [userId, organizationId, realValue]
         );
         await tm.query(
+          // Add points by the value which the user voted
           `
         update organization
         set points = points + $1
@@ -97,25 +103,29 @@ export class OrganizationResolver {
   @Query(() => PaginatedOrganizations)
   async organizations(
     @Arg("limit", () => Int) limit: number,
+    @Arg("searchValue", () => String) searchValue: string,
     @Arg("searchOptions", () => String) searchOptions: string,
     @Arg("cursor", () => String, { nullable: true }) cursor: string | null,
     @Ctx() { req }: MyContext
   ): Promise<PaginatedOrganizations> {
-    const realLimit = Math.min(50, limit);
-    const realLimitPlusOne = realLimit + 1;
+    const realLimit = Math.min(50, limit); // Cap the limit at 50
+    const realLimitPlusOne = realLimit + 1; // Fetch the next item to know if there is still more data
     const replacements: any[] = [realLimitPlusOne];
 
     if (req.session.userId) {
-      replacements.push(req.session.userId);
+      // Check if user is logged in
+      replacements.push(req.session.userId); // If the user is logged in, add the session id to the query
     }
 
-    let cursorIndex = 99;
+    let cursorIndex = 99; // Add a cursor index
 
     if (cursor) {
+      // If there is a cursor, add it to the query
       replacements.push(new Date(parseInt(cursor)));
-      cursorIndex = replacements.length;
+      cursorIndex = replacements.length; // Make sure that PostgresSQl doesnt insert a value out of range
     }
     const organizations = await dataSource.query(
+      // Get all Organizations
       `
     select o.*,
     json_build_object(
@@ -126,13 +136,14 @@ export class OrganizationResolver {
       'updatedAt', u."updatedAt"
       ) creator,
     ${
+      // If User is logged in, get their voteStatus on the Organization
       req.session.userId
         ? '(select value from star where "userId" = $2 and "organizationId" = o.id) "voteStatus"'
         : 'null as "voteStatus"'
     }
-    from organization o 
+    from organization o
     inner join public.user u on u.id = o."creatorId"
-    where LOWER(o.name) LIKE '%${searchOptions}%'
+    where LOWER(o.${searchOptions}) LIKE '%${searchValue}%'
 
     ${cursor ? `and o."createdAt" < $${cursorIndex}` : ""}
     order by o."createdAt" DESC
@@ -141,6 +152,7 @@ export class OrganizationResolver {
       replacements
     );
 
+    // Return Organizations, and if there is more data
     return {
       organizations: organizations.slice(0, realLimit),
       hasMore: organizations.length === realLimitPlusOne,
@@ -149,6 +161,8 @@ export class OrganizationResolver {
   @Query(() => Organization, { nullable: true })
   organization(@Arg("id", () => Int) id: number): Promise<Organization | null> {
     return Organization.findOne({ where: { id }, relations: ["creator"] });
+    // Find an organization where the id is equal to the id the user specified
+    // Also fetches the creator of the Organization
   }
   @Mutation(() => Organization)
   @UseMiddleware(isAuth)
@@ -157,8 +171,9 @@ export class OrganizationResolver {
     @Ctx() { req }: MyContext
   ): Promise<Organization> {
     const organization = Organization.create({
+      // Add the input to a new organization
       ...input,
-      creatorId: req.session.userId,
+      creatorId: req.session.userId, // Use the session id of the logged in user as the creatorId
     }).save();
     return organization;
   }
@@ -196,12 +211,12 @@ export class OrganizationResolver {
   }
 
   @Mutation(() => Boolean)
-  @UseMiddleware(isAuth)
+  @UseMiddleware(isAuth) // Make sure a logged in user is not deleting organizations
   async deleteOrganization(
     @Arg("id", () => Int) id: number,
     @Ctx() { req }: MyContext
   ): Promise<boolean> {
-    await Organization.delete({ id, creatorId: req.session.userId });
-    return true;
+    await Organization.delete({ id, creatorId: req.session.userId }); // Make sure the user can only delete the organizations the user added
+    return true; // The Functin was able to delete the organization
   }
 }

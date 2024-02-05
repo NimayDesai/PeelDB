@@ -21,11 +21,11 @@ const CreateOrganization: React.FC<{}> = ({ }) => {
                     console.log(values);
                     const { errors } = await addOrganization({
                         variables: { input: values },
-                        update: (cache) => {
+                        update: (cache) => { // Update Cache
                             cache.evict({ fieldName: "organizations:{}" });
                         },
                     });
-                    if (!errors) {
+                    if (!errors) { // If no errors, go to home page
                         router.push('/');
                     }
 

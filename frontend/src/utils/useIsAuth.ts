@@ -5,6 +5,9 @@ import {
   useAddOrganizationMutation,
 } from "../gql/generated/graphql";
 
+// If User wanted to go to a page,
+// but not logged in, go to the page
+// the user wanted to go to after the user logs in
 export const useIsAuth = () => {
   const { data, loading } = useMeQuery();
   const router = useRouter();

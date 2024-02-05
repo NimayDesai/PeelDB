@@ -6,16 +6,18 @@ import {
   CardBody,
   CardHeader,
   Flex,
+  FormControl,
   Heading,
   IconButton,
   InputGroup,
   InputRightAddon,
   Link,
+  Select,
   Stack,
   StackDivider,
   Text
 } from "@chakra-ui/react";
-import { Form, Formik } from "formik";
+import { Field, Form, Formik } from "formik";
 import NextLink from 'next/link';
 import { useEffect, useState } from "react";
 import { InputField } from "../components/InputField";
@@ -30,53 +32,61 @@ const Index = () => {
     variables: {
       limit: 10,
       cursor: null,
-      searchOptions: ""
+      searchOptions: "name",
+      searchValue: ""
     }
   });
   const { data: meData } = useMeQuery()
   const [deleteOrganization,] = useDeleteOrganizationMutation();
   console.log(data);
-  useEffect(() => {
+  useEffect(() => { // Avoid Error in React 18
     setDomLoaded(true);
   }, []);
   return (
     <Wrapper>
       <Heading size="xl">Organizations: </Heading>
       <br />
-      <Formik onSubmit={async (values) => {
-        await refetch({
-          searchOptions: values.searchOptions.toLowerCase()
+      <Formik onSubmit={async (values) => { // Refetch when user searches again
+        refetch({
+          searchValue: values.searchValue.toLowerCase(),
+          searchOptions: values.searchOptions
         })
-      }} initialValues={{ searchOptions: "", }}>
-        <Form>
-
-          <InputGroup>
-            <InputField name="searchOptions" placeholder="search" />
-
-            <InputRightAddon>
-              <IconButton icon={<SearchIcon />} aria-label="Search" type="submit" onClick={() => {
-
-              }} />
-            </InputRightAddon>
-          </InputGroup>
-        </Form>
+      }} initialValues={{ searchValue: "", searchOptions: "" }}>
+        {({ handleChange }) => (
+          <Form>
+            <FormControl>
+              <Select as="select" name="searchOptions" placeholder='Select Organization Type' onChange={handleChange}>
+                <option value="name">Name</option>
+                <option value='"typeOfOrganization"'>Type Of Organization</option>
+                <option value='email'>Organization email</option>
+                <option value='address'>Organization Address</option>
+                <option value='"phoneNumber"'>Phone Number</option>
+              </Select>
+            </FormControl>
+            <InputGroup>
+              <InputField name="searchValue" placeholder="search" />
+              <InputRightAddon>
+                <IconButton icon={<SearchIcon />} aria-label="Search" type="submit" onClick={() => {
+                }} />
+              </InputRightAddon>
+            </InputGroup>
+          </Form>
+        )}
       </Formik>
       {domLoaded ?
         <Box mt={8}>
           <Stack spacing={8}>
-            {!data ? null : data?.organizations.organizations.map(o => (
+            {!data ? null : data?.organizations.organizations.map(o => ( // Go through all organizations fetched
               <Card key={o.id}>
-
                 <CardHeader flexDirection={"row"}>
                   <Flex align={"center"}>
-
-                    <NextLink href="/organization/[id]" as={`/organization/${o.id}`}>
+                    <NextLink href="/organization/[id]" as={`/organization/${o.id}`}> {/* Add Link to organization*/}
                       <Link>
                         <Heading size='lg'>Name: {o.name}</Heading>
                       </Link>
                     </NextLink>
                     <StarSection organization={o} />
-                    {meData?.me?.id === o.creatorId ?
+                    {meData?.me?.id === o.creatorId ? // Check if the user is the same user who created the Organization
                       <IconButton icon={<DeleteIcon />} aria-label="Delete Organization" onClick={() => {
                         deleteOrganization({
                           variables: { id: o.id },
@@ -128,8 +138,8 @@ const Index = () => {
               <Button my={8} m="auto" onClick={() => {
                 fetchMore({
                   variables: {
-                    limit: variables?.limit,
-                    cursor: data.organizations.organizations[data.organizations.organizations.length - 1].createdAt
+                    limit: variables?.limit, // Keep limit the same
+                    cursor: data.organizations.organizations[data.organizations.organizations.length - 1].createdAt // Get the createdAt of the last element
                   }
                 })
               }}>Load More</Button>

@@ -52,7 +52,7 @@ const Login = forwardRef<{}>(({ }) => {
                             <Formik initialValues={{ usernameOrEmail: "", password: "" }} onSubmit={async (values, { setErrors }) => {
                                 const response = await login({
                                     variables: { options: values },
-                                    update: (cache, { data }) => {
+                                    update: (cache, { data }) => { // Update Cache when use logs in
                                         cache.writeQuery<MeQuery>({
                                             query: MeDocument,
                                             data: {
@@ -63,11 +63,11 @@ const Login = forwardRef<{}>(({ }) => {
                                         cache.evict({ fieldName: "posts:{}" });
                                     },
                                 });
-                                if (response.data?.login.errors) {
+                                if (response.data?.login.errors) { // If there are errors map through them
                                     setErrors(toErrorMap(response.data.login.errors));
-                                } else if (response.data?.login.user) {
-                                    if (typeof router.query.next === 'string') {
-                                        router.push(router.query.next)
+                                } else if (response.data?.login.user) { // If there is a user
+                                    if (typeof router.query.next === 'string') { // If the user wanted to go to a different page but go directed to login
+                                        router.push(router.query.next) // Send them to the page they wanted to go
                                     } else {
                                         router.push('/')
                                     }
