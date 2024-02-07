@@ -48,7 +48,7 @@ export class OrganizationResolver {
     @Ctx() { req }: MyContext
   ) {
     const isStar = value !== -1;
-    const realValue = isStar ? 1 : -1;
+    const realValue = isStar ? Math.min(10, value) : Math.max(-10, value);
     const { userId } = req.session;
 
     const star = await Star.findOne({ where: { organizationId, userId } });

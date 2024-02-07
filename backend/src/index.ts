@@ -1,4 +1,5 @@
 import { ApolloServer } from "apollo-server-express";
+import "dotenv-safe/config";
 import RedisStore from "connect-redis";
 import cors from "cors";
 import express from "express";
@@ -47,13 +48,14 @@ const main = async () => {
         httpOnly: true,
         secure: __prod__,
         sameSite: "lax",
+        domain: __prod__ ? ".peeldb.me" : undefined,
       },
       resave: false, // required: force lightweight session keep alive (touch)
       saveUninitialized: false, // recommended: only save session when data exists
       secret: "qwaasqwdqweqwadqwdaa",
     }),
     cors<cors.CorsRequest>({
-      origin: process.env.CORS_ORIGIN,
+      origin: "",
       credentials: true,
     })
   );
@@ -71,12 +73,12 @@ const main = async () => {
   apolloServer.applyMiddleware({
     app,
     cors: {
-      origin: ["http://localhost:3000", "https://peeldb.me"],
+      origin: [process.env.CORS_ORIGIN, "https://peeldb.me"],
       credentials: true,
     },
   });
 
-  app.listen(4000, () => {
+  app.listen(parseInt(process.env.PORT), () => {
     console.log("server started on localhost:4000");
   });
 };
