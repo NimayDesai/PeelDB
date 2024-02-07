@@ -48,7 +48,6 @@ export const PasswordField: React.FC<PasswordFieldProps> = ({ label, size: _, ..
                     placeholder={props.placeholder}
                     type={isOpen ? 'text' : 'password'}
                     autoComplete="current-password"
-                    required
                 />
             </InputGroup>
             {error ? <FormErrorMessage>{error}</FormErrorMessage> : null}

@@ -1,0 +1,17 @@
+mutation ChangeInfo($input: ChangeInfoInput!) {
+  changeInfo(input: $input) {
+    errors {
+      field
+      message
+    }
+    user {
+      createdAt
+      id
+      updatedAt
+      username
+      email
+      createdAt
+      updatedAt
+    }
+  }
+}

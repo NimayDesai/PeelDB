@@ -17,6 +17,13 @@ export type Scalars = {
   Float: { input: number; output: number; }
 };
 
+export type ChangeInfoInput = {
+  confirmPassword?: InputMaybe<Scalars['String']['input']>;
+  email?: InputMaybe<Scalars['String']['input']>;
+  password?: InputMaybe<Scalars['String']['input']>;
+  username?: InputMaybe<Scalars['String']['input']>;
+};
+
 export type FieldError = {
   __typename?: 'FieldError';
   field: Scalars['String']['output'];
@@ -26,6 +33,7 @@ export type FieldError = {
 export type Mutation = {
   __typename?: 'Mutation';
   addOrganization: Organization;
+  changeInfo: UserResponse;
   deleteOrganization: Scalars['Boolean']['output'];
   login: UserResponse;
   logout: Scalars['Boolean']['output'];
@@ -37,6 +45,11 @@ export type Mutation = {
 
 export type MutationAddOrganizationArgs = {
   input: OrganizationInput;
+};
+
+
+export type MutationChangeInfoArgs = {
+  input: ChangeInfoInput;
 };
 
 
@@ -151,6 +164,13 @@ export type OrganizationSnippetFragment = { __typename?: 'Organization', id: num
 
 export type RegularUserFragment = { __typename?: 'User', username: string, email: string, id: number };
 
+export type ChangeInfoMutationVariables = Exact<{
+  input: ChangeInfoInput;
+}>;
+
+
+export type ChangeInfoMutation = { __typename?: 'Mutation', changeInfo: { __typename?: 'UserResponse', errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null, user?: { __typename?: 'User', createdAt: string, id: number, updatedAt: string, username: string, email: string } | null } };
+
 export type AddOrganizationMutationVariables = Exact<{
   input: OrganizationInput;
 }>;
@@ -243,6 +263,51 @@ export const RegularUserFragmentDoc = gql`
   id
 }
     `;
+export const ChangeInfoDocument = gql`
+    mutation ChangeInfo($input: ChangeInfoInput!) {
+  changeInfo(input: $input) {
+    errors {
+      field
+      message
+    }
+    user {
+      createdAt
+      id
+      updatedAt
+      username
+      email
+      createdAt
+      updatedAt
+    }
+  }
+}
+    `;
+export type ChangeInfoMutationFn = Apollo.MutationFunction<ChangeInfoMutation, ChangeInfoMutationVariables>;
+
+/**
+ * __useChangeInfoMutation__
+ *
+ * To run a mutation, you first call `useChangeInfoMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useChangeInfoMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [changeInfoMutation, { data, loading, error }] = useChangeInfoMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useChangeInfoMutation(baseOptions?: Apollo.MutationHookOptions<ChangeInfoMutation, ChangeInfoMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ChangeInfoMutation, ChangeInfoMutationVariables>(ChangeInfoDocument, options);
+      }
+export type ChangeInfoMutationHookResult = ReturnType<typeof useChangeInfoMutation>;
+export type ChangeInfoMutationResult = Apollo.MutationResult<ChangeInfoMutation>;
+export type ChangeInfoMutationOptions = Apollo.BaseMutationOptions<ChangeInfoMutation, ChangeInfoMutationVariables>;
 export const AddOrganizationDocument = gql`
     mutation addOrganization($input: OrganizationInput!) {
   addOrganization(input: $input) {

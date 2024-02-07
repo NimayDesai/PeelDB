@@ -1,7 +1,7 @@
-import { ChangeInfoInput, RegisterInput } from "src/resolvers/user";
+import { ChangeInfoInput } from "../resolvers/user";
 
-export const validateRegister = (options: RegisterInput | ChangeInfoInput) => {
-  if (options.username.length <= 2) {
+export const validateChangeInfo = (options: ChangeInfoInput) => {
+  if (options.username.length <= 2 && options.email) {
     return {
       errors: [
         {
@@ -11,7 +11,7 @@ export const validateRegister = (options: RegisterInput | ChangeInfoInput) => {
       ],
     };
   }
-  if (!options.email.includes("@")) {
+  if (!options.email.includes("@") && options.email) {
     return {
       errors: [
         {
@@ -21,7 +21,7 @@ export const validateRegister = (options: RegisterInput | ChangeInfoInput) => {
       ],
     };
   }
-  if (options.password.length <= 2) {
+  if (options.password.length <= 2 && options.password) {
     return {
       errors: [
         {
@@ -31,7 +31,7 @@ export const validateRegister = (options: RegisterInput | ChangeInfoInput) => {
       ],
     };
   }
-  if (options.password !== options.confirmPassword) {
+  if (options.password !== options.confirmPassword && options.password) {
     return {
       errors: [
         {
@@ -42,7 +42,7 @@ export const validateRegister = (options: RegisterInput | ChangeInfoInput) => {
     };
   }
 
-  if (options.username.includes("@")) {
+  if (options.username.includes("@") && options.username) {
     return {
       errors: [
         {

@@ -10,9 +10,12 @@ import {
   Query,
   Resolver,
   Root,
+  UseMiddleware,
 } from "type-graphql";
 import argon2 from "argon2";
-import { MyContext } from "src/types";
+import { MyContext } from "../types";
+import { isAuth } from "../middleware/isAuth";
+import { validateChangeInfo } from "../utils/valdiateChangeInfo";
 
 @InputType()
 class UsernamePasswordEmailInput {
@@ -23,7 +26,19 @@ class UsernamePasswordEmailInput {
 }
 
 @InputType()
-class RegisterInput {
+export class ChangeInfoInput {
+  @Field(() => String, { nullable: true })
+  username?: string;
+  @Field(() => String, { nullable: true })
+  email?: string;
+  @Field(() => String, { nullable: true })
+  password?: string;
+  @Field(() => String, { nullable: true })
+  confirmPassword?: string;
+}
+
+@InputType()
+export class RegisterInput {
   @Field()
   username: string;
   @Field()
@@ -59,6 +74,49 @@ class UserResponse {
 
 @Resolver(User)
 export class UserResolver {
+  @UseMiddleware(isAuth)
+  @Mutation(() => UserResponse)
+  async changeInfo(
+    @Arg("input") input: ChangeInfoInput,
+    @Ctx() { req }: MyContext
+  ): Promise<UserResponse> {
+    const errors = validateChangeInfo(input);
+    if (errors) {
+      return errors;
+    }
+
+    const userId = req.session.userId;
+
+    let user = await User.findOne({ where: { id: userId } });
+
+    try {
+      await User.update(
+        { id: userId },
+        {
+          password: input.password
+            ? await argon2.hash(input.password)
+            : user.password,
+          username: input.username ? input.username : user.username,
+          email: input.email ? input.email : user.email,
+        }
+      );
+    } catch (err) {
+      if (err.code === "23505") {
+        return {
+          errors: [
+            {
+              field: "username",
+              message: "School Already Exists",
+            },
+          ],
+        };
+      }
+    }
+    user = await User.findOne({ where: { id: userId } });
+
+    return { user };
+  }
+
   @FieldResolver(() => String)
   email(@Root() user: User, @Ctx() { req }: MyContext) {
     if (req.session.userId === user.id) {

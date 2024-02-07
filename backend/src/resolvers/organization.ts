@@ -15,7 +15,6 @@ import {
 import { isAuth } from "../middleware/isAuth";
 import { Star } from "../entities/Stars";
 import dataSource from "../db.config";
-import { DataSource, getConnection } from "typeorm";
 
 @InputType()
 class OrganizationInput {

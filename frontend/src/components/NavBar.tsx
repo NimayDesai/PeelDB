@@ -104,7 +104,11 @@ const MenuLinks = ({ isOpen }: any) => {
         body = (
             <Stack direction={"row"} align={"center"} spacing={4}>
                 <Box>
-                    {data.me.username}
+                    <NextLink href={"/change-info"}>
+                        <Link>
+                            {data.me.username}
+                        </Link>
+                    </NextLink>
                 </Box>
                 <Box><CgProfile size={40} /></Box>
                 <Button
