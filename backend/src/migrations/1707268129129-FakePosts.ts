@@ -1,6 +1,6 @@
 import { MigrationInterface, QueryRunner } from "typeorm";
 
-export class FakePosts1707259471507 implements MigrationInterface {
+export class FakePosts1707268129129 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(`
         insert into organization (name, "typeOfOrganization", "phoneNumber", address, "creatorId", description, email) values ('Kayveo', 'for profit', '588-544-3418', '486 Nova Avenue', 1, 'Quisque id justo sit amet sapien dignissim vestibulum. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nulla dapibus dolor vel est. Donec odio justo, sollicitudin ut, suscipit a, feugiat et, eros.
@@ -333,5 +333,5 @@ insert into organization (name, "typeOfOrganization", "phoneNumber", address, "c
         `);
   }
 
-  public async down(queryRunner: QueryRunner): Promise<void> {}
+  public async down(_: QueryRunner): Promise<void> {}
 }

@@ -16,7 +16,7 @@ import Redis from "ioredis";
 import { MyContext } from "./types";
 import cors from "cors";
 import { Star } from "./entities/Stars";
-import dataSource from "./db.config";
+import dataSource, { initataSource } from "./db.config";
 
 // Initialize client.
 
@@ -30,6 +30,9 @@ const main = async () => {
   //   address: "2 Seasame Street",
   //   phoneNumber: "1234567890",
   // }).save();
+
+  await dataSource.initialize();
+  // await dataSource.runMigrations();
 
   const app = express();
 

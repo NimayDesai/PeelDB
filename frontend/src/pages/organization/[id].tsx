@@ -67,6 +67,14 @@ const Organization: React.FC<{}> = ({ }) => {
                                 {data?.organization?.address}
                             </Text>
                         </Box>
+                        <Box>
+                            <Heading size='xs' textTransform='uppercase'>
+                                Description
+                            </Heading>
+                            <Text pt='2' fontSize='sm'>
+                                {data.organization.description}
+                            </Text>
+                        </Box>
                     </Stack>
                 </CardBody>
             </Card>

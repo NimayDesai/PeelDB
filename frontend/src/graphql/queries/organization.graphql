@@ -8,6 +8,7 @@ query Organization($id: Int!) {
     email
     phoneNumber
     address
+    description
     points
     creator {
       id

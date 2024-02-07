@@ -42,10 +42,7 @@ const Register = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
                         <Stack spacing="8">
                             <Stack spacing="6">
                                 <Stack spacing={{ base: '2', md: '3' }} textAlign="center">
-                                    <Heading size={{ base: 'lg', md: '2xl' }}>Register</Heading>
-                                    <Text color="fg.muted">
-                                        Already have a school acount? <NextLink href="/login"><Link mr={8}>Log in</Link></NextLink>
-                                    </Text>
+                                    <Heading size={{ base: 'lg', md: '2xl' }}>Change Info</Heading>
                                 </Stack>
                             </Stack>
                             <Box
@@ -77,7 +74,7 @@ const Register = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
                                                 <HStack justify="space-between">
                                                 </HStack>
                                                 <Stack spacing="6">
-                                                    <Button type='submit' colorScheme={'teal'} isLoading={isSubmitting}>Register</Button>
+                                                    <Button type='submit' colorScheme={'teal'} isLoading={isSubmitting}>Change Info</Button>
                                                 </Stack>
                                             </Stack>
                                         </Form>

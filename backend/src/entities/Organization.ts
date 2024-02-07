@@ -64,4 +64,8 @@ export class Organization extends BaseEntity {
 
   @OneToMany(() => Star, (star) => star.organization)
   stars: Star[];
+
+  @Field(() => String)
+  @Column()
+  description!: string;
 }

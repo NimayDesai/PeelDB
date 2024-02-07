@@ -16,6 +16,10 @@ const dataSource = new DataSource({
   migrations: [path.join(__dirname, "./migrations/*")],
   entities: [Organization, User, Star],
 });
-dataSource.initialize();
+
+export const initataSource = async () => {
+  await dataSource.initialize();
+  await dataSource.runMigrations();
+};
 
 export default dataSource;

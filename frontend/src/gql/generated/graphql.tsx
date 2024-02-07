@@ -89,6 +89,7 @@ export type Organization = {
   createdAt: Scalars['String']['output'];
   creator: User;
   creatorId: Scalars['Float']['output'];
+  description: Scalars['String']['output'];
   email: Scalars['String']['output'];
   id: Scalars['Float']['output'];
   name: Scalars['String']['output'];
@@ -160,7 +161,9 @@ export type UsernamePasswordEmailInput = {
   usernameOrEmail: Scalars['String']['input'];
 };
 
-export type OrganizationSnippetFragment = { __typename?: 'Organization', id: number, createdAt: string, updatedAt: string, typeOfOrganization: string, name: string, email: string, phoneNumber: string, address: string, points: number, voteStatus?: number | null, creatorId: number, creator: { __typename?: 'User', id: number, username: string, email: string } };
+export type OrganizationSnippetFragment = { __typename?: 'Organization', id: number, createdAt: string, updatedAt: string, typeOfOrganization: string, name: string, email: string, phoneNumber: string, address: string, points: number, voteStatus?: number | null, description: string, creatorId: number, creator: { __typename?: 'User', id: number, username: string, email: string } };
+
+export type RegularErrorFragment = { __typename?: 'FieldError', field: string, message: string };
 
 export type RegularUserFragment = { __typename?: 'User', username: string, email: string, id: number };
 
@@ -169,7 +172,7 @@ export type ChangeInfoMutationVariables = Exact<{
 }>;
 
 
-export type ChangeInfoMutation = { __typename?: 'Mutation', changeInfo: { __typename?: 'UserResponse', errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null, user?: { __typename?: 'User', createdAt: string, id: number, updatedAt: string, username: string, email: string } | null } };
+export type ChangeInfoMutation = { __typename?: 'Mutation', changeInfo: { __typename?: 'UserResponse', errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null, user?: { __typename?: 'User', username: string, email: string, id: number } | null } };
 
 export type AddOrganizationMutationVariables = Exact<{
   input: OrganizationInput;
@@ -225,7 +228,7 @@ export type OrganizationQueryVariables = Exact<{
 }>;
 
 
-export type OrganizationQuery = { __typename?: 'Query', organization?: { __typename?: 'Organization', id: number, createdAt: string, updatedAt: string, typeOfOrganization: string, name: string, email: string, phoneNumber: string, address: string, points: number, creator: { __typename?: 'User', id: number, username: string, email: string } } | null };
+export type OrganizationQuery = { __typename?: 'Query', organization?: { __typename?: 'Organization', id: number, createdAt: string, updatedAt: string, typeOfOrganization: string, name: string, email: string, phoneNumber: string, address: string, description: string, points: number, creator: { __typename?: 'User', id: number, username: string, email: string } } | null };
 
 export type OrganizationsQueryVariables = Exact<{
   limit: Scalars['Int']['input'];
@@ -234,7 +237,7 @@ export type OrganizationsQueryVariables = Exact<{
 }>;
 
 
-export type OrganizationsQuery = { __typename?: 'Query', organizations: { __typename?: 'PaginatedOrganizations', hasMore: boolean, organizations: Array<{ __typename?: 'Organization', id: number, createdAt: string, updatedAt: string, typeOfOrganization: string, name: string, email: string, phoneNumber: string, address: string, points: number, voteStatus?: number | null, creatorId: number, creator: { __typename?: 'User', id: number, username: string, email: string } }> } };
+export type OrganizationsQuery = { __typename?: 'Query', organizations: { __typename?: 'PaginatedOrganizations', hasMore: boolean, organizations: Array<{ __typename?: 'Organization', id: number, createdAt: string, updatedAt: string, typeOfOrganization: string, name: string, email: string, phoneNumber: string, address: string, points: number, voteStatus?: number | null, description: string, creatorId: number, creator: { __typename?: 'User', id: number, username: string, email: string } }> } };
 
 export const OrganizationSnippetFragmentDoc = gql`
     fragment OrganizationSnippet on Organization {
@@ -248,12 +251,19 @@ export const OrganizationSnippetFragmentDoc = gql`
   address
   points
   voteStatus
+  description
   creatorId
   creator {
     id
     username
     email
   }
+}
+    `;
+export const RegularErrorFragmentDoc = gql`
+    fragment RegularError on FieldError {
+  field
+  message
 }
     `;
 export const RegularUserFragmentDoc = gql`
@@ -267,21 +277,15 @@ export const ChangeInfoDocument = gql`
     mutation ChangeInfo($input: ChangeInfoInput!) {
   changeInfo(input: $input) {
     errors {
-      field
-      message
+      ...RegularError
     }
     user {
-      createdAt
-      id
-      updatedAt
-      username
-      email
-      createdAt
-      updatedAt
+      ...RegularUser
     }
   }
 }
-    `;
+    ${RegularErrorFragmentDoc}
+${RegularUserFragmentDoc}`;
 export type ChangeInfoMutationFn = Apollo.MutationFunction<ChangeInfoMutation, ChangeInfoMutationVariables>;
 
 /**
@@ -574,6 +578,7 @@ export const OrganizationDocument = gql`
     email
     phoneNumber
     address
+    description
     points
     creator {
       id
