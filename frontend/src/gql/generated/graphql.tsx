@@ -132,6 +132,7 @@ export type QueryOrganizationsArgs = {
   cursor?: InputMaybe<Scalars['String']['input']>;
   limit: Scalars['Int']['input'];
   searchOptions: Scalars['String']['input'];
+  searchValue: Scalars['String']['input'];
 };
 
 export type RegisterInput = {
@@ -161,7 +162,7 @@ export type UsernamePasswordEmailInput = {
   usernameOrEmail: Scalars['String']['input'];
 };
 
-export type OrganizationSnippetFragment = { __typename?: 'Organization', id: number, createdAt: string, updatedAt: string, typeOfOrganization: string, name: string, email: string, phoneNumber: string, address: string, points: number, voteStatus?: number | null, description: string, creatorId: number, creator: { __typename?: 'User', id: number, username: string, email: string } };
+export type OrganizationSnippetFragment = { __typename?: 'Organization', id: number, createdAt: string, updatedAt: string, typeOfOrganization: string, name: string, email: string, phoneNumber: string, address: string, points: number, voteStatus?: number | null, creatorId: number, creator: { __typename?: 'User', id: number, username: string, email: string } };
 
 export type RegularErrorFragment = { __typename?: 'FieldError', field: string, message: string };
 
@@ -234,10 +235,11 @@ export type OrganizationsQueryVariables = Exact<{
   limit: Scalars['Int']['input'];
   cursor?: InputMaybe<Scalars['String']['input']>;
   searchOptions: Scalars['String']['input'];
+  searchValue: Scalars['String']['input'];
 }>;
 
 
-export type OrganizationsQuery = { __typename?: 'Query', organizations: { __typename?: 'PaginatedOrganizations', hasMore: boolean, organizations: Array<{ __typename?: 'Organization', id: number, createdAt: string, updatedAt: string, typeOfOrganization: string, name: string, email: string, phoneNumber: string, address: string, points: number, voteStatus?: number | null, description: string, creatorId: number, creator: { __typename?: 'User', id: number, username: string, email: string } }> } };
+export type OrganizationsQuery = { __typename?: 'Query', organizations: { __typename?: 'PaginatedOrganizations', hasMore: boolean, organizations: Array<{ __typename?: 'Organization', id: number, createdAt: string, updatedAt: string, typeOfOrganization: string, name: string, email: string, phoneNumber: string, address: string, points: number, voteStatus?: number | null, creatorId: number, creator: { __typename?: 'User', id: number, username: string, email: string } }> } };
 
 export const OrganizationSnippetFragmentDoc = gql`
     fragment OrganizationSnippet on Organization {
@@ -251,7 +253,6 @@ export const OrganizationSnippetFragmentDoc = gql`
   address
   points
   voteStatus
-  description
   creatorId
   creator {
     id
@@ -622,8 +623,13 @@ export type OrganizationLazyQueryHookResult = ReturnType<typeof useOrganizationL
 export type OrganizationSuspenseQueryHookResult = ReturnType<typeof useOrganizationSuspenseQuery>;
 export type OrganizationQueryResult = Apollo.QueryResult<OrganizationQuery, OrganizationQueryVariables>;
 export const OrganizationsDocument = gql`
-    query Organizations($limit: Int!, $cursor: String, $searchOptions: String!) {
-  organizations(limit: $limit, cursor: $cursor, searchOptions: $searchOptions) {
+    query Organizations($limit: Int!, $cursor: String, $searchOptions: String!, $searchValue: String!) {
+  organizations(
+    limit: $limit
+    cursor: $cursor
+    searchOptions: $searchOptions
+    searchValue: $searchValue
+  ) {
     hasMore
     organizations {
       ...OrganizationSnippet
@@ -647,6 +653,7 @@ export const OrganizationsDocument = gql`
  *      limit: // value for 'limit'
  *      cursor: // value for 'cursor'
  *      searchOptions: // value for 'searchOptions'
+ *      searchValue: // value for 'searchValue'
  *   },
  * });
  */

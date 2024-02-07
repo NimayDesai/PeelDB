@@ -7,10 +7,7 @@ import { User } from "./entities/User";
 
 const dataSource = new DataSource({
   type: "postgres",
-  database: "school-app2",
-  username: "postgres",
-  password: "postgres",
-
+  url: "postgresql://postgres:postgres@localhost:5432/school-app2",
   logging: !__prod__,
   synchronize: true,
   migrations: [path.join(__dirname, "./migrations/*")],

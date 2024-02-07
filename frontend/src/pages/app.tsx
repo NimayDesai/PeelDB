@@ -9,8 +9,10 @@ import {
   Heading,
   IconButton,
   InputGroup,
+  InputLeftAddon,
   InputRightAddon,
   Link,
+  Select,
   Stack,
   StackDivider,
   Text
@@ -30,7 +32,8 @@ const Index = () => {
     variables: {
       limit: 10,
       cursor: null,
-      searchOptions: ""
+      searchValue: "",
+      searchOptions: "name",
     }
   });
   const { data: meData } = useMeQuery()
@@ -45,21 +48,26 @@ const Index = () => {
       <br />
       <Formik onSubmit={async (values) => {
         await refetch({
-          searchOptions: values.searchOptions.toLowerCase()
+          searchValue: values.searchValue.toLowerCase(),
+          searchOptions: values.searchOptions
         })
-      }} initialValues={{ searchOptions: "", }}>
-        <Form>
-
-          <InputGroup>
-            <InputField name="searchOptions" placeholder="search" />
-
-            <InputRightAddon>
+      }} initialValues={{ searchOptions: "", searchValue: "", }}>
+        {({ handleChange }) => (
+          <Form>
+            <InputGroup>
+              <Select w="300px" placeholder='Select By' name='searchOptions' onChange={handleChange}>
+                <option value="name">Name</option>
+                <option value='"typeOfOrganization"'>Type Of Organization</option>
+                <option value="address">Address</option>
+                <option value='"phoneNumber"'>Phone Number</option>
+                <option value="email">Email</option>
+              </Select>
+              <InputField name="searchValue" placeholder="search" />
               <IconButton icon={<SearchIcon />} aria-label="Search" type="submit" onClick={() => {
-
               }} />
-            </InputRightAddon>
-          </InputGroup>
-        </Form>
+            </InputGroup>
+          </Form>
+        )}
       </Formik>
       {domLoaded ?
         <Box mt={8}>

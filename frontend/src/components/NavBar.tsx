@@ -5,20 +5,16 @@ import NextLink from 'next/link';
 import { useLogoutMutation, useMeQuery } from "../gql/generated/graphql";
 import { CgProfile } from "react-icons/cg";
 import { useApolloClient } from "@apollo/client";
-import { withApollo } from "../utils/withApollo";
 import { isServer } from "../utils/isServer";
 
 
 
 export const NavBar = (props: any) => {
-    const [isOpen, setIsOpen] = React.useState(false);
-
     const [domLoaded, setDomLoaded] = useState(false);
 
     useEffect(() => {
         setDomLoaded(true);
     }, []);
-    const toggle = () => setIsOpen(!isOpen);
 
     return (
         <>
@@ -30,8 +26,7 @@ export const NavBar = (props: any) => {
                             SchoolDB{' '}</Heading>
                     </chakra.span>{' '}
                     <Flex ml="auto">
-                        <MenuToggle toggle={toggle} isOpen={isOpen} />
-                        <MenuLinks isOpen={isOpen} />
+                        <MenuLinks />
                     </Flex>
                 </NavBarContainer>
                 :
@@ -62,13 +57,6 @@ const MenuIcon = () => (
     </svg>
 );
 
-const MenuToggle = ({ toggle, isOpen }: any) => {
-    return (
-        <Box display={{ base: "block", md: "none" }} onClick={toggle}>
-            {isOpen ? <CloseIcon /> : <MenuIcon />}
-        </Box>
-    );
-};
 
 const MenuItem = ({ children, isLast, to = "/", ...rest }: any) => {
     return (
@@ -163,9 +151,6 @@ const NavBarContainer = ({ children, ...props }: any) => {
         <Flex
             as="nav"
             align="center"
-            justify="space-between"
-            wrap="wrap"
-            w="100%"
             mb={8}
             p={8}
             bg={["primary.500", "primary.500", "transparent", "transparent"]}
@@ -176,6 +161,3 @@ const NavBarContainer = ({ children, ...props }: any) => {
         </Flex>
     );
 };
-
-
-

@@ -1,22 +1,17 @@
-import "reflect-metadata";
-import { DataSource, createConnection } from "typeorm";
-import { __prod__ } from "./constants";
-import { Organization } from "./entities/Organization";
-import express from "express";
 import { ApolloServer } from "apollo-server-express";
-import { buildSchema } from "type-graphql";
-import { HelloResolver } from "./resolvers/hello";
-import { OrganizationResolver } from "./resolvers/organization";
-import path from "path";
-import { User } from "./entities/User";
-import { UserResolver } from "./resolvers/user";
 import RedisStore from "connect-redis";
+import cors from "cors";
+import express from "express";
 import session from "express-session";
 import Redis from "ioredis";
+import "reflect-metadata";
+import { buildSchema } from "type-graphql";
+import { __prod__ } from "./constants";
+import dataSource from "./db.config";
+import { HelloResolver } from "./resolvers/hello";
+import { OrganizationResolver } from "./resolvers/organization";
+import { UserResolver } from "./resolvers/user";
 import { MyContext } from "./types";
-import cors from "cors";
-import { Star } from "./entities/Stars";
-import dataSource, { initataSource } from "./db.config";
 
 // Initialize client.
 
@@ -36,7 +31,7 @@ const main = async () => {
 
   const app = express();
 
-  const redis = new Redis();
+  const redis = new Redis(process.env.REDIS_URL);
   let redisStore = new RedisStore({
     client: redis,
     disableTouch: true,
@@ -58,7 +53,7 @@ const main = async () => {
       secret: "qwaasqwdqweqwadqwdaa",
     }),
     cors<cors.CorsRequest>({
-      origin: ["http://localhost:3000", "https://studio.apollographql.com"],
+      origin: process.env.CORS_ORIGIN,
       credentials: true,
     })
   );
@@ -76,7 +71,7 @@ const main = async () => {
   apolloServer.applyMiddleware({
     app,
     cors: {
-      origin: ["http://localhost:3000", "https://studio.apollographql.com"],
+      origin: ["http://localhost:3000", "https://peeldb.me"],
       credentials: true,
     },
   });

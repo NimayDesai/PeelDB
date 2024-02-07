@@ -96,6 +96,7 @@ export class OrganizationResolver {
   @Query(() => PaginatedOrganizations)
   async organizations(
     @Arg("limit", () => Int) limit: number,
+    @Arg("searchValue", () => String) searchValue: string,
     @Arg("searchOptions", () => String) searchOptions: string,
     @Arg("cursor", () => String, { nullable: true }) cursor: string | null,
     @Ctx() { req }: MyContext
@@ -131,7 +132,7 @@ export class OrganizationResolver {
     }
     from organization o 
     inner join public.user u on u.id = o."creatorId"
-    where LOWER(o.name) LIKE '%${searchOptions}%'
+    where LOWER(o.${searchOptions}) LIKE '%${searchValue}%'
 
     ${cursor ? `and o."createdAt" < $${cursorIndex}` : ""}
     order by o."createdAt" DESC
