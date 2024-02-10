@@ -13,7 +13,7 @@ Right now, the website lists 25 initial partners that the school uses with Conta
 | Technology                                                                                                                                                 | What it is used for                                                       |
 | ---------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
 | ![Next JS](https://img.shields.io/badge/Next-black?style=for-the-badge&logo=next.js&logoColor=white)(https://nextjs.org/)                                  | An advanced React Framwork great for Serve Side Rendering                 |
-| ![NodeJS](https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white)                                                    | An open source runtime for javascript code on the server                  |
+| ![NodeJS](https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white) (https://nodejs.org/en/guides)                     | An open source runtime for javascript code on the server                  |
 | ![GraphQL](https://img.shields.io/badge/-GraphQL-E10098?style=for-the-badge&logo=graphql&logoColor=white) (https://graphql.org/)                           | A query language for your API that connects your backend to your frontend |
 | ![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white) (https://www.typescriptlang.org/) | A high level program language based on Javascript, but with types         |
 | ![Apollo-GraphQL](https://img.shields.io/badge/-ApolloGraphQL-311C87?style=for-the-badge&logo=apollo-graphql)(https://www.apollographql.com/docs/react/)   | A management client for Javascript to mange GraphQL Data                  |
@@ -25,6 +25,10 @@ Right now, the website lists 25 initial partners that the school uses with Conta
 ```sh
 $ git clone https://github.com/NimayDesai/SchoolOrganizationDB.git .
 ```
+
+## Configure Env
+
+You can use the .env.example on the backend folder for your setup
 
 ## How to Run Backend
 
