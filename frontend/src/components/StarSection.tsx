@@ -1,12 +1,13 @@
-import { StarIcon } from '@chakra-ui/icons';
-import { Heading, IconButton, Stack } from '@chakra-ui/react';
-import React, { useState } from 'react'
-import { OrganizationSnippetFragment, OrganizationsQuery, VoteMutation, useVoteMutation } from '../gql/generated/graphql';
 import { ApolloCache } from '@apollo/client';
-import { gql } from 'graphql-tag'
+import { StarIcon } from '@chakra-ui/icons';
+import { Heading, IconButton, Stack, Text } from '@chakra-ui/react';
+import { gql } from 'graphql-tag';
+import React from 'react';
+import { OrganizationSnippetFragment, VoteMutation, useCountUsersQuery, useVoteMutation } from '../gql/generated/graphql';
 
 interface StarSectionProps {
     organization: OrganizationSnippetFragment;
+    isOnMainPage: boolean
 }
 
 const updateAfterVote = (value: number, organizationId: number, cache: ApolloCache<VoteMutation>) => {
@@ -40,10 +41,12 @@ const updateAfterVote = (value: number, organizationId: number, cache: ApolloCac
     }
 }
 
-export const StarSection: React.FC<StarSectionProps> = ({ organization }) => {
+export const StarSection: React.FC<StarSectionProps> = ({ organization, isOnMainPage }) => {
     const [vote,] = useVoteMutation();
+    const { data } = useCountUsersQuery();
     return (
         <Stack direction={"row"} align={"center"} spacing={2} ml="auto">
+            {!isOnMainPage && data?.countUsers ? <Text mr={2} fontSize={"small"}>{Math.round((organization.points / data!.countUsers) * 100)}% of people have starred this organization </Text> : null}
             <Heading size="lg">{organization.points}</Heading>
             <IconButton ml="auto" icon={<StarIcon />} colorScheme={organization.voteStatus === 1 ? "yellow" : undefined} m={2} onClick={() => {
                 vote({

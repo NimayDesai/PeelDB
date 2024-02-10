@@ -5,6 +5,7 @@ import {
   Field,
   FieldResolver,
   InputType,
+  Int,
   Mutation,
   ObjectType,
   Query,
@@ -16,6 +17,7 @@ import argon2 from "argon2";
 import { MyContext } from "../types";
 import { isAuth } from "../middleware/isAuth";
 import { validateChangeInfo } from "../utils/valdiateChangeInfo";
+import dataSource from "../db.config";
 
 @InputType()
 class UsernamePasswordEmailInput {
@@ -74,6 +76,10 @@ class UserResponse {
 
 @Resolver(User)
 export class UserResolver {
+  @Query(() => Int)
+  async countUsers() {
+    return dataSource.getRepository(User).createQueryBuilder("u").getCount();
+  }
   @UseMiddleware(isAuth)
   @Mutation(() => UserResponse)
   async changeInfo(

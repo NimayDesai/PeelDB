@@ -8,6 +8,7 @@ fragment OrganizationSnippet on Organization {
   phoneNumber
   address
   points
+  description
   voteStatus
   creatorId
   creator {
