@@ -32,8 +32,8 @@ const Organization: React.FC<{}> = ({ }) => {
                 <CardHeader flexDirection={"row"}>
                     <Flex align={"center"}>
                         <Heading size='lg'>Name: {data?.organization?.name}</Heading>
+                        <StarSection isOnMainPage={false} organization={data?.organization} />
                     </Flex>
-
                     <Heading size='sm' mt={2}>Added by: {data?.organization?.creator.username}</Heading>
 
                 </CardHeader>
