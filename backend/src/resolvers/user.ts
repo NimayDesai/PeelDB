@@ -68,10 +68,10 @@ declare module "express-session" {
 @ObjectType()
 class UserResponse {
   @Field(() => [FieldError], { nullable: true })
-  errors?: FieldError[];
+  errors?: FieldError[] | null;
 
   @Field(() => User, { nullable: true })
-  user?: User;
+  user?: User | null;
 }
 
 @Resolver(User)
@@ -93,7 +93,7 @@ export class UserResolver {
 
     const userId = req.session.userId;
 
-    let user = await User.findOne({ where: { id: userId } });
+    let user: User | null = await User.findOne({ where: { id: userId } });
 
     try {
       await User.update(
@@ -101,9 +101,9 @@ export class UserResolver {
         {
           password: input.password
             ? await argon2.hash(input.password)
-            : user.password,
-          username: input.username ? input.username : user.username,
-          email: input.email ? input.email : user.email,
+            : user?.password,
+          username: input.username ? input.username : user?.username,
+          email: input.email ? input.email : user?.email,
         }
       );
     } catch (err) {

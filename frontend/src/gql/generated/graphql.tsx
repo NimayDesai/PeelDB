@@ -116,6 +116,7 @@ export type PaginatedOrganizations = {
 
 export type Query = {
   __typename?: 'Query';
+  countUsers: Scalars['Int']['output'];
   hello: Scalars['String']['output'];
   me?: Maybe<User>;
   organization?: Maybe<Organization>;
@@ -162,7 +163,7 @@ export type UsernamePasswordEmailInput = {
   usernameOrEmail: Scalars['String']['input'];
 };
 
-export type OrganizationSnippetFragment = { __typename?: 'Organization', id: number, createdAt: string, updatedAt: string, typeOfOrganization: string, name: string, email: string, phoneNumber: string, address: string, points: number, voteStatus?: number | null, creatorId: number, creator: { __typename?: 'User', id: number, username: string, email: string } };
+export type OrganizationSnippetFragment = { __typename?: 'Organization', id: number, createdAt: string, updatedAt: string, typeOfOrganization: string, name: string, email: string, phoneNumber: string, address: string, points: number, description: string, voteStatus?: number | null, creatorId: number, creator: { __typename?: 'User', id: number, username: string, email: string } };
 
 export type RegularErrorFragment = { __typename?: 'FieldError', field: string, message: string };
 
@@ -219,6 +220,11 @@ export type VoteMutationVariables = Exact<{
 
 export type VoteMutation = { __typename?: 'Mutation', vote: boolean };
 
+export type CountUsersQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type CountUsersQuery = { __typename?: 'Query', countUsers: number };
+
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -239,7 +245,7 @@ export type OrganizationsQueryVariables = Exact<{
 }>;
 
 
-export type OrganizationsQuery = { __typename?: 'Query', organizations: { __typename?: 'PaginatedOrganizations', hasMore: boolean, organizations: Array<{ __typename?: 'Organization', id: number, createdAt: string, updatedAt: string, typeOfOrganization: string, name: string, email: string, phoneNumber: string, address: string, points: number, voteStatus?: number | null, creatorId: number, creator: { __typename?: 'User', id: number, username: string, email: string } }> } };
+export type OrganizationsQuery = { __typename?: 'Query', organizations: { __typename?: 'PaginatedOrganizations', hasMore: boolean, organizations: Array<{ __typename?: 'Organization', id: number, createdAt: string, updatedAt: string, typeOfOrganization: string, name: string, email: string, phoneNumber: string, address: string, points: number, description: string, voteStatus?: number | null, creatorId: number, creator: { __typename?: 'User', id: number, username: string, email: string } }> } };
 
 export const OrganizationSnippetFragmentDoc = gql`
     fragment OrganizationSnippet on Organization {
@@ -252,6 +258,7 @@ export const OrganizationSnippetFragmentDoc = gql`
   phoneNumber
   address
   points
+  description
   voteStatus
   creatorId
   creator {
@@ -529,6 +536,43 @@ export function useVoteMutation(baseOptions?: Apollo.MutationHookOptions<VoteMut
 export type VoteMutationHookResult = ReturnType<typeof useVoteMutation>;
 export type VoteMutationResult = Apollo.MutationResult<VoteMutation>;
 export type VoteMutationOptions = Apollo.BaseMutationOptions<VoteMutation, VoteMutationVariables>;
+export const CountUsersDocument = gql`
+    query countUsers {
+  countUsers
+}
+    `;
+
+/**
+ * __useCountUsersQuery__
+ *
+ * To run a query within a React component, call `useCountUsersQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCountUsersQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useCountUsersQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useCountUsersQuery(baseOptions?: Apollo.QueryHookOptions<CountUsersQuery, CountUsersQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<CountUsersQuery, CountUsersQueryVariables>(CountUsersDocument, options);
+      }
+export function useCountUsersLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CountUsersQuery, CountUsersQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<CountUsersQuery, CountUsersQueryVariables>(CountUsersDocument, options);
+        }
+export function useCountUsersSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<CountUsersQuery, CountUsersQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<CountUsersQuery, CountUsersQueryVariables>(CountUsersDocument, options);
+        }
+export type CountUsersQueryHookResult = ReturnType<typeof useCountUsersQuery>;
+export type CountUsersLazyQueryHookResult = ReturnType<typeof useCountUsersLazyQuery>;
+export type CountUsersSuspenseQueryHookResult = ReturnType<typeof useCountUsersSuspenseQuery>;
+export type CountUsersQueryResult = Apollo.QueryResult<CountUsersQuery, CountUsersQueryVariables>;
 export const MeDocument = gql`
     query Me {
   me {
