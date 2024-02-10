@@ -9,15 +9,9 @@ import { User } from "./entities/User";
 const dataSource = new DataSource({
   type: "postgres",
   url: process.env.DATABASE_URL,
-  logging: !__prod__,
-  synchronize: true,
-  migrations: [path.join(__dirname, "./migrations/*")],
-  entities: [Organization, User, Star],
+  logging: !__prod__, // Only log in dev
+  synchronize: true, // Sync entities with database
+  migrations: [path.join(__dirname, "./migrations/*")], // Migrations folder
+  entities: [Organization, User, Star], // All tables
 });
-
-export const initataSource = async () => {
-  await dataSource.initialize();
-  await dataSource.runMigrations();
-};
-
 export default dataSource;
