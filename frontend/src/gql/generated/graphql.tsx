@@ -235,7 +235,7 @@ export type OrganizationQueryVariables = Exact<{
 }>;
 
 
-export type OrganizationQuery = { __typename?: 'Query', organization?: { __typename?: 'Organization', id: number, createdAt: string, updatedAt: string, typeOfOrganization: string, name: string, email: string, phoneNumber: string, address: string, description: string, points: number, creator: { __typename?: 'User', id: number, username: string, email: string } } | null };
+export type OrganizationQuery = { __typename?: 'Query', organization?: { __typename?: 'Organization', id: number, createdAt: string, updatedAt: string, typeOfOrganization: string, name: string, email: string, phoneNumber: string, address: string, points: number, description: string, voteStatus?: number | null, creatorId: number, creator: { __typename?: 'User', id: number, username: string, email: string } } | null };
 
 export type OrganizationsQueryVariables = Exact<{
   limit: Scalars['Int']['input'];
@@ -615,24 +615,10 @@ export type MeQueryResult = Apollo.QueryResult<MeQuery, MeQueryVariables>;
 export const OrganizationDocument = gql`
     query Organization($id: Int!) {
   organization(id: $id) {
-    id
-    createdAt
-    updatedAt
-    typeOfOrganization
-    name
-    email
-    phoneNumber
-    address
-    description
-    points
-    creator {
-      id
-      username
-      email
-    }
+    ...OrganizationSnippet
   }
 }
-    `;
+    ${OrganizationSnippetFragmentDoc}`;
 
 /**
  * __useOrganizationQuery__
