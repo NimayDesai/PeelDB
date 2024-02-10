@@ -16,6 +16,7 @@ import { FaGithub } from 'react-icons/fa';
 import NextLink from 'next/link'
 import { useMeQuery } from '../gql/generated/graphql';
 import { useRouter } from 'next/router';
+import { Wrapper } from '../components/Wrapper';
 
 const features = [
     {
@@ -103,17 +104,11 @@ const features = [
 ];
 const Index = () => {
     const { data } = useMeQuery();
-    const [domLoaded, setDomLoaded] = useState(false);
     const router = useRouter();
-    if (data?.me) {
-        router.replace('/app')
-    }
-    useEffect(() => {
-        setDomLoaded(true);
-    }, []);
+
     return (
-        <>
-            {domLoaded ? <Fragment>
+        <Wrapper variant='full'>
+            <Fragment>
                 <Container maxW="6xl" px={{ base: 6, md: 10 }} py={14}>
                     <Stack direction={{ base: 'column', md: 'row' }}>
                         <Stack direction="column" spacing={10} justifyContent="center">
@@ -228,9 +223,7 @@ const Index = () => {
                     </svg>
                 </Box>
             </Fragment>
-                : null}
-
-        </>
+        </Wrapper>
     );
 };
 
