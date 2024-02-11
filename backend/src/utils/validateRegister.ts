@@ -1,7 +1,8 @@
-import { ChangeInfoInput, RegisterInput } from "src/resolvers/user";
+import { RegisterInput } from "src/resolvers/user";
 
-export const validateRegister = (options: RegisterInput | ChangeInfoInput) => {
+export const validateRegister = (options: RegisterInput) => {
   if (options.username!.length <= 2) {
+    // Username too Short
     return {
       errors: [
         {
@@ -12,6 +13,7 @@ export const validateRegister = (options: RegisterInput | ChangeInfoInput) => {
     };
   }
   if (!options.email?.includes("@")) {
+    // Email is Invalid
     return {
       errors: [
         {
@@ -21,7 +23,19 @@ export const validateRegister = (options: RegisterInput | ChangeInfoInput) => {
       ],
     };
   }
+  if (options.email!.length <= 2) {
+    // Email too Short
+    return {
+      errors: [
+        {
+          field: "email",
+          message: "Length must be greater than 2",
+        },
+      ],
+    };
+  }
   if (options.password!.length <= 2) {
+    // Password is too short
     return {
       errors: [
         {
@@ -32,6 +46,7 @@ export const validateRegister = (options: RegisterInput | ChangeInfoInput) => {
     };
   }
   if (options.password !== options.confirmPassword) {
+    // Password and confirm Password are not equal
     return {
       errors: [
         {
@@ -43,6 +58,7 @@ export const validateRegister = (options: RegisterInput | ChangeInfoInput) => {
   }
 
   if (options.username!.includes("@")) {
+    // Usrname is invalid
     return {
       errors: [
         {

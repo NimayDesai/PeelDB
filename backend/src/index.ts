@@ -14,25 +14,12 @@ import { OrganizationResolver } from "./resolvers/organization";
 import { UserResolver } from "./resolvers/user";
 import { MyContext } from "./types";
 
-// Initialize client.
-
-// Initialize store.
-
 const main = async () => {
-  // await Organization.create({
-  //   name: "bob",
-  //   email: "bob@bob.com",
-  //   typeOfOrganization: "non profit",
-  //   address: "2 Seasame Street",
-  //   phoneNumber: "1234567890",
-  // }).save();
+  await dataSource.initialize(); // Initialize the database
 
-  await dataSource.initialize();
-  // await dataSource.runMigrations();
+  const app = express(); // Create express app
 
-  const app = express();
-
-  const redis = new Redis(process.env.REDIS_URL);
+  const redis = new Redis(process.env.REDIS_URL); // Create redis store and redis client
   let redisStore = new RedisStore({
     client: redis,
     disableTouch: true,
@@ -40,6 +27,7 @@ const main = async () => {
 
   // Initialize session storage.
   app.use(
+    // Add the cookie and redis session
     session({
       name: "qid",
       store: redisStore,

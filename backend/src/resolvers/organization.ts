@@ -16,6 +16,7 @@ import { isAuth } from "../middleware/isAuth";
 import { Star } from "../entities/Stars";
 import dataSource from "../db.config";
 
+// Input for creating an organization
 @InputType()
 class OrganizationInput {
   @Field()
@@ -30,6 +31,7 @@ class OrganizationInput {
   phoneNumber: string;
 }
 
+// An Objectype which returns the list of organization, and if there is more data
 @ObjectType()
 class PaginatedOrganizations {
   @Field(() => [Organization])
@@ -38,22 +40,25 @@ class PaginatedOrganizations {
   hasMore: boolean;
 }
 
+// Other input
 @Resolver()
 export class OrganizationResolver {
   @UseMiddleware(isAuth)
   @Mutation(() => Boolean)
+  // Lets user star an organization
   async vote(
     @Arg("organizationId", () => Int) organizationId: number,
     @Arg("value", () => Int) value: number,
     @Ctx() { req }: MyContext
   ) {
-    const isStar = value !== -1;
-    const realValue = isStar ? Math.min(10, value) : Math.max(-10, value);
-    const { userId } = req.session;
+    const isStar = value !== -1; // Limits value to plus or -1
+    const realValue = isStar ? 1 : -1;
+    const { userId } = req.session; // Gets the currently logged in user from the cookie
 
-    const star = await Star.findOne({ where: { organizationId, userId } });
+    const star = await Star.findOne({ where: { organizationId, userId } }); // See if the user has voted already
 
     if (star && star.value !== realValue) {
+      // The user has already voted and they are changing their vote (star to unstar) or (star to unstar to star)
       await dataSource.transaction(async (tm) => {
         await tm.query(
           `
@@ -73,6 +78,7 @@ export class OrganizationResolver {
         );
       });
     } else if (!star) {
+      // The user has not voted
       await dataSource.transaction(async (tm) => {
         await tm.query(
           `
@@ -93,6 +99,7 @@ export class OrganizationResolver {
     }
     return true;
   }
+  // Gets all organizations based on the cursor and limit
   @Query(() => PaginatedOrganizations)
   async organizations(
     @Arg("limit", () => Int) limit: number,
@@ -101,11 +108,12 @@ export class OrganizationResolver {
     @Arg("cursor", () => String, { nullable: true }) cursor: string | null,
     @Ctx() { req }: MyContext
   ): Promise<PaginatedOrganizations> {
-    const realLimit = Math.min(50, limit);
-    const realLimitPlusOne = realLimit + 1;
+    const realLimit = Math.min(50, limit); // Cap limit at 50
+    const realLimitPlusOne = realLimit + 1; // Fetch the next organization, but do not display it
     const replacements: any[] = [realLimitPlusOne];
 
     if (req.session.userId) {
+      // If there is al ogged in user
       replacements.push(req.session.userId);
     }
 
@@ -115,6 +123,7 @@ export class OrganizationResolver {
       replacements.push(new Date(parseInt(cursor)));
       cursorIndex = replacements.length;
     }
+    // Get all organizations, passing in the cursor, and taking in the limit while filtering results by the search options
     const organizations = await dataSource.query(
       `
     select o.*,
@@ -126,7 +135,7 @@ export class OrganizationResolver {
       'updatedAt', u."updatedAt"
       ) creator,
     ${
-      req.session.userId
+      req.session.userId // If user is logged in get their voteStatus
         ? '(select value from star where "userId" = $2 and "organizationId" = o.id) "voteStatus"'
         : 'null as "voteStatus"'
     }
@@ -142,21 +151,24 @@ export class OrganizationResolver {
     );
 
     return {
-      organizations: organizations.slice(0, realLimit),
+      organizations: organizations.slice(0, realLimit), // Liimit number of Organizations based on the limit
       hasMore: organizations.length === realLimitPlusOne,
     };
   }
+  // Finds a singular organization
   @Query(() => Organization, { nullable: true })
   organization(@Arg("id", () => Int) id: number): Promise<Organization | null> {
-    return Organization.findOne({ where: { id }, relations: ["creator"] });
+    return Organization.findOne({ where: { id }, relations: ["creator"] }); // Add a relation to cretor to fetch the creator
   }
+  // Adds an organization to the database
   @Mutation(() => Organization)
-  @UseMiddleware(isAuth)
+  @UseMiddleware(isAuth) // Make sure user is logged in
   async addOrganization(
     @Arg("input") input: OrganizationInput,
     @Ctx() { req }: MyContext
   ): Promise<Organization> {
     const organization = Organization.create({
+      // Create user with the creator id being the currently logged in user
       ...input,
       creatorId: req.session.userId,
     }).save();
@@ -196,12 +208,12 @@ export class OrganizationResolver {
   }
 
   @Mutation(() => Boolean)
-  @UseMiddleware(isAuth)
+  @UseMiddleware(isAuth) // Make sure there is a logged in user
   async deleteOrganization(
     @Arg("id", () => Int) id: number,
     @Ctx() { req }: MyContext
   ): Promise<boolean> {
-    await Organization.delete({ id, creatorId: req.session.userId });
+    await Organization.delete({ id, creatorId: req.session.userId }); // Only delete the organizations the user has added
     return true;
   }
 }

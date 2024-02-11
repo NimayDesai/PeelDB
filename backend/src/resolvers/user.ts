@@ -18,7 +18,9 @@ import { MyContext } from "../types";
 import { isAuth } from "../middleware/isAuth";
 import { validateChangeInfo } from "../utils/valdiateChangeInfo";
 import dataSource from "../db.config";
+import { validateRegister } from "src/utils/validateRegister";
 
+// Input for Login
 @InputType()
 class UsernamePasswordEmailInput {
   @Field()
@@ -27,6 +29,7 @@ class UsernamePasswordEmailInput {
   password: string;
 }
 
+// Input for change INfo
 @InputType()
 export class ChangeInfoInput {
   @Field(() => String, { nullable: true })
@@ -50,6 +53,7 @@ export class RegisterInput {
   @Field()
   confirmPassword: string;
 }
+// Returns a field that displays the field and message which displays the error
 @ObjectType()
 class FieldError {
   @Field()
@@ -58,6 +62,7 @@ class FieldError {
   message: string;
 }
 
+// Add user id to express-session
 declare module "express-session" {
   export interface SessionData {
     user: { [key: string]: any };
@@ -65,6 +70,7 @@ declare module "express-session" {
   }
 }
 
+// Returns a list of FieldErrors or a user
 @ObjectType()
 class UserResponse {
   @Field(() => [FieldError], { nullable: true })
@@ -78,29 +84,31 @@ class UserResponse {
 export class UserResolver {
   @Query(() => Int)
   async countUsers() {
-    return dataSource.getRepository(User).createQueryBuilder("u").getCount();
+    return dataSource.getRepository(User).createQueryBuilder("u").getCount(); // Get the count of how many users are there
   }
-  @UseMiddleware(isAuth)
+  @UseMiddleware(isAuth) // Check if the user is logged in
   @Mutation(() => UserResponse)
   async changeInfo(
     @Arg("input") input: ChangeInfoInput,
     @Ctx() { req }: MyContext
   ): Promise<UserResponse> {
-    const errors = validateChangeInfo(input);
+    const errors = validateChangeInfo(input); // Validate the user input
     if (errors) {
+      // Return errors if there are any errors
       return errors;
     }
 
-    const userId = req.session.userId;
+    const userId = req.session.userId; // Get the user id from the currently logged in user
 
-    let user: User | null = await User.findOne({ where: { id: userId } });
+    let user: User | null = await User.findOne({ where: { id: userId } }); // Find a user based on the userId
 
     try {
       await User.update(
+        // Update the user
         { id: userId },
         {
           password: input.password
-            ? await argon2.hash(input.password)
+            ? await argon2.hash(input.password) // Only update if given
             : user?.password,
           username: input.username ? input.username : user?.username,
           email: input.email ? input.email : user?.email,
@@ -108,6 +116,7 @@ export class UserResolver {
       );
     } catch (err) {
       if (err.code === "23505") {
+        // User already exists (dupliate key error)
         return {
           errors: [
             {
@@ -118,94 +127,55 @@ export class UserResolver {
         };
       }
     }
-    user = await User.findOne({ where: { id: userId } });
+    user = await User.findOne({ where: { id: userId } }); // Refetch the new user
 
-    return { user };
+    return { user }; // Return the user
   }
 
   @FieldResolver(() => String)
   email(@Root() user: User, @Ctx() { req }: MyContext) {
     if (req.session.userId === user.id) {
-      return user.email;
+      // If the user viewing the email is the same user whose email it is
+      return user.email; // It is ok for the user to see their own email
     }
 
-    return "";
+    return ""; // If not return an empty string
   }
+  // Finds the currently logged in user
   @Query(() => User, { nullable: true })
   async me(@Ctx() { req }: MyContext) {
     if (!req.session.userId) {
+      // If the user isnt logged in return null
       return null;
     }
 
-    const user = await User.findOne({ where: { id: req.session.userId } });
-    return user;
+    const user = await User.findOne({ where: { id: req.session.userId } }); // Find the currently logged in user
+    return user; // Return the user
   }
+  // Creates a new user
   @Mutation(() => UserResponse)
   async register(
     @Arg("options") options: RegisterInput,
     @Ctx() { req }: MyContext
   ): Promise<UserResponse> {
-    if (options.username.length <= 2) {
-      return {
-        errors: [
-          {
-            field: "username",
-            message: "Length must be greater than 2",
-          },
-        ],
-      };
+    const errors = validateRegister(options); // Validate Input
+    if (errors) {
+      // If errors return the errors
+      return errors;
     }
-    if (!options.email.includes("@")) {
-      return {
-        errors: [
-          {
-            field: "email",
-            message: "Email must include at sign",
-          },
-        ],
-      };
-    }
-    if (options.password.length <= 2) {
-      return {
-        errors: [
-          {
-            field: "password",
-            message: "Length Must be greater than 2",
-          },
-        ],
-      };
-    }
-    if (options.password !== options.confirmPassword) {
-      return {
-        errors: [
-          {
-            field: "confirmPassword",
-            message: "Passwords do not match",
-          },
-        ],
-      };
-    }
-
-    if (options.username.includes("@")) {
-      return {
-        errors: [
-          {
-            field: "username",
-            message: "Username cannot include at sign",
-          },
-        ],
-      };
-    }
-    const hashedPassword = await argon2.hash(options.password);
+    const hashedPassword = await argon2.hash(options.password); // Store the hashedPassword in the DB
     const user = User.create({
+      // Create a new user in the DB with the options specified
       username: options.username,
       password: hashedPassword,
       email: options.email,
     });
     try {
+      // Try to create a us
       await user.save();
     } catch (err) {
       if (err.code === "23505") {
+        // User already exists (duplicate key error)
         return {
           errors: [
             {
@@ -217,7 +187,7 @@ export class UserResolver {
       }
     }
 
-    req.session.userId = user.id;
+    req.session.userId = user.id; // Automatically Log in the User
     return {
       user,
     };
@@ -228,11 +198,13 @@ export class UserResolver {
     @Ctx() { req }: MyContext
   ): Promise<UserResponse> {
     const user = await User.findOne({
+      // If userNameOrEmail includes an at sign assume its an email otherwise assume its a username
       where: options.usernameOrEmail.includes("@")
         ? { email: options.usernameOrEmail }
         : { username: options.usernameOrEmail },
     });
     if (!user) {
+      // No user with the specified Username or Email
       return {
         errors: [
           {
@@ -244,6 +216,7 @@ export class UserResolver {
     }
     const valid = await argon2.verify(user.password, options.password);
     if (!valid) {
+      // Invalid Password
       return {
         errors: [
           {
@@ -254,6 +227,7 @@ export class UserResolver {
       };
     }
 
+    // Login in the user by storing a cookie
     req.session!.userId = user.id;
     return {
       user,
@@ -263,7 +237,8 @@ export class UserResolver {
   logout(@Ctx() { req, res }: MyContext) {
     return new Promise((resolve) => {
       req.session.destroy((err) => {
-        res.clearCookie("qid");
+        // Destroy the redis session
+        res.clearCookie("qid"); // Destory the cookie
         if (err) {
           resolve(false);
           return;
