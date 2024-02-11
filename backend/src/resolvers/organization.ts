@@ -157,8 +157,31 @@ export class OrganizationResolver {
   }
   // Finds a singular organization
   @Query(() => Organization, { nullable: true })
-  organization(@Arg("id", () => Int) id: number): Promise<Organization | null> {
-    return Organization.findOne({ where: { id }, relations: ["creator"] }); // Add a relation to cretor to fetch the creator
+  async organization(
+    @Arg("id", () => Int) id: number,
+    @Ctx() { req }: MyContext
+  ): Promise<Organization | null> {
+    const organizations = await dataSource.query(`
+    select o.*,
+    json_build_object(
+      'username', u.username,
+      'id', u.id,
+      'email', u.email,
+      'createdAt', u."createdAt",
+      'updatedAt', u."updatedAt"
+      ) creator,
+    ${
+      req.session.userId // If user is logged in get their voteStatus
+        ? `(select value from star where "userId" = ${req.session.userId} and "organizationId" = o.id) "voteStatus"`
+        : 'null as "voteStatus"'
+    }
+    from organization o
+    inner join public.user u on u.id = o."creatorId"
+    where o.id = ${id}
+
+    `);
+
+    return organizations[0];
   }
   // Adds an organization to the database
   @Mutation(() => Organization)

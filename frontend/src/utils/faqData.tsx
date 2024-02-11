@@ -97,7 +97,7 @@ export const faqData: FaqData[] = [
                         1. Navigate to the home page by clicking home
                     </Text>
                     <Box mt={4}>
-                        <Image src={"/loginsteps/LoginStep1.png"} alt='Press login button on homepage' width={900} height={100} />
+                        <Image src={"/registersteps/RegisterStep1.png"} alt='Press login button on homepage' width={900} height={100} />
                     </Box>
                     <Divider />
                     <Text mt={8}>
