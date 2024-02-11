@@ -11,13 +11,15 @@ const Help: React.FC<{}> = ({ }) => {
             <Box>
                 <Accordion defaultIndex={[0]} allowMultiple>
                     {faqData.map((data, index) => (
-                        <AccordionItem mt={8} key={index}>
+                        <AccordionItem mb={8} key={index}>
                             {!data.isSpecial ? (
                                 <>
                                     <h2>
                                         <AccordionButton>
                                             <Box as="span" flex='1' textAlign='left'>
-                                                {data.label}
+                                                <Heading fontSize={"xl"}>
+                                                    {data.label}
+                                                </Heading>
                                             </Box>
                                             <AccordionIcon />
                                         </AccordionButton>

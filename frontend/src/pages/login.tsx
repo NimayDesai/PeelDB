@@ -4,21 +4,18 @@ import {
     Container,
     Heading,
     HStack,
-    InputProps,
     Link,
     Stack,
-    Text,
-    useDisclosure
+    Text
 } from '@chakra-ui/react'
 import { Form, Formik } from 'formik'
+import NextLink from 'next/link'
 import { useRouter } from 'next/router'
-import { forwardRef, useEffect, useRef, useState } from 'react'
+import { forwardRef, useEffect, useState } from 'react'
 import { InputField } from '../components/InputField'
 import { PasswordField } from '../components/PasswordField'
-import { MeDocument, MeQuery, useLoginMutation, useRegisterMutation } from '../gql/generated/graphql'
+import { MeDocument, MeQuery, useLoginMutation } from '../gql/generated/graphql'
 import { toErrorMap } from '../utils/toErrorMap'
-import NextLink from 'next/link';
-import { withApollo } from '../utils/withApollo'
 
 const Login = forwardRef<{}>(({ }) => {
     const [login,] = useLoginMutation();

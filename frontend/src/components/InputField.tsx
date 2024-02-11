@@ -2,15 +2,10 @@ import {
     FormControl,
     FormErrorMessage,
     FormLabel,
-    IconButton,
-    Input,
-    InputGroup,
-    InputRightElement,
-    useDisclosure
+    Input
 } from '@chakra-ui/react'
 import { useField } from 'formik'
-import { InputHTMLAttributes, useRef } from 'react'
-import { HiEye, HiEyeOff } from 'react-icons/hi'
+import { InputHTMLAttributes } from 'react'
 
 type InputFieldProps = InputHTMLAttributes<HTMLInputElement> & {
     name: string

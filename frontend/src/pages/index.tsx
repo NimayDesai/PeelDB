@@ -1,22 +1,21 @@
-import { Fragment, useEffect, useState } from 'react';
 import {
-    chakra,
+    Box,
+    Button,
     Container,
+    Flex,
+    Icon,
+    Link,
     Stack,
     Text,
-    useColorModeValue,
-    Button,
-    Link,
-    Icon,
-    Flex,
-    Box
+    chakra,
+    useColorModeValue
 } from '@chakra-ui/react';
+import { Fragment } from 'react';
 // Here we have used react-icons package for the icons
+import NextLink from 'next/link';
 import { FaGithub } from 'react-icons/fa';
-import NextLink from 'next/link'
-import { useMeQuery } from '../gql/generated/graphql';
-import { useRouter } from 'next/router';
 import { Wrapper } from '../components/Wrapper';
+import { useMeQuery } from '../gql/generated/graphql';
 
 const features = [
     {
@@ -104,7 +103,6 @@ const features = [
 ];
 const Index = () => {
     const { data } = useMeQuery();
-    const router = useRouter();
 
     return (
         <Wrapper variant='full'>

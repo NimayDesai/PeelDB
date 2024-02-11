@@ -1,9 +1,6 @@
 import { useRouter } from "next/router";
 import { useEffect } from "react";
-import {
-  useMeQuery,
-  useAddOrganizationMutation,
-} from "../gql/generated/graphql";
+import { useMeQuery } from "../gql/generated/graphql";
 
 export const useIsAuth = () => {
   const { data, loading } = useMeQuery();

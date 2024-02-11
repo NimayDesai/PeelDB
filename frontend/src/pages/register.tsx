@@ -2,37 +2,28 @@ import {
     Box,
     Button,
     Container,
-    FormControl,
-    FormLabel,
     Heading,
     HStack,
-    Input,
     InputProps,
     Link,
     Stack,
-    Text,
-    useDisclosure,
-    useMergeRefs
+    Text
 } from '@chakra-ui/react'
-import { Form, Formik, useField } from 'formik'
-import { forwardRef, useEffect, useRef, useState } from 'react'
-import { PasswordField } from '../components/PasswordField'
+import { Form, Formik } from 'formik'
+import NextLink from 'next/link'
+import { useRouter } from 'next/router'
+import { forwardRef, useEffect, useState } from 'react'
 import { InputField } from '../components/InputField'
-import { gql, useMutation } from '@apollo/client'
+import { PasswordField } from '../components/PasswordField'
 import { MeDocument, MeQuery, useRegisterMutation } from '../gql/generated/graphql'
 import { toErrorMap } from '../utils/toErrorMap'
-import { useRouter } from 'next/router'
-import NextLink from 'next/link';
-import { withApollo } from '../utils/withApollo'
 
-const Register = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
-    const { isOpen, onToggle } = useDisclosure()
+const Register = forwardRef<HTMLInputElement, InputProps>(() => {
     const [domLoaded, setDomLoaded] = useState(false);
 
     useEffect(() => {
         setDomLoaded(true);
     }, []);
-    const inputRef = useRef<HTMLInputElement>(null)
     const [register,] = useRegisterMutation();
     const router = useRouter();
 

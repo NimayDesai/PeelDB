@@ -31,11 +31,7 @@ const footerData = [
         label: 'Social',
         href: '#',
         links: [
-            { label: 'Email', href: '#' },
-            { label: 'Twitter', href: '#' },
-            { label: 'Github', href: '#' },
-            { label: 'Linkedin', href: '#' },
-            { label: 'RSS', href: '#' }
+            { label: 'Github', href: 'https://github.com/NimayDesai/SchoolOrganizationDB' },
         ]
     }
 ];

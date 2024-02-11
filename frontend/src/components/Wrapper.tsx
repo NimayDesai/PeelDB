@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Box } from "@chakra-ui/react";
 
 export type WrapperVariant = "small" | "regular" | "large" | "full";
@@ -19,15 +19,29 @@ export const Wrapper: React.FC<WrapperProps> = ({
         pixelSize = "1200px"
     } else if (variant === "full") {
         pixelSize = "1920px"
+    } else {
+        pixelSize = "800px"
     }
+    const [domLoaded, setDomLoaded] = useState(false);
+
+    useEffect(() => {
+        setDomLoaded(true);
+    }, []);
     return (
-        <Box
-            mt={8}
-            mx="auto"
-            maxW="1920"
-            w="100%"
-        >
-            {children}
-        </Box>
+        <>
+            {
+                domLoaded ? (
+                    <Box
+                        mt={8}
+                        mx="auto"
+                        maxW={pixelSize}
+                        w="100%"
+                    >
+                        {children}
+                    </Box>
+                )
+                    : null
+            }
+        </>
     );
 };

@@ -17,7 +17,7 @@ const CreateOrganization: React.FC<{}> = ({ }) => {
         <Wrapper variant="small">
             <Formik
                 initialValues={{ name: "", typeOfOrganization: "", email: "", address: "", phoneNumber: "", }}
-                onSubmit={async (values, { setErrors }) => {
+                onSubmit={async (values) => {
                     console.log(values);
                     const { errors } = await addOrganization({
                         variables: { input: values },

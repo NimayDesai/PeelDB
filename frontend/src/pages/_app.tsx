@@ -6,6 +6,7 @@ import { DarkModeSwitch } from "../components/DarkModeSwitch";
 import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client"
 import { NavBar } from "../components/NavBar";
 import { withApollo } from "../utils/withApollo";
+import { Footer } from "../components/Footer";
 
 const client = new ApolloClient({
   uri: "http://localhost:4000/graphql",
@@ -20,6 +21,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     <ChakraProvider theme={theme}>
       <NavBar />
       <Component {...pageProps} />
+      <Footer />
     </ChakraProvider>
   );
 }
