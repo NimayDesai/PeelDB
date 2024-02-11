@@ -18,7 +18,7 @@ import { MyContext } from "../types";
 import { isAuth } from "../middleware/isAuth";
 import { validateChangeInfo } from "../utils/valdiateChangeInfo";
 import dataSource from "../db.config";
-import { validateRegister } from "src/utils/validateRegister";
+import { validateRegister } from "../utils/validateRegister";
 
 // Input for Login
 @InputType()
