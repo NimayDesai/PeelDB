@@ -1,12 +1,11 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies
-backend/node_modules
+/node_modules
 /.pnp
-/backend/dist
 .pnp.js
 .yarn/install-state.gz
-
+/dist
 # testing
 /coverage
 
@@ -28,7 +27,7 @@ yarn-error.log*
 
 # local env files
 .env*.local
-
+.env
 # vercel
 .vercel
 

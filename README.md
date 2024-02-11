@@ -2,6 +2,8 @@
 
 ## By Nimay Desai
 
+The presentation for this project can be downloaded at [this link](SchoolDB.pptx)
+
 # About the project
 
 This website aim to provides a place for schools to add all their business and community partners for other people to access. The website allows the user to search through the list, and schools can add their own partners for other schools to see.
