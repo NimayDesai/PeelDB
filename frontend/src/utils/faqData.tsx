@@ -101,33 +101,71 @@ export const faqData: FaqData[] = [
                     </Box>
                     <Divider />
                     <Text mt={8}>
-                        2. Click login to access the login page
+                        2. Click register button to access the register page
                     </Text>
                     <Box mt={4}>
-                        <Image src={"/loginsteps/LoginStep2.png"} alt='Press login button on homepage' width={900} height={100} />
+                        <Image src={"/registersteps/RegisterStep2.png"} alt='Press login button on homepage' width={900} height={100} />
                     </Box>
                     <Divider />
                     <Text mt={8}>
-                        3. Enter your username and password.
-                        Make sure that the length of both are at least 3 characters,
-                        and the username does not include an at sign
+                        3. Enter your username, email and password.
+                        Make sure that the length of all fields are at least 3 characters,
+                        the username does not include an at sign,
+                        your email must have an at sign, and both of your passwords are the same
                     </Text>
                     <Flex>
                         <Box m="auto" mt={4}>
-                            <Image src={"/loginsteps/LoginStep3.png"} alt='Press login button on homepage' width={400} height={400} />
+                            <Image src={"/registersteps/RegisterStep3.png"} alt='Press login button on homepage' width={400} height={400} />
                         </Box>
                     </Flex>
                     <Text mt={8}>
-                        4. Click the login button on the bottom to complete your login
+                        4. Click the register button to create your account
                     </Text>
                     <Flex>
                         <Box m="auto" mt={4}>
-                            <Image src={"/loginsteps/LoginStep4.png"} alt='Press login button on homepage' width={400} height={400} />
+                            <Image src={"/registersteps/RegisterStep4.png"} alt='Press login button on homepage' width={400} height={400} />
                         </Box>
                     </Flex>
                 </AccordionPanel>
             </>
         ),
         isSpecial: true
-    }
+    },
+    {
+        special: () => (
+            <>
+                <h2>
+                    <AccordionButton>
+                        <Box as="span" flex='1' textAlign='left'>
+                            <Heading fontSize={"xl"}>
+                                How to add an organization on SchoolDB
+                            </Heading>
+                        </Box>
+                        <AccordionIcon />
+                    </AccordionButton>
+                </h2>
+                <AccordionPanel pb={4} alignItems={"ceter"}>
+                    <Text size={"md"}>
+                        How to add an organizaiton
+                    </Text>
+                    <Text mt={8}>
+                        1. Navigate to the main app page and make sure you are logged in
+                    </Text>
+
+                    <Divider />
+                    <Text mt={8}>
+                        2. Click on the add organization button
+                    </Text>
+                    <Divider />
+                    <Text mt={8}>
+                        3. Enter you content you want for this organization
+                    </Text>
+                    <Text mt={8}>
+                        4. Click on the add organizaiton button to add the organization
+                    </Text>
+                </AccordionPanel>
+            </>
+        ),
+        isSpecial: true
+    },
 ];

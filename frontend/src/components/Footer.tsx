@@ -13,9 +13,8 @@ const footerData = [
     },
     {
         label: 'Organization',
-        href: '#',
         links: [
-            { label: 'Add Organization', href: '#' },
+            { label: 'Add Organization', href: '/create-organizations' },
             { label: 'View Organizations', href: '/app' },
         ]
     },
