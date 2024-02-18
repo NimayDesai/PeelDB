@@ -64,9 +64,8 @@ const Index = () => {
       </Formik>
       <Box mt={8}>
         <Stack spacing={8}>
-          {!data ? null : data?.organizations.organizations.map(o => (
+          {(!data?.organizations || data!.organizations.organizations.length < 1) ? <div>{!data?.organizations ? "Server Error" : "There are no search results availble"}</div> : data?.organizations.organizations.map(o => (
             <Card key={o.id}>
-
               <CardHeader flexDirection={"row"}>
                 <Flex align={"center"}>
 
@@ -122,7 +121,8 @@ const Index = () => {
               </CardBody>
             </Card>
           )
-          )}</Stack>
+          )}
+        </Stack>
         {data && data.organizations.hasMore ?
           <Flex mt={8}>
             <Button my={8} m="auto" onClick={() => {

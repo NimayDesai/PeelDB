@@ -6,9 +6,9 @@ The presentation for this project can be downloaded at [this link](SchoolDB.pptx
 
 # About the project
 
-# ACESS THE WEBISTE NOW (https://peeldb.me)
+# ACCESS THE WEBISTE NOW (https://peeldb.me)
 
-This website aim to provides a place for schools to add all their business and community partners for other people to access. The website allows the user to search through the list, and schools can add their own partners for other schools to see.
+This website aims to provides a place for schools to add all their business and community partners for other people to access. The website allows the user to search through the list, and schools can add their own partners for other schools to see.
 
 Right now, the website lists 25 initial partners that the school uses with Contact Info, Type of Organzaiation and Name of the Organizaiton
 

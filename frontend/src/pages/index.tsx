@@ -111,7 +111,7 @@ const Index = () => {
                     <Stack direction={{ base: 'column', md: 'row' }}>
                         <Stack direction="column" spacing={10} justifyContent="center">
                             <chakra.h1 fontSize="5xl" lineHeight={1} fontWeight="bold" textAlign="left">
-                                Have all your board's busines partners in
+                                Have all your board's business partners in
                                 <chakra.span bgGradient="linear(to-br, #74d680, #378b29)" bgClip="text">
                                     {' '}
                                     One Place{' '}
@@ -125,8 +125,7 @@ const Index = () => {
                                 fontWeight="400"
                                 maxW="700px"
                             >
-                                Build fully functional accessible web applications faster than ever – TemplatesKart
-                                includes more than 80 customizable components and hooks to cover you in any situation
+                                SchoolDB allows you to add all the organizations you want for your school, and share the information with other schools, while accessing other schools best organizations by starring them
                             </Text>
                             <Stack
                                 direction={{ base: 'column', md: 'row' }}

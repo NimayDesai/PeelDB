@@ -102,6 +102,7 @@ export type Organization = {
 
 export type OrganizationInput = {
   address: Scalars['String']['input'];
+  description: Scalars['String']['input'];
   email: Scalars['String']['input'];
   name: Scalars['String']['input'];
   phoneNumber: Scalars['String']['input'];
@@ -181,7 +182,7 @@ export type AddOrganizationMutationVariables = Exact<{
 }>;
 
 
-export type AddOrganizationMutation = { __typename?: 'Mutation', addOrganization: { __typename?: 'Organization', id: number, createdAt: string, updatedAt: string, name: string, phoneNumber: string, address: string, email: string, typeOfOrganization: string } };
+export type AddOrganizationMutation = { __typename?: 'Mutation', addOrganization: { __typename?: 'Organization', id: number, createdAt: string, updatedAt: string, name: string, description: string, phoneNumber: string, address: string, email: string, typeOfOrganization: string } };
 
 export type DeleteOrganizationMutationVariables = Exact<{
   id: Scalars['Int']['input'];
@@ -327,6 +328,7 @@ export const AddOrganizationDocument = gql`
     createdAt
     updatedAt
     name
+    description
     phoneNumber
     address
     email

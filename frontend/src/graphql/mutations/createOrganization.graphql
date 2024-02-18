@@ -4,6 +4,7 @@ mutation addOrganization($input: OrganizationInput!) {
     createdAt
     updatedAt
     name
+    description
     phoneNumber
     address
     email

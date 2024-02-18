@@ -28,6 +28,8 @@ class OrganizationInput {
   @Field()
   address: string;
   @Field()
+  description: string;
+  @Field()
   phoneNumber: string;
 }
 

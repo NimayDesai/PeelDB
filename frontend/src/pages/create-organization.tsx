@@ -16,7 +16,7 @@ const CreateOrganization: React.FC<{}> = ({ }) => {
     return (
         <Wrapper variant="small">
             <Formik
-                initialValues={{ name: "", typeOfOrganization: "", email: "", address: "", phoneNumber: "", }}
+                initialValues={{ name: "", typeOfOrganization: "", email: "", address: "", phoneNumber: "", description: "" }}
                 onSubmit={async (values) => {
                     console.log(values);
                     const { errors } = await addOrganization({
@@ -61,6 +61,13 @@ const CreateOrganization: React.FC<{}> = ({ }) => {
                                 name="phoneNumber"
                                 placeholder="123-456-7890..."
                                 label="Phone Number"
+                            />
+                        </Box>
+                        <Box mt={4}>
+                            <InputField
+                                name="description"
+                                placeholder="Lorem Ipsum..."
+                                label="Description"
                             />
                         </Box>
                         <Button

@@ -69,7 +69,7 @@ export const Footer: React.FC<{}> = () => {
                 </Flex>
                 <Flex alignItems="center">
                     <Text color="gray.500" fontSize="0.875rem" pl="0.5rem">
-                        &copy; 2019 company, Inc. All rights reserved.
+                        &copy; 2023 SchoolDB. All rights reserved.
                     </Text>
                 </Flex>
             </VStack>
