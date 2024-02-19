@@ -59,7 +59,7 @@ export class OrganizationResolver {
 
     const star = await Star.findOne({ where: { organizationId, userId } }); // See if the user has voted already
 
-    if (star && star.value !== realValue) {
+    if (star && star.value !== -1) {
       // The user has already voted and they are changing their vote (star to unstar) or (star to unstar to star)
       await dataSource.transaction(async (tm) => {
         await tm.query(
@@ -110,9 +110,9 @@ export class OrganizationResolver {
     @Arg("cursor", () => String, { nullable: true }) cursor: string | null,
     @Ctx() { req }: MyContext
   ): Promise<PaginatedOrganizations> {
-    const realLimit = Math.min(50, limit); // Cap limit at 50
-    const realLimitPlusOne = realLimit + 1; // Fetch the next organization, but do not display it
-    const replacements: any[] = [realLimitPlusOne];
+    const realLimit = Math.min(100, limit); // Cap limit at 100
+    const extraLimit = realLimit + 1; // Fetch the next organization, but do not display it
+    const replacements: any[] = [extraLimit];
 
     if (req.session.userId) {
       // If there is al ogged in user
@@ -154,7 +154,7 @@ export class OrganizationResolver {
 
     return {
       organizations: organizations.slice(0, realLimit), // Liimit number of Organizations based on the limit
-      hasMore: organizations.length === realLimitPlusOne,
+      hasMore: organizations.length === extraLimit,
     };
   }
   // Finds a singular organization

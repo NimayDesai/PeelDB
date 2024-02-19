@@ -21,7 +21,7 @@ export const NavBar = (props: any) => {
             {domLoaded ?
                 <NavBarContainer {...props}>
                     <chakra.span bgGradient="linear(to-br, #74d680, #378b29)" bgClip="text">
-                        <Heading size={"xl"}>
+                        <Heading size={"xl"} mr={4}>
                             {' '}
                             SchoolDB{' '}</Heading>
                     </chakra.span>{' '}
@@ -126,10 +126,19 @@ const MenuLinks = () => {
                                 </Text>
                             </Link>
                         </NextLink>
+                        <NextLink href="/help">
+                            <Link size={"4xl"}>
+                                <Text display="block" size="xl">
+                                    Help
+                                </Text>
+                            </Link>
+                        </NextLink>
                         {body}
 
                     </HStack>
                 </Box>
+
+                <DarkModeSwitch />
                 <Box display={{ base: "block", md: "none" }}>
                     <Menu>
                         <MenuButton
@@ -146,8 +155,32 @@ const MenuLinks = () => {
                         />
                         <MenuList fontSize="sm" zIndex={5}>
                             {data?.me ?
-                                <MenuItem>
-                                    <Button>
+                                <>
+                                    <MenuItem>
+                                        <Button>
+                                            <NextLink href="/">
+                                                <Link size={"4xl"}>
+                                                    <Text display="block" size="xl">
+                                                        Home
+                                                    </Text>
+                                                </Link>
+                                            </NextLink>
+                                        </Button></MenuItem>
+                                    <MenuItem>
+                                        <Button>
+                                            <NextLink href="/help">
+                                                <Link size={"4xl"}>
+                                                    <Text display="block" size="xl">
+                                                        Help
+                                                    </Text>
+                                                </Link>
+                                            </NextLink>
+                                        </Button>
+                                    </MenuItem>
+                                </>
+                                :
+                                <>
+                                    <MenuItem>
                                         <NextLink href="/">
                                             <Link size={"4xl"}>
                                                 <Text display="block" size="xl">
@@ -155,16 +188,17 @@ const MenuLinks = () => {
                                                 </Text>
                                             </Link>
                                         </NextLink>
-                                    </Button></MenuItem>
-                                :
-                                <MenuItem>
-                                    <NextLink href="/">
-                                        <Link size={"4xl"}>
-                                            <Text display="block" size="xl">
-                                                Home
-                                            </Text>
-                                        </Link>
-                                    </NextLink></MenuItem>}
+                                    </MenuItem>
+                                    <MenuItem>
+                                        <NextLink href="/help">
+                                            <Link size={"4xl"}>
+                                                <Text display="block" size="xl">
+                                                    Help
+                                                </Text>
+                                            </Link>
+                                        </NextLink>
+                                    </MenuItem>
+                                </>}
                             {data?.me ?
                                 <>
                                     <MenuItem>
@@ -217,7 +251,6 @@ const MenuLinks = () => {
                         </MenuList>
                     </Menu>
                 </Box>
-                <DarkModeSwitch />
 
             </HStack>
         </Box>
