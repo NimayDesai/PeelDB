@@ -1,5 +1,5 @@
 import { useApolloClient } from "@apollo/client";
-import { Box, Button, Flex, HStack, Heading, IconButton, Link, Menu, MenuButton, MenuDivider, MenuItem, MenuList, Stack, Text, chakra, useColorModeValue } from "@chakra-ui/react";
+import { Box, Button, Flex, HStack, Heading, IconButton, Link, Menu, MenuButton, MenuDivider, MenuItem, MenuList, Stack, Text, chakra } from "@chakra-ui/react";
 import NextLink from 'next/link';
 import { useEffect, useState } from "react";
 import { CgProfile } from "react-icons/cg";
@@ -9,7 +9,7 @@ import { isServer } from "../utils/isServer";
 import { DarkModeSwitch } from "./DarkModeSwitch";
 
 
-export const NavBar = (props: any) => {
+export const NavBar = () => {
     const [domLoaded, setDomLoaded] = useState(false);
 
     useEffect(() => {
@@ -19,7 +19,7 @@ export const NavBar = (props: any) => {
     return (
         <>
             {domLoaded ?
-                <NavBarContainer {...props}>
+                <NavBarContainer>
                     <chakra.span bgGradient="linear(to-br, #74d680, #378b29)" bgClip="text">
                         <Heading size={"xl"} mr={4}>
                             {' '}
@@ -52,22 +52,20 @@ const MenuLinks = () => {
     else if (!data?.me) {
         body = (
             <>
-                <HStack spacing={8} display={{ base: "none", md: "block" }}>
-                    <NextLink href="/login">
-                        <Link size={"4xl"}>
-                            <Text display="block" size="xl">
-                                Login
-                            </Text>
-                        </Link>
-                    </NextLink>
-                    <NextLink href="/register">
-                        <Link size={"4xl"}>
-                            <Text display="block" size="xl">
-                                Register
-                            </Text>
-                        </Link>
-                    </NextLink>
-                </HStack>
+                <NextLink href="/login">
+                    <Link size={"4xl"}>
+                        <Text display="block" size="xl">
+                            Login
+                        </Text>
+                    </Link>
+                </NextLink>
+                <NextLink href="/register">
+                    <Link size={"4xl"}>
+                        <Text display="block" size="xl">
+                            Register
+                        </Text>
+                    </Link>
+                </NextLink>
             </>
         )
     } else {
@@ -148,12 +146,9 @@ const MenuLinks = () => {
                             transition="all 0.2s"
                             size="md"
                             color="white"
-                            variant="outline"
-                            bg={useColorModeValue('gray.400', 'gray.800')}
-                            _hover={{ bg: 'auto' }}
-                            _focus={{ boxShadow: 'outline' }}
+                            bg="gray.900"
                         />
-                        <MenuList fontSize="sm" zIndex={5}>
+                        <MenuList fontSize="sm">
                             {data?.me ?
                                 <>
                                     <MenuItem>
@@ -189,6 +184,7 @@ const MenuLinks = () => {
                                             </Link>
                                         </NextLink>
                                     </MenuItem>
+                                    <MenuDivider />
                                     <MenuItem>
                                         <NextLink href="/help">
                                             <Link size={"4xl"}>

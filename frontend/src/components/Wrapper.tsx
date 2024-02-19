@@ -5,7 +5,7 @@ export type WrapperVariant = "small" | "regular" | "large" | "full";
 
 interface WrapperProps {
     variant?: WrapperVariant;
-    children: any
+    children: React.JSX.Element[] | React.JSX.Element | string | React.ReactElement | React.ReactElement[];
 }
 
 export const Wrapper: React.FC<WrapperProps> = ({
