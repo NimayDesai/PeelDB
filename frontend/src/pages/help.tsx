@@ -7,7 +7,7 @@ import { faqData } from '../utils/faqData';
 const Help: React.FC<{}> = ({ }) => {
     return (
         <Wrapper variant='regular'>
-            <Heading mb={8} size={"xl"}>Frequently Asked Questions</Heading>
+            <Heading mb={8} ml={2} size={"xl"}>Frequently Asked Questions</Heading>
             <Box>
                 <Accordion defaultIndex={[0]} allowMultiple>
                     {faqData.map((data, index) => (
