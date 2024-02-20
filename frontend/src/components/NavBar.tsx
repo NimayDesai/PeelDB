@@ -21,7 +21,7 @@ export const NavBar = () => {
             {domLoaded ?
                 <NavBarContainer>
                     <chakra.span bgGradient="linear(to-br, #74d680, #378b29)" bgClip="text">
-                        <Heading size={"xl"} mr={4}>
+                        <Heading size={"xl"} mr={4} color={{ base: "white", md: "green" }}>
                             {' '}
                             SchoolDB{' '}</Heading>
                     </chakra.span>{' '}
@@ -131,6 +131,13 @@ const MenuLinks = () => {
                                 </Text>
                             </Link>
                         </NextLink>
+                        <NextLink href="/about">
+                            <Link size={"4xl"}>
+                                <Text display="block" size="xl">
+                                    About
+                                </Text>
+                            </Link>
+                        </NextLink>
                         {body}
 
                     </HStack>
@@ -190,6 +197,15 @@ const MenuLinks = () => {
                                             <Link size={"4xl"}>
                                                 <Text display="block" size="xl">
                                                     Help
+                                                </Text>
+                                            </Link>
+                                        </NextLink>
+                                    </MenuItem>
+                                    <MenuItem>
+                                        <NextLink href="/about">
+                                            <Link size={"4xl"}>
+                                                <Text display="block" size="xl">
+                                                    About
                                                 </Text>
                                             </Link>
                                         </NextLink>

@@ -1,7 +1,7 @@
 import { Container, Flex, Link, Text, VStack } from '@chakra-ui/react';
 import NextLink from 'next/link';
 import React from 'react';
-import { footerData } from '../utils/footerData';
+import { footerData } from '../utils/data';
 import { Wrapper } from './Wrapper';
 
 export const Footer: React.FC<{}> = () => {
