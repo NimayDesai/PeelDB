@@ -21,3 +21,15 @@ export type FeatureData = {
   title: string;
   detail: string;
 };
+
+export type ContactData = {
+  label: string;
+  text: string;
+};
+
+export type ReviewData = {
+  name: string;
+  content: string;
+  src?: string;
+  position: string;
+};
