@@ -1,7 +1,7 @@
 import { ApolloServer } from "apollo-server-express";
-import "dotenv-safe/config";
 import RedisStore from "connect-redis";
 import cors from "cors";
+import "dotenv-safe/config";
 import express from "express";
 import session from "express-session";
 import Redis from "ioredis";
@@ -55,14 +55,18 @@ const main = async () => {
       resolvers: [HelloResolver, OrganizationResolver, UserResolver],
       validate: false,
     }),
-    context: ({ req, res }): MyContext => ({ req, res }),
+    context: ({ req, res }): MyContext => ({ req, res, redis }),
   });
 
   await apolloServer.start();
   apolloServer.applyMiddleware({
     app,
     cors: {
-      origin: [process.env.CORS_ORIGIN, "https://peeldb.me"],
+      origin: [
+        process.env.CORS_ORIGIN,
+        "https://peeldb.me",
+        "https://studio.apollographql.com",
+      ],
       credentials: true,
     },
   });

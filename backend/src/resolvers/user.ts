@@ -19,6 +19,9 @@ import { isAuth } from "../middleware/isAuth";
 import { validateChangeInfo } from "../utils/valdiateChangeInfo";
 import dataSource from "../db.config";
 import { validateRegister } from "../utils/validateRegister";
+import { sendEmail } from "../utils/sendEmail";
+import { v4 } from "uuid";
+import { FORGET_PASSWORD_PREFIX } from "../constants";
 
 // Input for Login
 @InputType()
@@ -82,6 +85,109 @@ class UserResponse {
 
 @Resolver(User)
 export class UserResolver {
+  @Mutation(() => UserResponse)
+  async changePassword(
+    @Arg("token") token: string,
+    @Arg("newPassword") newPassword: string,
+    @Arg("confirmNewPassword") confirmNewPassword: string,
+    @Ctx() { req, redis }: MyContext
+  ): Promise<UserResponse> {
+    if (newPassword!.length <= 2) {
+      // Password is too short
+      return {
+        errors: [
+          {
+            field: "newPassword",
+            message: "Length Must be greater than 2",
+          },
+        ],
+      };
+    }
+    if (newPassword !== confirmNewPassword) {
+      // Password and confirm Password are not equal
+      return {
+        errors: [
+          {
+            field: "confirmNewPassword",
+            message: "Passwords do not match",
+          },
+        ],
+      };
+    }
+
+    const redisKey = FORGET_PASSWORD_PREFIX + token;
+    const userId = await redis.get(redisKey);
+
+    if (!userId) {
+      return {
+        errors: [
+          {
+            field: "token",
+            message: "Invalid Token",
+          },
+        ],
+      };
+    }
+
+    const userIdNumber = parseInt(userId);
+    const user = await User.findOne({ where: { id: userIdNumber } });
+
+    if (!user) {
+      return {
+        errors: [
+          {
+            field: "token",
+            message: "User no longer exists",
+          },
+        ],
+      };
+    }
+
+    await User.update(
+      { id: userIdNumber },
+      {
+        password: await argon2.hash(newPassword),
+      }
+    );
+
+    await redis.del(redisKey);
+
+    req.session.userId = user.id;
+
+    return { user };
+  }
+  @Mutation(() => Boolean)
+  async forgotPassword(
+    @Arg("email") email: string,
+    @Ctx() { redis }: MyContext
+  ) {
+    const user = await User.findOne({ where: { email } });
+
+    if (!user) {
+      return true;
+    }
+
+    const token = v4();
+
+    await redis.set(
+      FORGET_PASSWORD_PREFIX + token,
+      user.id,
+      "EX",
+      1000 * 60 * 60 * 24 * 3
+    );
+
+    const html = `
+    <div>
+    <div>
+    <h2>Hello ${user.username}</h2>
+    <p>Below is a link to reset your password</p>
+    <a href="https://peeldb.me/change-password/${token}">Reset Password</a>
+    </div></div>
+    `;
+
+    await sendEmail(email, html);
+    return true;
+  }
   @Query(() => Int)
   async countUsers() {
     return dataSource.getRepository(User).createQueryBuilder("u").getCount(); // Get the count of how many users are there

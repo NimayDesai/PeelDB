@@ -37,6 +37,9 @@ const Login = forwardRef<{}>(({ }) => {
                                 <Text color="fg.muted">
                                     Dont have an account yet? <NextLink href="/register"><Link mr={8}>Register</Link></NextLink>
                                 </Text>
+                                <Text color="fg.muted">
+                                    Forgot Password? <NextLink href="/forgot-password"><Link mr={8}>Click Here</Link></NextLink>
+                                </Text>
                             </Stack>
                         </Stack>
                         <Box

@@ -6,6 +6,8 @@ declare global {
       PORT: string;
       CORS_ORIGIN: string;
       SESSION_SECRET: string;
+      SMTP_USERNANME: string;
+      SMTP_PASSWORD: string;
     }
   }
 }
