@@ -354,4 +354,20 @@ export class UserResolver {
       });
     });
   }
+
+  @Mutation(() => Boolean)
+  @UseMiddleware(isAuth)
+  async deleteUser(@Ctx() { req, res }: MyContext): Promise<boolean> {
+    await User.delete({ id: req.session.userId });
+    return new Promise((resolve) => {
+      req.session.destroy((err) => {
+        res.clearCookie("qid");
+        if (err) {
+          resolve(false);
+          return;
+        }
+        resolve(true);
+      });
+    });
+  }
 }

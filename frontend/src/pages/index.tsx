@@ -135,7 +135,6 @@ const Index = () => {
                                         </Box>
                                     ))}
 
-
                                 </VStack>
                             </Stack>
                         </Stack>

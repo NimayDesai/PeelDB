@@ -258,12 +258,12 @@ export const reviewData: ReviewData[] = [
     },
     {
         name: "Manat Manat",
-        content: "SchoolDB Helped me find great non profits organizations I can volunteer at, and get more hours",
+        content: "SchoolDB Helped me find great non profits organizations I can volunteer at and get more hours for work experience!",
         position: "Student at EL Schools",
     },
     {
         name: "Manav Vasa",
-        content: "SchoolDB helped our school find more information about the organizations we are involved at, and our teachers have found",
-        position: "Principals at EL Schools",
+        content: "SchoolDB helped our school find more information about the organizations we are involved at and organizations our teachers have found",
+        position: "Principals at MV Schools located in Brapmton",
     }
 ];

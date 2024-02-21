@@ -1,4 +1,4 @@
-import { Box, Button, Container, HStack, Heading, Stack } from '@chakra-ui/react';
+import { Alert, AlertDescription, AlertIcon, AlertTitle, Box, Button, Container, HStack, Heading, Stack } from '@chakra-ui/react';
 import { Form, Formik } from 'formik';
 import React, { useEffect, useState } from 'react';
 import { InputField } from '../components/InputField';
@@ -34,20 +34,33 @@ const ForgotPassword: React.FC<{}> = ({ }) => {
                                 await forgotPassword({ variables: values });
                                 setComplete(true);
                             }}>
-                                {({ isSubmitting }) => complete ? <Box>Email sent to the email specified</Box> : (
-                                    <Form>
-                                        <Stack spacing="6">
-                                            <Stack spacing="5">
-                                                <InputField name='email' placeholder='bob@bob.com' label='Email' />
-                                            </Stack>
-                                            <HStack justify="space-between">
-                                            </HStack>
+                                {({ isSubmitting }) => complete ?
+                                    (
+                                        <Alert variant='subtle'
+                                            flexDirection='column'
+                                            alignItems='center'
+                                            justifyContent='center'
+                                            textAlign='center'
+                                            height='200px'
+                                            rounded={"md"}
+                                            status='info'>
+                                            <AlertIcon />
+                                            Email sent to the specified email
+                                        </Alert>
+                                    ) : (
+                                        <Form>
                                             <Stack spacing="6">
-                                                <Button type='submit' colorScheme={'teal'} isLoading={isSubmitting}>Forgot Password</Button>
+                                                <Stack spacing="5">
+                                                    <InputField name='email' placeholder='bob@bob.com' label='Email' />
+                                                </Stack>
+                                                <HStack justify="space-between">
+                                                </HStack>
+                                                <Stack spacing="6">
+                                                    <Button type='submit' colorScheme={'teal'} isLoading={isSubmitting}>Forgot Password</Button>
+                                                </Stack>
                                             </Stack>
-                                        </Stack>
-                                    </Form>
-                                )}
+                                        </Form>
+                                    )}
                             </Formik>
                         </Box>
                     </Stack>

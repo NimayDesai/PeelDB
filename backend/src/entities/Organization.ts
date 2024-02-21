@@ -55,7 +55,7 @@ export class Organization extends BaseEntity {
   points!: number;
 
   @Field()
-  @ManyToOne(() => User, (user) => user.organizations)
+  @ManyToOne(() => User, (user) => user.organizations, { onDelete: "CASCADE" })
   creator: User;
 
   @Field()

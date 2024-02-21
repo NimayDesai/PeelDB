@@ -17,7 +17,7 @@ export const Footer: React.FC<{}> = () => {
                     >
                         {footerData.map((data, index) => (
                             <Flex key={index} direction="column" mb="3">
-                                <Text key={index} mb={2} mt={2} fontWeight={"bold"}>{data.label}</Text>
+                                <Text mb={2} mt={2} fontWeight={"bold"}>{data.label}</Text>
                                 <Flex direction={{ base: 'row', md: 'column' }}>
                                     {data!.links!.map((link, index) => (
                                         <NextLink href={link.href}>

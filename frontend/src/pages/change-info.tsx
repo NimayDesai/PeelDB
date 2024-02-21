@@ -1,11 +1,19 @@
 import {
+    AlertDialog,
+    AlertDialogBody,
+    AlertDialogContent,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogOverlay,
     Box,
     Button,
     Container,
     Heading,
     HStack,
     InputProps,
-    Stack
+    Stack,
+    Text,
+    useDisclosure
 } from '@chakra-ui/react'
 import { Form, Formik } from 'formik'
 import { useRouter } from 'next/router'
@@ -13,22 +21,27 @@ import { forwardRef } from 'react'
 import { InputField } from '../components/InputField'
 import { PasswordField } from '../components/PasswordField'
 import { Wrapper } from '../components/Wrapper'
-import { useChangeInfoMutation, useMeQuery } from '../gql/generated/graphql'
+import { useChangeInfoMutation, useDeleteUserMutation, useMeQuery } from '../gql/generated/graphql'
 import { toErrorMap } from '../utils/toErrorMap'
+import { useIsAuth } from '../utils/useIsAuth'
+import { DeleteIcon } from '@chakra-ui/icons'
+import React from 'react'
 
 const Register = forwardRef<HTMLInputElement, InputProps>(() => {
     const [changeInfo,] = useChangeInfoMutation();
+    const [deleteUser] = useDeleteUserMutation();
     const router = useRouter();
-    const { data, loading } = useMeQuery();
+    const { data } = useMeQuery();
+    const { isOpen, onClose, onOpen } = useDisclosure();
+    const cancelRef: any = React.useRef()
 
-    if (!data?.me && !loading) {
-        router.push('/');
-    }
+    useIsAuth();
+
 
     return (
         <Wrapper>
             <Container maxW="lg" py={{ base: '12', md: '24' }} px={{ base: '0', sm: '8' }
-            }>
+            } textAlign={"center"}>
                 <Stack spacing="8">
                     <Stack spacing="6">
                         <Stack spacing={{ base: '2', md: '3' }} textAlign="center">
@@ -71,6 +84,39 @@ const Register = forwardRef<HTMLInputElement, InputProps>(() => {
                             )}
                         </Formik>
                     </Box>
+                    <Button aria-label="Delete Organization" leftIcon={<DeleteIcon width={25} h={25} />} colorScheme='red' p={5} py={10} onClick={onOpen}><Text fontSize={"x-large"}>Delete Account</Text></Button>
+                    <AlertDialog
+                        isOpen={isOpen}
+                        leastDestructiveRef={cancelRef}
+                        onClose={onClose}
+                    >
+                        <AlertDialogOverlay>
+                            <AlertDialogContent>
+                                <AlertDialogHeader fontSize='lg' fontWeight='bold'>
+                                    Delete Account
+                                </AlertDialogHeader>
+
+                                <AlertDialogBody>
+                                    Are you sure you want to delete your account? This action cannot be undoed,
+                                    and all the organizations you have added will be deleted
+                                </AlertDialogBody>
+
+                                <AlertDialogFooter>
+                                    <Button ref={cancelRef} onClick={onClose}>
+                                        Cancel
+                                    </Button>
+                                    <Button colorScheme='red' onClick={async () => {
+                                        await deleteUser({
+                                            update: (cache) => cache.evict({ id: "User:" + data?.me?.id })
+                                        })
+                                        router.push('/');
+                                    }} ml={3}>
+                                        Delete
+                                    </Button>
+                                </AlertDialogFooter>
+                            </AlertDialogContent>
+                        </AlertDialogOverlay>
+                    </AlertDialog>
                 </Stack>
             </Container>
         </Wrapper>

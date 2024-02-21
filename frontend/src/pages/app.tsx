@@ -68,7 +68,6 @@ const Index = () => {
             <Card key={o.id}>
               <CardHeader flexDirection={"row"}>
                 <Flex align={"center"}>
-
                   <NextLink href="/organization/[id]" as={`/organization/${o.id}`}>
                     <Link>
                       <Heading size='lg'>Name: {o.name} </Heading>
@@ -123,6 +122,7 @@ const Index = () => {
           )
           )}
         </Stack>
+
         {data && data.organizations.hasMore ?
           <Flex mt={8}>
             <Button my={8} m="auto" onClick={() => {

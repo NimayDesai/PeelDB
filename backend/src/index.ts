@@ -59,6 +59,7 @@ const main = async () => {
   });
 
   await apolloServer.start();
+  // Allow dev host, production host, and apollo studio to send requests
   apolloServer.applyMiddleware({
     app,
     cors: {
