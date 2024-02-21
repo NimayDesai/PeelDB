@@ -72,7 +72,7 @@ const MenuLinks = () => {
         body = (
             <Stack direction={"row"} align={"center"} spacing={4}>
                 <Box>
-                    <NextLink href={"/change-info"}>
+                    <NextLink href={"/account-settings"}>
                         <Link>
                             {data.me.username}
                         </Link>
@@ -179,6 +179,17 @@ const MenuLinks = () => {
                                             </NextLink>
                                         </Button>
                                     </MenuItem>
+                                    <MenuItem>
+                                        <Button>
+                                            <NextLink href="/about">
+                                                <Link size={"4xl"}>
+                                                    <Text display="block" size="xl">
+                                                        About
+                                                    </Text>
+                                                </Link>
+                                            </NextLink>
+                                        </Button>
+                                    </MenuItem>
                                 </>
                                 :
                                 <>
@@ -217,6 +228,13 @@ const MenuLinks = () => {
                                         <NextLink href="/create-organization">
                                             <Link ml="auto">
                                                 <Button ml={"auto"}>Create Organization</Button>
+                                            </Link>
+                                        </NextLink>
+                                    </MenuItem>
+                                    <MenuItem>
+                                        <NextLink href="/account-settings">
+                                            <Link ml="auto">
+                                                <Button ml={"auto"}>Account Settings</Button>
                                             </Link>
                                         </NextLink>
                                     </MenuItem>

@@ -246,7 +246,7 @@ export const footerData: FooterData[] = [
 export const reviewData: ReviewData[] = [
     {
         name: "Sachkeerat Brar",
-        content: "SchoolDB Help my school immensly about other wonderful business that the community offers. With SchoolDB, I helped increase of clubs byo 200%, and increased engagement by 60%",
+        content: "SchoolDB Help my school immensly about other wonderful business that the community offers. With SchoolDB, I helped increase of clubs buy 200%, and increased engagement by 60%",
         position: "Principal of SB Schools in Brampton, ON",
         src: "/Sachkeerat.jpg"
     },

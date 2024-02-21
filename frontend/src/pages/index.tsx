@@ -22,10 +22,16 @@ import { Wrapper } from '../components/Wrapper';
 import { useMeQuery } from '../gql/generated/graphql';
 import { features } from '../utils/data';
 import { reviewData } from '../utils/data';
+import { useRouter } from 'next/router';
 
 
 const Index = () => {
     const { data } = useMeQuery();
+    const router = useRouter();
+
+    if (data?.me) {
+        router.push('/app');
+    }
 
     return (
         <Wrapper variant='full'>
@@ -74,26 +80,28 @@ const Index = () => {
                                     spacing={{ base: 0, sm: 2 }}
                                     flexWrap="wrap"
                                 >
-                                    <NextLink href={data?.me ? "/app" : "/login"}>
-                                        <Link>
-                                            <Button
-                                                h={12}
-                                                px={6}
-                                                bgGradient="linear(to-br, #74d680, #378b29)"
-                                                color="white"
-                                                _hover={{ bgGradient: 'linear(to-br, #74d680, #378b29)' }}
-                                                variant="solid"
-                                                size="lg"
-                                                rounded="md"
-                                                fontWeight="bold"
-                                                mb={{ base: 2, sm: 0 }}
-                                            >
+                                    <Flex>
+                                        <NextLink href={data?.me ? "/app" : "/login"}>
+                                            <Link >
+                                                <Button
+                                                    h={12}
+                                                    px={6}
+                                                    bgGradient="linear(to-br, #74d680, #378b29)"
+                                                    color="white"
+                                                    _hover={{ bgGradient: 'linear(to-br, #74d680, #378b29)' }}
+                                                    variant="solid"
+                                                    size="lg"
+                                                    rounded="md"
+                                                    fontWeight="bold"
+                                                    mb={{ base: 2, sm: 0 }}
+                                                >
 
-                                                <chakra.span>{data?.me ? "Go To app " : "Get Started"}</chakra.span>
-                                            </Button>
-                                        </Link>
-                                    </NextLink>
-                                    <Link href='https://github.com/NimayDesai/SchoolOrganizationDB'>
+                                                    <chakra.span>{data?.me ? "Go To app " : "Get Started"}</chakra.span>
+                                                </Button>
+                                            </Link>
+                                        </NextLink>
+                                    </Flex>
+                                    <Link href='https://github.com/NimayDesai/SchoolOrganizationDB' mr={"auto"}>
                                         <Flex
                                             border="1px solid"
                                             borderColor="gray.700"
