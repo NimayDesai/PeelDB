@@ -17,8 +17,4 @@ export async function sendEmail(to: string, html: string) {
     subject: "Change Password",
     html,
   });
-
-  console.log("Message sent: %s", info.messageId);
-
-  console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
 }

@@ -6,10 +6,9 @@ export default class Document extends NextDocument {
     return (
       <Html>
         <Head>
-          <link type="image/png" sizes="16x16" rel="icon" href="/icons8-school-16.png" />
+          <link type="image/png" sizes="16x16" rel="icon" href="/icons8-school-101.png" />
         </Head>
         <body>
-
           {/* Make Color mode to persists when you refresh the page. */}
           <ColorModeScript />
           <Main />

@@ -80,7 +80,7 @@ const Register = forwardRef<HTMLInputElement, InputProps>(() => {
                                                 <HStack justify="space-between">
                                                 </HStack>
                                                 <Stack spacing="6">
-                                                    <Button type='submit' colorScheme={'teal'} isLoading={isSubmitting}>Register</Button>
+                                                    <Button type='submit' colorScheme={'green'} isLoading={isSubmitting}>Register</Button>
                                                 </Stack>
                                             </Stack>
                                         </Form>

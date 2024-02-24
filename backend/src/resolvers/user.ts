@@ -160,7 +160,7 @@ export class UserResolver {
   async forgotPassword(
     @Arg("email") email: string,
     @Ctx() { redis }: MyContext
-  ) {
+  ): Promise<boolean> {
     const user = await User.findOne({ where: { email } });
 
     if (!user) {
@@ -189,7 +189,7 @@ export class UserResolver {
     return true;
   }
   @Query(() => Int)
-  async countUsers() {
+  async countUsers(): Promise<number> {
     return dataSource.getRepository(User).createQueryBuilder("u").getCount(); // Get the count of how many users are there
   }
   @UseMiddleware(isAuth) // Check if the user is logged in
@@ -249,7 +249,7 @@ export class UserResolver {
   }
   // Finds the currently logged in user
   @Query(() => User, { nullable: true })
-  async me(@Ctx() { req }: MyContext) {
+  async me(@Ctx() { req }: MyContext): Promise<User | null> {
     if (!req.session.userId) {
       // If the user isnt logged in return null
       return null;
@@ -340,7 +340,7 @@ export class UserResolver {
     };
   }
   @Mutation(() => Boolean)
-  logout(@Ctx() { req, res }: MyContext) {
+  logout(@Ctx() { req, res }: MyContext): Promise<boolean> {
     return new Promise((resolve) => {
       req.session.destroy((err) => {
         // Destroy the redis session

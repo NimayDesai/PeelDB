@@ -5,6 +5,7 @@ import {
     Container,
     Divider,
     Flex,
+    Grid,
     Heading,
     Icon,
     Link,
@@ -17,12 +18,11 @@ import {
 import { Fragment } from 'react';
 // Here we have used react-icons package for the icons
 import NextLink from 'next/link';
+import { useRouter } from 'next/router';
 import { FaGithub } from 'react-icons/fa';
 import { Wrapper } from '../components/Wrapper';
 import { useMeQuery } from '../gql/generated/graphql';
-import { features } from '../utils/data';
-import { reviewData } from '../utils/data';
-import { useRouter } from 'next/router';
+import { features, reviewData } from '../utils/data';
 
 
 const Index = () => {
@@ -37,16 +37,16 @@ const Index = () => {
         <Wrapper variant='full'>
             <Fragment>
                 <Flex>
-                    <Container maxW="6xl" px={{ base: 6, md: 10 }} py={14} justifyContent={"center"} alignContent={"center"} alignItems={"center"}>
+                    <Container maxW="6xl" px={{ base: 6, md: 10 }} py={14}>
                         <Stack direction={{ base: 'column', md: 'row' }}>
-                            <Stack direction="column" spacing={10} justifyContent="center">
+                            <Stack direction="column" spacing={10}>
                                 <chakra.h1 fontSize="5xl" lineHeight={1} fontWeight="bold" textAlign="left">
                                     Have all your board's business partners in
                                     <chakra.span bgGradient="linear(to-br, #74d680, #378b29)" bgClip="text">
                                         {' '}
                                         One Place{' '}
                                     </chakra.span>{' '}
-                                    with SchoolDB
+                                    with PeelDB
                                 </chakra.h1>
                                 <Text
                                     color={useColorModeValue('gray.500', 'gray.400')}
@@ -55,7 +55,7 @@ const Index = () => {
                                     fontWeight="400"
                                     maxW="700px"
                                 >
-                                    SchoolDB allows you to add all the organizations you want for your school, and share the information with other schools, while accessing other schools best organizations by starring them
+                                    PeelDB allows you to add all the organizations you want for your school, and share the information with other schools, while accessing other schools best organizations by starring them
                                 </Text>
                                 <Stack
                                     direction={{ base: 'column', md: 'row' }}
@@ -121,11 +121,10 @@ const Index = () => {
                                         </Flex>
                                     </Link>
                                 </Stack>
-                                <VStack alignItems={"center"} m="auto" justifyContent={"center"}>
-                                    <Heading>What our customers think of us</Heading>
-
+                                <Heading size={"2xl"} textAlign={"center"}>What our customers think of us</Heading>
+                                <Grid templateColumns={"repeat(3, 1fr)"} gap={48} >
                                     {reviewData.map((data, index) => (
-                                        <Box maxW="399px" key={index} mt={8}>
+                                        <Box maxW="399px" key={index} height={"150px"} mt={24}>
                                             <Text size="lg" m="auto" justifyContent={"center"} textAlign={"center"}>{data.content}</Text>
                                             <VStack alignItems="center" mt={8}>
                                                 <Avatar name={data.name} size="lg" width={100} height={100} src={data.src ? data.src : undefined} />
@@ -141,15 +140,13 @@ const Index = () => {
                                             </VStack>
                                             <Divider mt={8} />
                                         </Box>
-                                    ))}
-
-                                </VStack>
+                                    ))}</Grid>
                             </Stack>
                         </Stack>
                     </Container>
                 </Flex>
             </Fragment>
-        </Wrapper>
+        </Wrapper >
     );
 };
 

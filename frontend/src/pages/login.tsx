@@ -83,7 +83,7 @@ const Login = forwardRef<{}>(({ }) => {
                                             <HStack justify="space-between">
                                             </HStack>
                                             <Stack spacing="6">
-                                                <Button type='submit' colorScheme={'teal'} isLoading={isSubmitting}>Login</Button>
+                                                <Button type='submit' colorScheme={'green'} isLoading={isSubmitting}>Login</Button>
                                             </Stack>
                                         </Stack>
                                     </Form>

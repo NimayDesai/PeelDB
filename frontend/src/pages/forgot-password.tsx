@@ -56,7 +56,7 @@ const ForgotPassword: React.FC<{}> = ({ }) => {
                                                 <HStack justify="space-between">
                                                 </HStack>
                                                 <Stack spacing="6">
-                                                    <Button type='submit' colorScheme={'teal'} isLoading={isSubmitting}>Forgot Password</Button>
+                                                    <Button type='submit' colorScheme={'green'} isLoading={isSubmitting}>Forgot Password</Button>
                                                 </Stack>
                                             </Stack>
                                         </Form>

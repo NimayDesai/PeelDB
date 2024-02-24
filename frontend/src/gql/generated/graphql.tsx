@@ -759,26 +759,10 @@ export type MeQueryResult = Apollo.QueryResult<MeQuery, MeQueryVariables>;
 export const OrganizationDocument = gql`
     query Organization($id: Int!) {
   organization(id: $id) {
-    id
-    createdAt
-    updatedAt
-    typeOfOrganization
-    name
-    email
-    phoneNumber
-    address
-    points
-    description
-    voteStatus
-    creatorId
-    creator {
-      id
-      username
-      email
-    }
+    ...OrganizationSnippet
   }
 }
-    `;
+    ${OrganizationSnippetFragmentDoc}`;
 
 /**
  * __useOrganizationQuery__

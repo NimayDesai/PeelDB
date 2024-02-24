@@ -77,14 +77,14 @@ const Register = forwardRef<HTMLInputElement, InputProps>(() => {
                                         <HStack justify="space-between">
                                         </HStack>
                                         <Stack spacing="6">
-                                            <Button type='submit' colorScheme={'teal'} isLoading={isSubmitting}>Change Info</Button>
+                                            <Button type='submit' colorScheme={'green'} isLoading={isSubmitting}>Change Info</Button>
                                         </Stack>
                                     </Stack>
                                 </Form>
                             )}
                         </Formik>
                     </Box>
-                    <Button aria-label="Delete Organization" leftIcon={<DeleteIcon width={25} h={25} />} colorScheme='red' p={5} py={10} onClick={onOpen}><Text fontSize={"x-large"}>Delete Account</Text></Button>
+                    <Button aria-label="Delete Organization" maxW="300px" alignSelf={"center"} leftIcon={<DeleteIcon width={25} h={25} />} colorScheme='red' px={10} py={10} onClick={onOpen}><Text fontSize={"x-large"}>Delete Account</Text></Button>
                     <AlertDialog
                         isOpen={isOpen}
                         leastDestructiveRef={cancelRef}

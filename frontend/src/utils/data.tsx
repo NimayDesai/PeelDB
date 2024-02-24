@@ -246,24 +246,30 @@ export const footerData: FooterData[] = [
 export const reviewData: ReviewData[] = [
     {
         name: "Sachkeerat Brar",
-        content: "SchoolDB Help my school immensly about other wonderful business that the community offers. With SchoolDB, I helped increase of clubs buy 200%, and increased engagement by 60%",
+        content: "PeelDB helped my school immensly about other wonderful business that the community offers. With SchoolDB, I helped increase of clubs buy 200%, and increased engagement by 60%",
         position: "Principal of SB Schools in Brampton, ON",
         src: "/Sachkeerat.jpg"
     },
     {
         name: "Edward Lin",
-        content: "SchoolDB Helped my class learn about where we get our resoruces, and encouraged them to donate to the non profits that they want to support",
+        content: "PeelDB helped my class learn about where we get our resoruces, and encouraged them to donate to the non profits that they want to support",
         position: "Teacher at EL Schools located at Caledon, ON",
         src: "/Edward.jpg"
     },
     {
         name: "Manat Manat",
-        content: "SchoolDB Helped me find great non profits organizations I can volunteer at and get more hours for work experience!",
+        content: "PeelDB helped me find great non profit organizations I can volunteer at and get more hours for work experience!",
         position: "Student at EL Schools",
     },
     {
         name: "Manav Vasa",
-        content: "SchoolDB helped our school find more information about the organizations we are involved at and organizations our teachers have found",
+        content: "PeelDB helped our school find more information about the organizations we are involved at and organizations our teachers have found",
         position: "Principals at MV Schools located in Brapmton",
+    },
+    {
+        name: "Pradyuman Uppal",
+        content: "PeelDB helped me get numerous jobs for orgainzations close to the school, which helped me advanced my portfolio for university",
+        position: "Student at PU Schools",
+        src: "/Pradyuman.jpg"
     }
 ];

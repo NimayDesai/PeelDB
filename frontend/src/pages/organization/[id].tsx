@@ -7,7 +7,6 @@ import { useOrganizationQuery } from '../../gql/generated/graphql';
 import { withApollo } from '../../utils/withApollo';
 
 
-
 const Organization: React.FC<{}> = ({ }) => {
     const router = useRouter();
     const intId = typeof router.query.id === "string" ? parseInt(router.query.id) : -1

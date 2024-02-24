@@ -19,7 +19,7 @@ const Contact: React.FC<{}> = ({ }) => {
                 </Box>
                 <Box mt={8}>
                     <Heading size={"2xl"} mt={8}>About Us</Heading>
-                    <Text mt={8}>SchoolDB was founded by Nimay Desai, for helping schools have an easy to use tool to find new partners they can work, and improve the quality of their schools. The website has stayed free for all users to make sure every school is able to use it</Text>
+                    <Text mt={8}>PeelDB was founded by Nimay Desai, for helping schools have an easy to use tool to find new partners they can work, and improve the quality of their schools. The website has stayed free for all users to make sure every school is able to use it</Text>
                 </Box>
             </Box>
             <Box ml="auto" mr={24}>

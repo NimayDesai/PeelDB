@@ -7,7 +7,7 @@ import { Wrapper } from './Wrapper';
 export const Footer: React.FC<{}> = () => {
     return (
         <Wrapper variant='full'>
-            <Container maxW="7xl" p={{ base: 5, md: 10 }}>
+            <Container maxW="7xl" p={{ base: 5, md: 10 }} mt={48}>
                 <VStack spacing={5} alignItems="initial">
                     <Flex
                         flexWrap="wrap"

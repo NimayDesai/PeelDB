@@ -74,7 +74,7 @@ const CreateOrganization: React.FC<{}> = ({ }) => {
                             mt={4}
                             type="submit"
                             isLoading={isSubmitting}
-                            colorScheme="teal"
+                            colorScheme="green"
                         >
                             Add Organization
                         </Button>
