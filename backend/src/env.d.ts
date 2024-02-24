@@ -8,7 +8,7 @@ declare global {
       SESSION_SECRET: string;
       SMTP_USERNANME: string;
       SMTP_PASSWORD: string;
-      BING_COOKIE: string;
+      COOKIE_NAME: string;
     }
   }
 }

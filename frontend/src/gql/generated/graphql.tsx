@@ -84,12 +84,8 @@ export type MutationRegisterArgs = {
 
 
 export type MutationUpdateOrganizationArgs = {
-  address?: InputMaybe<Scalars['String']['input']>;
-  email?: InputMaybe<Scalars['String']['input']>;
-  id: Scalars['Float']['input'];
-  name?: InputMaybe<Scalars['String']['input']>;
-  phoneNumber?: InputMaybe<Scalars['String']['input']>;
-  typeOfOrganization?: InputMaybe<Scalars['String']['input']>;
+  id: Scalars['Int']['input'];
+  input: UpdateOrganizationInput;
 };
 
 
@@ -157,6 +153,15 @@ export type RegisterInput = {
   email: Scalars['String']['input'];
   password: Scalars['String']['input'];
   username: Scalars['String']['input'];
+};
+
+export type UpdateOrganizationInput = {
+  address?: InputMaybe<Scalars['String']['input']>;
+  description?: InputMaybe<Scalars['String']['input']>;
+  email?: InputMaybe<Scalars['String']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  phoneNumber?: InputMaybe<Scalars['String']['input']>;
+  typeOfOrganization?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type User = {
@@ -248,6 +253,14 @@ export type RegisterMutationVariables = Exact<{
 
 
 export type RegisterMutation = { __typename?: 'Mutation', register: { __typename?: 'UserResponse', errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null, user?: { __typename?: 'User', username: string, email: string, id: number } | null } };
+
+export type UpdateOrganizationMutationVariables = Exact<{
+  id: Scalars['Int']['input'];
+  input: UpdateOrganizationInput;
+}>;
+
+
+export type UpdateOrganizationMutation = { __typename?: 'Mutation', updateOrganization?: { __typename?: 'Organization', id: number, createdAt: string, updatedAt: string, typeOfOrganization: string, name: string, email: string, phoneNumber: string, address: string, description: string } | null };
 
 export type VoteMutationVariables = Exact<{
   organizationId: Scalars['Int']['input'];
@@ -648,6 +661,48 @@ export function useRegisterMutation(baseOptions?: Apollo.MutationHookOptions<Reg
 export type RegisterMutationHookResult = ReturnType<typeof useRegisterMutation>;
 export type RegisterMutationResult = Apollo.MutationResult<RegisterMutation>;
 export type RegisterMutationOptions = Apollo.BaseMutationOptions<RegisterMutation, RegisterMutationVariables>;
+export const UpdateOrganizationDocument = gql`
+    mutation UpdateOrganization($id: Int!, $input: UpdateOrganizationInput!) {
+  updateOrganization(id: $id, input: $input) {
+    id
+    createdAt
+    updatedAt
+    typeOfOrganization
+    name
+    email
+    phoneNumber
+    address
+    description
+  }
+}
+    `;
+export type UpdateOrganizationMutationFn = Apollo.MutationFunction<UpdateOrganizationMutation, UpdateOrganizationMutationVariables>;
+
+/**
+ * __useUpdateOrganizationMutation__
+ *
+ * To run a mutation, you first call `useUpdateOrganizationMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateOrganizationMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateOrganizationMutation, { data, loading, error }] = useUpdateOrganizationMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useUpdateOrganizationMutation(baseOptions?: Apollo.MutationHookOptions<UpdateOrganizationMutation, UpdateOrganizationMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateOrganizationMutation, UpdateOrganizationMutationVariables>(UpdateOrganizationDocument, options);
+      }
+export type UpdateOrganizationMutationHookResult = ReturnType<typeof useUpdateOrganizationMutation>;
+export type UpdateOrganizationMutationResult = Apollo.MutationResult<UpdateOrganizationMutation>;
+export type UpdateOrganizationMutationOptions = Apollo.BaseMutationOptions<UpdateOrganizationMutation, UpdateOrganizationMutationVariables>;
 export const VoteDocument = gql`
     mutation Vote($organizationId: Int!, $value: Int!) {
   vote(organizationId: $organizationId, value: $value)

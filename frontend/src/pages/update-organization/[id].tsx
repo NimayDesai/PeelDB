@@ -2,34 +2,44 @@ import { Box, Button } from '@chakra-ui/react';
 import { Form, Formik } from 'formik';
 import { useRouter } from 'next/router';
 import React from 'react';
-import { InputField } from '../components/InputField';
-import { Wrapper } from '../components/Wrapper';
-import { useAddOrganizationMutation } from '../gql/generated/graphql';
-import { useIsAuth } from '../utils/useIsAuth';
-import { withApollo } from '../utils/withApollo';
+import { InputField } from '../../components/InputField';
+import { Wrapper } from '../../components/Wrapper';
+import { useOrganizationQuery, useUpdateOrganizationMutation } from '../../gql/generated/graphql';
+import { useGetIntId } from '../../utils/useGetIntId';
 
 
-const CreateOrganization: React.FC<{}> = ({ }) => {
-    const [addOrganization] = useAddOrganizationMutation();
-    // If the user is not logged in redirect to the login page
-    useIsAuth();
+const UpdateOrganization: React.FC<{}> = ({ }) => {
     const router = useRouter();
+    const intId = useGetIntId();
+    const [updateOrganization] = useUpdateOrganizationMutation();
+    const { data, loading } = useOrganizationQuery({
+        skip: intId === -1,
+        variables: {
+            id: intId
+        }
+    })
+    if (loading) {
+        return <div>Loading...</div>
+    }
     return (
         <Wrapper variant="small">
             <Formik
-                initialValues={{ name: "", typeOfOrganization: "", email: "", address: "", phoneNumber: "", description: "" }}
+                initialValues={{
+                    name: data?.organization?.name,
+                    typeOfOrganization: data?.organization?.typeOfOrganization,
+                    email: data?.organization?.email,
+                    address: data?.organization?.address,
+                    phoneNumber: data?.organization?.phoneNumber,
+                    description: data?.organization?.description
+                }}
                 onSubmit={async (values) => {
-                    console.log(values);
-                    const { errors } = await addOrganization({
-                        variables: { input: values },
+                    await updateOrganization({
+                        variables: { input: values, id: intId },
                         update: (cache) => {
                             cache.evict({ fieldName: "organizations:{}" });
                         },
                     });
-                    if (!errors) {
-                        router.push('/');
-                    }
-
+                    router.push('/');
                 }
                 }
             >
@@ -67,7 +77,6 @@ const CreateOrganization: React.FC<{}> = ({ }) => {
                         <Box mt={4}>
                             <InputField
                                 name="description"
-                                textarea
                                 placeholder="Lorem Ipsum..."
                                 label="Description"
                             />
@@ -78,13 +87,14 @@ const CreateOrganization: React.FC<{}> = ({ }) => {
                             isLoading={isSubmitting}
                             colorScheme="green"
                         >
-                            Add Organization
+                            Update Organization
                         </Button>
                     </Form>
                 )}
             </Formik>
         </Wrapper>
     );
-};
+}
 
-export default withApollo({ ssr: false })(CreateOrganization);
+
+export default UpdateOrganization;

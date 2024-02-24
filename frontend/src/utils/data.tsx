@@ -217,20 +217,20 @@ export const footerData: FooterData[] = [
         links: [
             { label: 'Home', href: '/' },
             { label: 'Help', href: '/help' },
-            { label: 'Contact', href: '/contact' }
+            { label: 'About', href: '/about' }
         ]
     },
     {
         label: 'Organization',
         links: [
-            { label: 'Add Organization', href: '/create-organizations' },
+            { label: 'Add Organization', href: '/create-organization' },
             { label: 'View Organizations', href: '/app' },
         ]
     },
     {
         label: 'Account Settings',
         links: [
-            { label: 'Change Info', href: '/change-info' },
+            { label: 'Account', href: '/account-settings' },
             { label: 'Login', href: '/login' },
             { label: 'Register', href: '/register' }
         ]

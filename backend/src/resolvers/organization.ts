@@ -33,6 +33,22 @@ class OrganizationInput {
   phoneNumber: string;
 }
 
+@InputType()
+class UpdateOrganizationInput {
+  @Field(() => String, { nullable: true })
+  name?: string;
+  @Field(() => String, { nullable: true })
+  email?: string;
+  @Field(() => String, { nullable: true })
+  typeOfOrganization?: string;
+  @Field(() => String, { nullable: true })
+  address?: string;
+  @Field(() => String, { nullable: true })
+  description?: string;
+  @Field(() => String, { nullable: true })
+  phoneNumber?: string;
+}
+
 // An Objectype which returns the list of organization, and if there is more data
 @ObjectType()
 class PaginatedOrganizations {
@@ -201,35 +217,39 @@ export class OrganizationResolver {
   }
   @Mutation(() => Organization, { nullable: true })
   async updateOrganization(
-    @Arg("name", () => String, { nullable: true }) name: string,
-    @Arg("email", () => String, { nullable: true }) email: string,
-    @Arg("id") id: number,
-    @Arg("address", () => String, { nullable: true }) address: string,
-    @Arg("phoneNumber", () => String, { nullable: true }) phoneNumber: string,
-    @Arg("typeOfOrganization", () => String, { nullable: true })
-    typeOfOrganization: string
+    @Arg("id", () => Int) id: number,
+    @Arg("input") input: UpdateOrganizationInput,
+    @Ctx() { req }: MyContext
   ): Promise<Organization | null> {
-    let organization = await Organization.findOne({ where: { id } });
-    if (!organization) {
+    let organizationQuery = await Organization.findOne({ where: { id } });
+    if (!organizationQuery) {
       return null;
     }
-    if (typeof name !== "undefined") {
-      await Organization.update({ id }, { name });
-    }
-    if (typeof email !== "undefined") {
-      await Organization.update({ id }, { email });
-    }
-    if (typeof address !== "undefined") {
-      await Organization.update({ id }, { address });
-    }
-    if (typeof phoneNumber !== "undefined") {
-      await Organization.update({ id }, { phoneNumber });
-    }
-    if (typeof typeOfOrganization !== "undefined") {
-      await Organization.update({ id }, { typeOfOrganization });
-    }
-    organization = await Organization.findOne({ where: { id } });
-    return organization;
+
+    const result = await dataSource
+      .createQueryBuilder()
+      .update(Organization)
+      .set({
+        name: input.name ? input.name : organizationQuery.name,
+        typeOfOrganization: input.typeOfOrganization
+          ? input.typeOfOrganization
+          : organizationQuery.typeOfOrganization,
+        address: input.address ? input.address : organizationQuery.address,
+        email: input.email ? input.email : organizationQuery.email,
+        description: input.description
+          ? input.description
+          : organizationQuery.description,
+        phoneNumber: input.phoneNumber
+          ? input.phoneNumber
+          : organizationQuery.phoneNumber,
+      })
+      .where('id = :id and "creatorId" = :creatorId', {
+        id,
+        creatorId: req.session.userId,
+      })
+      .returning("*")
+      .execute();
+    return result.raw[0];
   }
 
   @Mutation(() => Boolean)

@@ -344,7 +344,7 @@ export class UserResolver {
     return new Promise((resolve) => {
       req.session.destroy((err) => {
         // Destroy the redis session
-        res.clearCookie("qid"); // Destory the cookie
+        res.clearCookie(process.env.COOKIE_NAME); // Destory the cookie
         if (err) {
           resolve(false);
           return;
@@ -361,7 +361,7 @@ export class UserResolver {
     await User.delete({ id: req.session.userId });
     return new Promise((resolve) => {
       req.session.destroy((err) => {
-        res.clearCookie("qid");
+        res.clearCookie(process.env.COOKIE_NAME);
         if (err) {
           resolve(false);
           return;

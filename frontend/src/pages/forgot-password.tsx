@@ -6,6 +6,9 @@ import { useForgotPasswordMutation } from '../gql/generated/graphql';
 
 
 const ForgotPassword: React.FC<{}> = ({ }) => {
+    // When the user loads the page, it sets DomLoaded to true
+    // Onlt if content is loaded, it will display the component
+    // This to avoid an error that is occuring in React 18
     const [domLoaded, setDomLoaded] = useState(false);
     const [forgotPassword] = useForgotPasswordMutation();
     const [complete, setComplete] = useState(false)
@@ -31,9 +34,11 @@ const ForgotPassword: React.FC<{}> = ({ }) => {
                             borderRadius={{ base: 'none', sm: 'xl' }}
                         >
                             <Formik initialValues={{ email: "" }} onSubmit={async (values) => {
+                                // Call the forgotPAssword mutation from the backend
                                 await forgotPassword({ variables: values });
                                 setComplete(true);
                             }}>
+                                {/* If the requeast is complete, display a message saying that the email has been sent? */}
                                 {({ isSubmitting }) => complete ?
                                     (
                                         <Alert variant='subtle'

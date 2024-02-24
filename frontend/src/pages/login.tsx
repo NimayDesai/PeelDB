@@ -20,6 +20,10 @@ import { toErrorMap } from '../utils/toErrorMap'
 const Login = forwardRef<{}>(({ }) => {
     const [login,] = useLoginMutation();
     const router = useRouter();
+
+    // When the user loads the page, it sets DomLoaded to true
+    // Onlt if content is loaded, it will display the component
+    // This to avoid an error that is occuring in React 18
     const [domLoaded, setDomLoaded] = useState(false);
 
     useEffect(() => {
@@ -50,6 +54,10 @@ const Login = forwardRef<{}>(({ }) => {
                             borderRadius={{ base: 'none', sm: 'xl' }}
                         >
                             <Formik initialValues={{ usernameOrEmail: "", password: "" }} onSubmit={async (values, { setErrors }) => {
+                                // Send the login mutation to GraphQL with the values from the user
+                                // After the update, it runs the Me Query, and updates the cache with
+                                // the new user without having to refresh the page which is slower
+                                // It also evicts all the organizations due to the delete, edit, and star butto needing a logged in user
                                 const response = await login({
                                     variables: { options: values },
                                     update: (cache, { data }) => {
@@ -63,12 +71,17 @@ const Login = forwardRef<{}>(({ }) => {
                                         cache.evict({ fieldName: "posts:{}" });
                                     },
                                 });
+                                // If there are any errors display them
                                 if (response.data?.login.errors) {
                                     setErrors(toErrorMap(response.data.login.errors));
-                                } else if (response.data?.login.user) {
+                                }
+                                // If we get a user back
+                                else if (response.data?.login.user) {
+                                    // If there is a ?next= in the url then push to that url
                                     if (typeof router.query.next === 'string') {
                                         router.push(router.query.next)
                                     } else {
+                                        // Else go to the home page
                                         router.push('/')
                                     }
                                 }

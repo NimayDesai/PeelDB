@@ -1,21 +1,13 @@
 import { Box, Card, CardBody, CardHeader, Flex, Heading, Stack, StackDivider, Text } from '@chakra-ui/react';
-import { useRouter } from 'next/router';
 import React from 'react';
 import { StarSection } from '../../components/StarSection';
 import { Wrapper } from '../../components/Wrapper';
-import { useOrganizationQuery } from '../../gql/generated/graphql';
+import { useGetOrganizationFromUrl } from '../../utils/useGetOrganizationFromUrl';
 import { withApollo } from '../../utils/withApollo';
 
 
 const Organization: React.FC<{}> = ({ }) => {
-    const router = useRouter();
-    const intId = typeof router.query.id === "string" ? parseInt(router.query.id) : -1
-    const { data, error } = useOrganizationQuery({
-        skip: intId === -1,
-        variables: {
-            id: intId
-        }
-    })
+    const { data, error } = useGetOrganizationFromUrl();
 
     if (error) {
         return <div>{error.message}</div>

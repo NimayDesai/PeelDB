@@ -1,0 +1,13 @@
+mutation UpdateOrganization($id: Int!, $input: UpdateOrganizationInput!) {
+  updateOrganization(id: $id, input: $input) {
+    id
+    createdAt
+    updatedAt
+    typeOfOrganization
+    name
+    email
+    phoneNumber
+    address
+    description
+  }
+}

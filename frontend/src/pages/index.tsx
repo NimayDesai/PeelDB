@@ -16,7 +16,6 @@ import {
     useColorModeValue
 } from '@chakra-ui/react';
 import { Fragment } from 'react';
-// Here we have used react-icons package for the icons
 import NextLink from 'next/link';
 import { useRouter } from 'next/router';
 import { FaGithub } from 'react-icons/fa';
@@ -26,9 +25,11 @@ import { features, reviewData } from '../utils/data';
 
 
 const Index = () => {
+    // Get the current user
     const { data } = useMeQuery();
     const router = useRouter();
 
+    // If the user is logged in to the application, automatically redirect to the home page
     if (data?.me) {
         router.push('/app');
     }
@@ -37,10 +38,10 @@ const Index = () => {
         <Wrapper variant='full'>
             <Fragment>
                 <Flex>
-                    <Container maxW="6xl" px={{ base: 6, md: 10 }} py={14}>
+                    <Container maxW="6xl" px={{ base: 6, md: 10 }} py={14} textAlign={"left"}>
                         <Stack direction={{ base: 'column', md: 'row' }}>
                             <Stack direction="column" spacing={10}>
-                                <chakra.h1 fontSize="5xl" lineHeight={1} fontWeight="bold" textAlign="left">
+                                <chakra.h1 fontSize="5xl" lineHeight={1} fontWeight="bold" >
                                     Have all your board's business partners in
                                     <chakra.span bgGradient="linear(to-br, #74d680, #378b29)" bgClip="text">
                                         {' '}
@@ -51,9 +52,9 @@ const Index = () => {
                                 <Text
                                     color={useColorModeValue('gray.500', 'gray.400')}
                                     fontSize="lg"
-                                    textAlign="left"
                                     fontWeight="400"
                                     maxW="700px"
+                                    textAlign={"center"}
                                 >
                                     PeelDB allows you to add all the organizations you want for your school, and share the information with other schools, while accessing other schools best organizations by starring them
                                 </Text>
@@ -62,6 +63,7 @@ const Index = () => {
                                     spacing={{ base: 5, md: 10 }}
                                     flexWrap="wrap"
                                 >
+                                    {/* Map through all the features in the data.tsx file and display them */}
                                     {features.map((feature, index) => (
                                         <Stack key={index} direction={{ base: 'row', md: 'column' }} spacing={2}>
                                             <Stack direction="column" spacing={2}>
@@ -121,12 +123,14 @@ const Index = () => {
                                         </Flex>
                                     </Link>
                                 </Stack>
-                                <Heading size={"2xl"} textAlign={"center"}>What our customers think of us</Heading>
+                                <Heading size={"2xl"}>What our customers think of us</Heading>
                                 <Grid templateColumns={"repeat(3, 1fr)"} gap={48} >
+                                    {/* Map through all of the reviews displaying the avater, description, name and position */}
                                     {reviewData.map((data, index) => (
                                         <Box maxW="399px" key={index} height={"150px"} mt={24}>
                                             <Text size="lg" m="auto" justifyContent={"center"} textAlign={"center"}>{data.content}</Text>
                                             <VStack alignItems="center" mt={8}>
+                                                {/* If there is a image display the image, if not display a default profile picture with the initials of the person's name */}
                                                 <Avatar name={data.name} size="lg" width={100} height={100} src={data.src ? data.src : undefined} />
                                                 <Box textAlign="center">
                                                     <Text fontWeight={"bold"} fontSize={"lg"}>⭐️⭐️⭐️⭐️⭐️</Text>
@@ -140,7 +144,15 @@ const Index = () => {
                                             </VStack>
                                             <Divider mt={8} />
                                         </Box>
-                                    ))}</Grid>
+                                    ))}
+                                </Grid>
+                                <br />
+                                <br />
+                                <br />
+                                <Heading mt={24}>Less time learning, and more time educating</Heading>
+                                <chakra.desc>
+                                    PeelDB's easy to navigate UI with an inuitive NavBar with easy link, auto redirect, and more helps schools, and teachers spend more time on finding valuable organizations, and business partners than learning how to navigate the site.
+                                </chakra.desc>
                             </Stack>
                         </Stack>
                     </Container>

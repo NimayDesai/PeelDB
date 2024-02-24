@@ -11,7 +11,7 @@ export async function sendEmail(to: string, html: string) {
     },
   });
 
-  const info = await transporter.sendMail({
+  await transporter.sendMail({
     from: '"SchoolDB"',
     to: to,
     subject: "Change Password",

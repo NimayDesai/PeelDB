@@ -1,4 +1,4 @@
-import { DeleteIcon, SearchIcon } from '@chakra-ui/icons';
+import { DeleteIcon, EditIcon, SearchIcon } from '@chakra-ui/icons';
 import {
   Box,
   Button,
@@ -34,7 +34,6 @@ const Index = () => {
   });
   const { data: meData } = useMeQuery()
   const [deleteOrganization,] = useDeleteOrganizationMutation();
-  console.log(data);
   return (
     <Wrapper>
       <Heading size="xl">Organizations: </Heading>
@@ -73,14 +72,18 @@ const Index = () => {
                       <Heading size='lg'>Name: {o.name} </Heading>
                     </Link>
                   </NextLink>
-                  <StarSection isOnMainPage organization={o} />
+                  {meData?.me ? <StarSection isOnMainPage organization={o} /> : null}
                   {meData?.me?.id === o.creatorId ?
-                    <IconButton icon={<DeleteIcon />} aria-label="Delete Organization" onClick={() => {
+                    <IconButton icon={<DeleteIcon />} mr={2} colorScheme='red' aria-label="Delete Organization" onClick={() => {
                       deleteOrganization({
                         variables: { id: o.id },
                         update: (cache) => cache.evict({ id: "Organization:" + o.id })
                       })
                     }} /> : null}
+                  {meData?.me?.id === o.creatorId ?
+                    <NextLink href={'/update-organization/[id]'} as={`/update-organization/${o.id}`}>
+                      <IconButton as={Link} icon={<EditIcon />} colorScheme="blue" aria-label="Update Organization" />
+                    </NextLink> : null}
                 </Flex>
 
                 <Heading size='sm' mt={2}>Added by: {o.creator.username}</Heading>
