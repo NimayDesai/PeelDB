@@ -38,12 +38,12 @@ const Index = () => {
         <Wrapper variant='full'>
             <Fragment>
                 <Flex>
-                    <Container maxW="6xl" px={{ base: 6, md: 10 }} py={14} textAlign={"left"}>
+                    <Container maxW="6xl" px={{ base: 6, md: 10 }} py={14} textAlign={"center"}>
                         <Stack direction={{ base: 'column', md: 'row' }}>
                             <Stack direction="column" spacing={10}>
                                 <chakra.h1 fontSize="5xl" lineHeight={1} fontWeight="bold" >
                                     Have all your board's business partners in
-                                    <chakra.span bgGradient="linear(to-br, #74d680, #378b29)" bgClip="text">
+                                    <chakra.span color={"green"}>
                                         {' '}
                                         One Place{' '}
                                     </chakra.span>{' '}
@@ -88,8 +88,8 @@ const Index = () => {
                                                 <Button
                                                     h={12}
                                                     px={6}
-                                                    bgGradient="linear(to-br, #74d680, #378b29)"
                                                     color="white"
+                                                    colorScheme='green'
                                                     _hover={{ bgGradient: 'linear(to-br, #74d680, #378b29)' }}
                                                     variant="solid"
                                                     size="lg"
@@ -149,10 +149,21 @@ const Index = () => {
                                 <br />
                                 <br />
                                 <br />
-                                <Heading mt={24}>Less time learning, and more time educating</Heading>
+                                <Heading mt={48}>Less time learning, and more time educating</Heading>
                                 <chakra.desc>
                                     PeelDB's easy-to-navigate UI with an intuitive NavBar with easy links, auto-redirect, and more helps schools, and teachers spend more time on finding valuable organizations, and business partners than learning how to navigate the site.
                                 </chakra.desc>
+                                <Flex direction={"column"} mt={24}>
+                                    <Heading size={"2xl"} m="auto">Ready to get your school started with PeelDB?</Heading>
+
+                                    <Box m="auto">
+                                        <NextLink href={"/login"}>
+                                            <Button as={Link} p={8} m="auto" mt={8} alignSelf={"center"} colorScheme='green'>
+                                                Get started
+                                            </Button>
+                                        </NextLink>
+                                    </Box>
+                                </Flex>
                             </Stack>
                         </Stack>
                     </Container>

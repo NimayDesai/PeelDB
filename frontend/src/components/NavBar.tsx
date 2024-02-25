@@ -121,6 +121,13 @@ export const NavBar = () => {
                                                 </Text>
                                             </Link>
                                         </NextLink>
+                                        <NextLink href="/app">
+                                            <Link size={"4xl"}>
+                                                <Text display="block" size="xl">
+                                                    App
+                                                </Text>
+                                            </Link>
+                                        </NextLink>
                                         <NextLink href="/help">
                                             <Link size={"4xl"}>
                                                 <Text display="block" size="xl">

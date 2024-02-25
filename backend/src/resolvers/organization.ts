@@ -33,6 +33,7 @@ class OrganizationInput {
   phoneNumber: string;
 }
 
+// Input for Updating an
 @InputType()
 class UpdateOrganizationInput {
   @Field(() => String, { nullable: true })
@@ -228,8 +229,8 @@ export class OrganizationResolver {
       return null;
     }
 
-
     // Return the result of updating the organization
+    const result = await dataSource
       .createQueryBuilder()
       .update(Organization)
       .set({

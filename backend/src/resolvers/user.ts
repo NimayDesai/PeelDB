@@ -288,7 +288,7 @@ export class UserResolver {
       email: options.email,
     });
     try {
-      // Try to create a us
+      // Try to create a user
       await user.save();
     } catch (err) {
       if (err.code === "23505") {
@@ -315,7 +315,7 @@ export class UserResolver {
     @Ctx() { req }: MyContext
   ): Promise<UserResponse> {
     const user = await User.findOne({
-      // If userNameOrEmail includes an at sign assume its an email otherwise assume its a username
+      // If userNameOrEmail includes an at-sign assume its an email otherwise assume its a username
       where: options.usernameOrEmail.includes("@")
         ? { email: options.usernameOrEmail }
         : { username: options.usernameOrEmail },

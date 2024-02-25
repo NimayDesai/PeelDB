@@ -15,7 +15,7 @@ import { MyContext } from "./types";
 
 const main = async () => {
   await dataSource.initialize(); // Initialize the database
-  await dataSource.runMigrations();
+  // await dataSource.runMigrations();
 
   const app = express(); // Create express app
 

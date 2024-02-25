@@ -5,17 +5,18 @@ import React from 'react';
 import { InputField } from '../../components/InputField';
 import { Wrapper } from '../../components/Wrapper';
 import { useOrganizationQuery, useUpdateOrganizationMutation } from '../../gql/generated/graphql';
-import { useGetIntId } from '../../utils/useGetIntId';
+import { useGetIntegerId } from '../../utils/useGetIntId';
 
 
 const UpdateOrganization: React.FC<{}> = ({ }) => {
     const router = useRouter();
-    const intId = useGetIntId();
+    const integerId = useGetIntegerId();
     const [updateOrganization] = useUpdateOrganizationMutation();
+    // Skip if no organization is supplied
     const { data, loading } = useOrganizationQuery({
-        skip: intId === -1,
+        skip: integerId === -1,
         variables: {
-            id: intId
+            id: integerId
         }
     })
     if (loading) {
@@ -33,8 +34,10 @@ const UpdateOrganization: React.FC<{}> = ({ }) => {
                     description: data?.organization?.description
                 }}
                 onSubmit={async (values) => {
+                    // Update the orgaizaations with the values, and the url
+                    // Evict the organization to update the cache
                     await updateOrganization({
-                        variables: { input: values, id: intId },
+                        variables: { input: values, id: integerId },
                         update: (cache) => {
                             cache.evict({ fieldName: "organizations:{}" });
                         },

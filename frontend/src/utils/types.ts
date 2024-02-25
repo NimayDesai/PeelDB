@@ -1,5 +1,6 @@
 import React from "react";
 
+// All Types for data
 export type FaqData = {
   label?: string;
   text?: string;

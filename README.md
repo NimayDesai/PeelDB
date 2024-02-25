@@ -2,11 +2,11 @@
 
 ## By Nimay Desai
 
+## ACCESS THE WEBISTE NOW (https://peeldb.me)
+
 The presentation for this project can be downloaded at [this link](SchoolDB.pptx)
 
 # About the project
-
-# ACCESS THE WEBISTE NOW (https://peeldb.me)
 
 This website aims to provides a place for schools to add all their business and community partners for other people to access. The website allows the user to search through the list, and schools can add their own partners for other schools to see.
 
@@ -24,7 +24,7 @@ Right now, the website lists 25 initial partners that the school uses with Conta
 | ![Type-graphql](https://img.shields.io/badge/-TypeGraphQL-%23C04392?style=for-the-badge) (https://typeorm.io/)                                             | A modern framework for GraphqlAPI in Nodejs/Typesript                     |
 | ![Postgres](https://img.shields.io/badge/postgres-%23316192.svg?style=for-the-badge&logo=postgresql&logoColor=white) (https://www.postgresql.org/)         | An Open Soure Relational Database using SQL Syntax                        |
 
-# How to Run Locally
+## How to Run Locally
 
 ```sh
 $ git clone https://github.com/NimayDesai/SchoolOrganizationDB.git .
@@ -34,7 +34,11 @@ $ git clone https://github.com/NimayDesai/SchoolOrganizationDB.git .
 
 You can use the .env.example on the backend folder for your setup
 
-## How to Run Backend
+### Make sure you have PostgresSQL and Redis installed and running, as they are nescessary for the application to run
+
+### Create a database with PostgresSQL
+
+### Start backend
 
 ```sh
 $ cd backend

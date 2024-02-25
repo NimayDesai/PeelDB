@@ -33,6 +33,7 @@ const Index = () => {
     }
   });
   const { data: meData } = useMeQuery()
+  console.log(meData?.me?.id)
   const [deleteOrganization,] = useDeleteOrganizationMutation();
   return (
     <Wrapper>

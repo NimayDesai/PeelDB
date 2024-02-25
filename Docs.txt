@@ -1,0 +1,31 @@
+REGISTER 
+Log out of any exisiting accounts
+Click register on the navbar
+Add your email, username, and password
+Click register
+
+REGISTER 
+Log out of any exisiting accounts
+Click login on the navbar
+Add your username or email and password
+Click login
+
+DELETE ORGANIZATION
+Click the red button on the organization you own
+Click "Delete orgaanization on the popup"
+
+ADD-ORGANIZATION
+Log into your account or create a new one
+Click Create organization on the navbar
+Enter the details 
+Click Add organization
+
+UPDATE-ORGANIZATION
+Log into your account or create a new one
+Click Update organization on the navbar
+Enter the new details 
+Click Update organization
+
+STAR
+CLICK ON THE STAR ICON TO STAR
+CLICK AGAIN TO UNSTAR

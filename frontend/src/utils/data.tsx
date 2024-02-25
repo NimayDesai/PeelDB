@@ -43,6 +43,32 @@ export const faqData: FaqData[] = [
         isSpecial: false
     },
     {
+        label: "How do I change my info",
+        text: `Make sure you are logged in. Then click your username on the NavBar
+        Now enter your new info. If you want to leave a field unchanged, leave it blank
+        Finally, click the change info button to finalize the change
+        `,
+        isSpecial: false
+    },
+    {
+        label: "I forgot my password, what do I do?",
+        text: `Make sure you know your email. Then click login on the NavBar, 
+        and click "forgot password?". Alternatively go to https://peeldb.me/forgot-password. 
+        Then enter your email. You should have gotten an email if an account exists. If you did not get an email,
+         check the spam inbox, and if still not there contact dessainimay08@gmail.com,
+         Click the link in the inbox that says reset password
+         Enter your new password, and you have set your new password`,
+        isSpecial: false,
+    },
+    {
+        label: "How to add an organization",
+        text: `Log into your account or create a new one
+        then click Create organization on the NavBar
+        then enter the details and make sure all data is fill
+        finally, click the  Add Organization button on the page to add an organization`,
+        isSpecial: false,
+    },
+    {
         special: () => (
             <>
                 <h2>

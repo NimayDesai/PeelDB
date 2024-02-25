@@ -1,10 +1,10 @@
 import { useRouter } from "next/router";
 
-export const useGetIntId = (): number => {
+export const useGetIntegerId = (): number => {
   // Get the router
   const router = useRouter();
   // Create a variable that gets the id from the url
-  const intId =
+  const intrgerId =
     typeof router.query.id === "string" ? parseInt(router.query.id) : -1;
-  return intId;
+  return intrgerId;
 };
