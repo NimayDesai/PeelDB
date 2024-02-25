@@ -11,7 +11,7 @@ const Help: React.FC<{}> = ({ }) => {
             <Box>
                 <Accordion defaultIndex={[0]} allowMultiple>
                     {/* Map through all the frequently asked Questions
-                    If there is special data (not just text) then display the special One
+                    If there is special data (not just text) then display the Special One
                     else only display the title and text using */}
                     {faqData.map((data, index) => (
                         <AccordionItem mb={8} key={index}>

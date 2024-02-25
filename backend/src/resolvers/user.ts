@@ -115,9 +115,11 @@ export class UserResolver {
       };
     }
 
+    // Get the redis key and userid
     const redisKey = FORGET_PASSWORD_PREFIX + token;
     const userId = await redis.get(redisKey);
 
+    // Invalid token (expired on user tampered with the URL)
     if (!userId) {
       return {
         errors: [
@@ -129,9 +131,12 @@ export class UserResolver {
       };
     }
 
+    // The userId as a number
     const userIdNumber = parseInt(userId);
+    // Find a user
     const user = await User.findOne({ where: { id: userIdNumber } });
 
+    // User was deleted
     if (!user) {
       return {
         errors: [
@@ -143,6 +148,7 @@ export class UserResolver {
       };
     }
 
+    // Update the user with the new password
     await User.update(
       { id: userIdNumber },
       {
@@ -161,14 +167,18 @@ export class UserResolver {
     @Arg("email") email: string,
     @Ctx() { redis }: MyContext
   ): Promise<boolean> {
+    // Find a user
     const user = await User.findOne({ where: { email } });
 
+    // If there is no user return true (we do not want the user to know if which email is related to a user)
     if (!user) {
       return true;
     }
+    // Get the uuid token
 
     const token = v4();
 
+    // Set the token to the token
     await redis.set(
       FORGET_PASSWORD_PREFIX + token,
       user.id,
@@ -176,6 +186,7 @@ export class UserResolver {
       1000 * 60 * 60 * 24 * 3
     );
 
+    // Send the user a link to reset their password
     const html = `
     <div>
     <div>

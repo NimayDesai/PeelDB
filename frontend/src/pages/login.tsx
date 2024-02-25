@@ -39,7 +39,7 @@ const Login = forwardRef<{}>(({ }) => {
                             <Stack spacing={{ base: '2', md: '3' }} textAlign="center">
                                 <Heading size={{ base: 'lg', md: '2xl' }}>Login</Heading>
                                 <Text color="fg.muted">
-                                    Dont have an account yet? <NextLink href="/register"><Link mr={8}>Register</Link></NextLink>
+                                    Don't have an account yet? <NextLink href="/register"><Link mr={8}>Register</Link></NextLink>
                                 </Text>
                                 <Text color="fg.muted">
                                     Forgot Password? <NextLink href="/forgot-password"><Link mr={8}>Click Here</Link></NextLink>
@@ -56,8 +56,8 @@ const Login = forwardRef<{}>(({ }) => {
                             <Formik initialValues={{ usernameOrEmail: "", password: "" }} onSubmit={async (values, { setErrors }) => {
                                 // Send the login mutation to GraphQL with the values from the user
                                 // After the update, it runs the Me Query, and updates the cache with
-                                // the new user without having to refresh the page which is slower
-                                // It also evicts all the organizations due to the delete, edit, and star butto needing a logged in user
+                                // the new user without having to refresh the slower page
+                                // It also evicts all the organizations due to the delete, edit, and star button needing a logged-in user
                                 const response = await login({
                                     variables: { options: values },
                                     update: (cache, { data }) => {
@@ -77,7 +77,7 @@ const Login = forwardRef<{}>(({ }) => {
                                 }
                                 // If we get a user back
                                 else if (response.data?.login.user) {
-                                    // If there is a ?next= in the url then push to that url
+                                    // If there is a ?next= in the URL then push to that URL
                                     if (typeof router.query.next === 'string') {
                                         router.push(router.query.next)
                                     } else {

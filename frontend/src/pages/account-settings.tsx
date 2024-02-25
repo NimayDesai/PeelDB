@@ -56,13 +56,17 @@ const Register = forwardRef<HTMLInputElement, InputProps>(() => {
                         borderRadius={{ base: 'none', sm: 'xl' }}
                     >
                         <Formik initialValues={{ username: "", password: "", confirmPassword: "", email: "", }} onSubmit={async (values, { setErrors }) => {
+                            // Change info with the values
                             const response = await changeInfo({
                                 variables: { input: values }
                             });
+                            // If errors set the error for the user to see
+
                             if (response.data?.changeInfo.errors) {
                                 setErrors(toErrorMap(response.data.changeInfo.errors));
                             } else if (response.data?.changeInfo.user) {
-                                router.push('/')
+                                // If user is returned go back to the main page
+                                router.push('/app')
                             }
                         }}>
                             {({ isSubmitting }) => (
@@ -106,6 +110,7 @@ const Register = forwardRef<HTMLInputElement, InputProps>(() => {
                                         Cancel
                                     </Button>
                                     <Button colorScheme='red' onClick={async () => {
+                                        // Delete user and update the cache by evicting the deleted User and going back to the main page
                                         await deleteUser({
                                             update: (cache) => cache.evict({ id: "User:" + data?.me?.id })
                                         })

@@ -39,6 +39,7 @@ const Index = () => {
       <Heading size="xl">Organizations: </Heading>
       <br />
       <Formik onSubmit={async (values) => {
+        // When User searches refetch data with new values
         await refetch({
           searchValue: values.searchValue.toLowerCase(),
           searchOptions: values.searchOptions
@@ -63,6 +64,7 @@ const Index = () => {
       </Formik>
       <Box mt={8}>
         <Stack spacing={8}>
+          {/* Display server error if no data but return no results found for empty data */}
           {(!data?.organizations || data!.organizations.organizations.length < 1) ? <div>{!data?.organizations ? "Server Error" : "There are no search results availble"}</div> : data?.organizations.organizations.map(o => (
             <Card key={o.id}>
               <CardHeader flexDirection={"row"}>
@@ -129,6 +131,7 @@ const Index = () => {
         {data && data.organizations.hasMore ?
           <Flex mt={8}>
             <Button my={8} m="auto" onClick={() => {
+              // When the load more button is clicked fetch more data using the current limit, but the cursor of the last current organization
               fetchMore({
                 variables: {
                   limit: variables?.limit,

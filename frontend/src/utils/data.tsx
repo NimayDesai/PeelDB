@@ -28,14 +28,14 @@ export const faqData: FaqData[] = [
     {
         label: "Is the website free to use for anyone?",
         text: `Yes!. The website is completely
-        free to use for anyone, anywhere with a
-        bsoulutely no paid subscriptions. 
+        free to use for anyone, anywhere with
+        absolutely no paid subscriptions. 
         The website also has no ads for the best experience. 
-        If you want to support our project, you can contribute on our github`,
+        If you want to support our project, you can contribute on our GitHub`,
         isSpecial: false
     },
     {
-        label: "Is my organizations information secure?",
+        label: "Is my organization information secure?",
         text: `Your information is perfectly safe in our hands, 
         as we have the latest argon2 encryption standards for your passwords, 
         leaving no one, not even us able to see your password
@@ -77,7 +77,7 @@ export const faqData: FaqData[] = [
                         3. Enter your username and password.
                         You can also use your email if you do not remember your username
                         Make sure that the length of both are at least 3 characters,
-                        and the username does not include an at sign
+                        and the username does not include an at-sign
                     </Text>
                     <Flex>
                         <Box m="auto" mt={4}>
@@ -110,7 +110,7 @@ export const faqData: FaqData[] = [
                         <AccordionIcon />
                     </AccordionButton>
                 </h2>
-                <AccordionPanel pb={4} alignItems={"ceter"}>
+                <AccordionPanel pb={4} alignItems={"center"}>
                     <Text size={"md"}>
                         To create an account on SchoolDB, follow these steps
                     </Text>
@@ -122,7 +122,7 @@ export const faqData: FaqData[] = [
                     </Box>
                     <Divider />
                     <Text mt={8}>
-                        2. Click register button to access the register page
+                        2. Click the register button to access the register page
                     </Text>
                     <Box mt={4}>
                         <Image src={"/registersteps/RegisterStep2.png"} alt='Press login button on homepage' width={900} height={100} />
@@ -130,7 +130,7 @@ export const faqData: FaqData[] = [
                     <Divider />
                     <Text mt={8}>
                         3. Enter your username, email and password.
-                        Make sure that the length of all fields are at least 3 characters,
+                        Make sure that the length of all fields is at least 3 characters,
                         the username does not include an at sign,
                         your email must have an at sign, and both of your passwords are the same
                     </Text>
@@ -167,7 +167,7 @@ export const faqData: FaqData[] = [
                 </h2>
                 <AccordionPanel pb={4} alignItems={"ceter"}>
                     <Text size={"md"}>
-                        How to add an organizaiton
+                        How to add an organization
                     </Text>
                     <Text mt={8}>
                         1. Navigate to the main app page and make sure you are logged in
@@ -175,14 +175,14 @@ export const faqData: FaqData[] = [
 
                     <Divider />
                     <Text mt={8}>
-                        2. Click on the add organization button
+                        2. Click on the Add Organization button
                     </Text>
                     <Divider />
                     <Text mt={8}>
                         3. Enter you content you want for this organization
                     </Text>
                     <Text mt={8}>
-                        4. Click on the add organizaiton button to add the organization
+                        4. Click on the add organization button to add the organization
                     </Text>
                 </AccordionPanel>
             </>
@@ -197,7 +197,7 @@ export const faqData: FaqData[] = [
 export const features: FeatureData[] = [
     {
         title: 'Free and open source',
-        detail: 'This website is completely free, and avaiblible on GitHub, with absoultely not paid plans or ads, and without tracking',
+        detail: 'This website is completely free, and available on GitHub, with absolutely not paid plans or ads, and without tracking',
     },
     {
         title: 'Secure',
@@ -246,29 +246,29 @@ export const footerData: FooterData[] = [
 export const reviewData: ReviewData[] = [
     {
         name: "Sachkeerat Brar",
-        content: "PeelDB helped my school immensly about other wonderful business that the community offers. With SchoolDB, I helped increase of clubs buy 200%, and increased engagement by 60%",
+        content: "PeelDB helped my school immensely with other wonderful businesses that the community offers. With SchoolDB, I helped increase of clubs by 200%, and increased engagement by 60%",
         position: "Principal of SB Schools in Brampton, ON",
         src: "/Sachkeerat.jpg"
     },
     {
         name: "Edward Lin",
-        content: "PeelDB helped my class learn about where we get our resoruces, and encouraged them to donate to the non profits that they want to support",
+        content: "PeelDB helped my class learn about where we get our resources and encouraged them to donate to the non-profits that they want to support",
         position: "Teacher at EL Schools located at Caledon, ON",
         src: "/Edward.jpg"
     },
     {
         name: "Manat Manat",
-        content: "PeelDB helped me find great non profit organizations I can volunteer at and get more hours for work experience!",
+        content: "PeelDB helped me find great non-profit organizations I can volunteer at and get more hours for work experience!",
         position: "Student at EL Schools",
     },
     {
         name: "Manav Vasa",
-        content: "PeelDB helped our school find more information about the organizations we are involved at and organizations our teachers have found",
-        position: "Principals at MV Schools located in Brapmton",
+        content: "PeelDB helped our school find more information about the organizations we are involved in and organizations our teachers have found",
+        position: "Principals at MV Schools located in Brampton",
     },
     {
         name: "Pradyuman Uppal",
-        content: "PeelDB helped me get numerous jobs for orgainzations close to the school, which helped me advanced my portfolio for university",
+        content: "PeelDB helped me get numerous jobs for organizations close to the school, which helped me advance my portfolio for university",
         position: "Student at PU Schools",
         src: "/Pradyuman.jpg"
     }

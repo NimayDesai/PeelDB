@@ -125,12 +125,12 @@ const Index = () => {
                                 </Stack>
                                 <Heading size={"2xl"}>What our customers think of us</Heading>
                                 <Grid templateColumns={"repeat(3, 1fr)"} gap={48} >
-                                    {/* Map through all of the reviews displaying the avater, description, name and position */}
+                                    {/* Map through all of the reviews displaying the avatar, description, name and position */}
                                     {reviewData.map((data, index) => (
                                         <Box maxW="399px" key={index} height={"150px"} mt={24}>
                                             <Text size="lg" m="auto" justifyContent={"center"} textAlign={"center"}>{data.content}</Text>
                                             <VStack alignItems="center" mt={8}>
-                                                {/* If there is a image display the image, if not display a default profile picture with the initials of the person's name */}
+                                                {/* If there is an image display the image, if not display a default profile picture with the initials of the person's name */}
                                                 <Avatar name={data.name} size="lg" width={100} height={100} src={data.src ? data.src : undefined} />
                                                 <Box textAlign="center">
                                                     <Text fontWeight={"bold"} fontSize={"lg"}>⭐️⭐️⭐️⭐️⭐️</Text>
@@ -151,7 +151,7 @@ const Index = () => {
                                 <br />
                                 <Heading mt={24}>Less time learning, and more time educating</Heading>
                                 <chakra.desc>
-                                    PeelDB's easy to navigate UI with an inuitive NavBar with easy link, auto redirect, and more helps schools, and teachers spend more time on finding valuable organizations, and business partners than learning how to navigate the site.
+                                    PeelDB's easy-to-navigate UI with an intuitive NavBar with easy links, auto-redirect, and more helps schools, and teachers spend more time on finding valuable organizations, and business partners than learning how to navigate the site.
                                 </chakra.desc>
                             </Stack>
                         </Stack>

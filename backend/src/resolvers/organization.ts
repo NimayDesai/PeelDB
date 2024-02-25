@@ -203,13 +203,13 @@ export class OrganizationResolver {
   }
   // Adds an organization to the database
   @Mutation(() => Organization)
-  @UseMiddleware(isAuth) // Make sure user is logged in
+  @UseMiddleware(isAuth) // Make sure User is logged in
   async addOrganization(
     @Arg("input") input: OrganizationInput,
     @Ctx() { req }: MyContext
   ): Promise<Organization> {
     const organization = Organization.create({
-      // Create user with the creator id being the currently logged in user
+      // Create User with the creator ID being the currently logged-in User
       ...input,
       creatorId: req.session.userId,
     }).save();
@@ -221,16 +221,19 @@ export class OrganizationResolver {
     @Arg("input") input: UpdateOrganizationInput,
     @Ctx() { req }: MyContext
   ): Promise<Organization | null> {
+    // Find an organization with the specified ID
     let organizationQuery = await Organization.findOne({ where: { id } });
+    // If no organization is found, return null
     if (!organizationQuery) {
       return null;
     }
 
-    const result = await dataSource
+
+    // Return the result of updating the organization
       .createQueryBuilder()
       .update(Organization)
       .set({
-        name: input.name ? input.name : organizationQuery.name,
+        name: input.name ? input.name : organizationQuery.name, // Only update the fields the user specified
         typeOfOrganization: input.typeOfOrganization
           ? input.typeOfOrganization
           : organizationQuery.typeOfOrganization,
@@ -243,6 +246,7 @@ export class OrganizationResolver {
           ? input.phoneNumber
           : organizationQuery.phoneNumber,
       })
+      // Get the creatorId from the logged in user to make sure only the creator can edit the organization
       .where('id = :id and "creatorId" = :creatorId', {
         id,
         creatorId: req.session.userId,
