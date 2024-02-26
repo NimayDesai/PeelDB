@@ -12,7 +12,6 @@ This website aims to provides a place for schools to add all their business and 
 
 Right now, the website lists 25 initial partners that the school uses with Contact Info, Type of Organzaiation and Name of the Organizaiton
 
-# Awards won (1st place in CNLC Coding and Programming)
 
 # Technologies Used
 
