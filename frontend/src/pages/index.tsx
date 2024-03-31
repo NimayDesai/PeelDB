@@ -5,10 +5,10 @@ import {
     Container,
     Divider,
     Flex,
-    Grid,
     Heading,
     Icon,
     Link,
+    SimpleGrid,
     Stack,
     Text,
     VStack,
@@ -37,8 +37,8 @@ const Index = () => {
     return (
         <Wrapper variant='full'>
             <Fragment>
-                <Flex>
-                    <Container maxW="6xl" px={{ base: 6, md: 10 }} py={14} textAlign={"center"}>
+                <Flex m={"auto"} textAlign={"center"}>
+                    <Container maxW="6xl" px={{ base: 6, md: 10 }} py={14}>
                         <Stack direction={{ base: 'column', md: 'row' }}>
                             <Stack direction="column" spacing={10}>
                                 <chakra.h1 fontSize="5xl" lineHeight={1} fontWeight="bold" >
@@ -49,16 +49,16 @@ const Index = () => {
                                     </chakra.span>{' '}
                                     with PeelDB
                                 </chakra.h1>
-                                <Text
+                                <chakra.h1
                                     color={useColorModeValue('gray.500', 'gray.400')}
                                     fontSize="lg"
                                     fontWeight="400"
-                                    maxW="700px"
-                                    textAlign={"center"}
+                                    lineHeight={1}
                                 >
                                     PeelDB allows you to add all the organizations you want for your school, and share the information with other schools, while accessing other schools best organizations by starring them
-                                </Text>
+                                </chakra.h1>
                                 <Stack
+                                    m="auto"
                                     direction={{ base: 'column', md: 'row' }}
                                     spacing={{ base: 5, md: 10 }}
                                     flexWrap="wrap"
@@ -78,6 +78,7 @@ const Index = () => {
                                     ))}
                                 </Stack>
                                 <Stack
+                                    m="auto"
                                     direction={{ base: 'column', sm: 'row' }}
                                     spacing={{ base: 0, sm: 2 }}
                                     flexWrap="wrap"
@@ -124,10 +125,10 @@ const Index = () => {
                                     </Link>
                                 </Stack>
                                 <Heading size={"2xl"}>What our customers think of us</Heading>
-                                <Grid templateColumns={"repeat(3, 1fr)"} gap={48} >
+                                <SimpleGrid columns={3} spacing={6}>
                                     {/* Map through all of the reviews displaying the avatar, description, name and position */}
                                     {reviewData.map((data, index) => (
-                                        <Box maxW="399px" key={index} height={"150px"} mt={24}>
+                                        <Box key={index}>
                                             <Text size="lg" m="auto" justifyContent={"center"} textAlign={"center"}>{data.content}</Text>
                                             <VStack alignItems="center" mt={8}>
                                                 {/* If there is an image display the image, if not display a default profile picture with the initials of the person's name */}
@@ -145,11 +146,8 @@ const Index = () => {
                                             <Divider mt={8} />
                                         </Box>
                                     ))}
-                                </Grid>
-                                <br />
-                                <br />
-                                <br />
-                                <Heading mt={48}>Less time learning, and more time educating</Heading>
+                                </SimpleGrid>
+                                <Heading>Less time learning, and more time educating</Heading>
                                 <chakra.desc>
                                     PeelDB's easy-to-navigate UI with an intuitive NavBar with easy links, auto-redirect, and more helps schools, and teachers spend more time on finding valuable organizations, and business partners than learning how to navigate the site.
                                 </chakra.desc>

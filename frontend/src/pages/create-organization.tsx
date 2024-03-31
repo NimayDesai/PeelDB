@@ -55,6 +55,7 @@ const CreateOrganization: React.FC<{}> = ({ }) => {
                                 name="email"
                                 placeholder="bob@bob.com..."
                                 label="Email"
+                                type='email'
                             />
                         </Box>
                         <Box mt={4}>

@@ -56,7 +56,7 @@ const Index = () => {
                 <option value='"phoneNumber"'>Phone Number </option>
                 <option value="email">Email</option>
               </Select>
-              <InputField name="searchValue" placeholder="search" />
+              <InputField name="searchValue" placeholder="search" type='search'/>
               <IconButton icon={<SearchIcon />} aria-label="Search" type="submit" onClick={() => {
               }} />
             </InputGroup>
