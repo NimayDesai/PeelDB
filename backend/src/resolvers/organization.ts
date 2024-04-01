@@ -15,6 +15,7 @@ import {
 import { isAuth } from "../middleware/isAuth";
 import { Star } from "../entities/Stars";
 import dataSource from "../db.config";
+import { contactUser } from "../utils/contact";
 
 // Input for creating an organization
 @InputType()
@@ -62,6 +63,19 @@ class PaginatedOrganizations {
 // Other input
 @Resolver()
 export class OrganizationResolver {
+  async sendContact(
+    @Arg("subject", () => String) subject: string,
+    @Arg("from", () => String) from: string,
+    @Arg("text", () => String) text: string
+  ): Promise<boolean> {
+    const HTML = `
+    <p>
+    ${text}
+    </p>
+    `;
+    await contactUser(from, HTML, subject);
+    return true;
+  }
   @UseMiddleware(isAuth)
   @Mutation(() => Boolean)
   // Lets user star an organization

@@ -88,7 +88,6 @@ export const NavBar = () => {
                     mb={8}
                     p={8}
                     bg={["primary.500", "primary.500", "transparent", "transparent"]}
-                    color={["white", "white", "primary.700", "primary.700"]}
                 >
                     <chakra.span as={HStack} bgGradient="linear(to-br, #74d680, #378b29)" bgClip="text">
                         <Heading size={"xl"} mr={4} color={{ base: "white", md: "green" }}>
@@ -156,7 +155,6 @@ export const NavBar = () => {
                                             icon={<GiHamburgerMenu />}
                                             transition="all 0.2s"
                                             size="md"
-                                            color="white"
                                             bg="gray.900"
                                         />
                                         <MenuList fontSize="sm">
