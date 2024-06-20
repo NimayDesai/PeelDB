@@ -20,9 +20,8 @@ export const Footer: React.FC<{}> = () => {
                                 <Text mb={2} mt={2} fontWeight={"bold"}>{data.label}</Text>
                                 <Flex direction={{ base: 'row', md: 'column' }} key={index}>
                                     {data!.links!.map((link, index) => (
-                                        <NextLink href={link.href}>
+                                        <NextLink href={link.href} key={index}>
                                             <Link
-                                                key={index}
                                                 padding={1}
                                                 fontSize={{ base: 'sm', sm: 'md' }}
                                                 mr={{ base: 1, sm: 2, md: 0 }}

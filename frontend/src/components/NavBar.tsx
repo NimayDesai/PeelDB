@@ -149,7 +149,7 @@ export const NavBar = () => {
                                     flexBasis={{ base: "100%", md: "auto" }}
                                     display={{ base: "none", md: "block" }}
                                 >
-                                    h2
+                                    
                                     <HStack spacing={8}>
                                         {data?.me ? (
                                             <NextLink href="/create-organization">

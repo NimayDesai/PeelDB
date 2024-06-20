@@ -1,22 +1,9 @@
 import { Box, Flex, Heading, Text } from '@chakra-ui/react';
 import React from 'react';
-import { contactData } from '../utils/data';
-
 const Contact: React.FC<{}> = ({ }) => {
     return (
         <Flex>
             <Box mr="auto" ml={24} maxW="500px">
-                <Box maxW="600px">
-                    <Heading size={"2xl"}>Contact Us</Heading>
-                    {contactData.map((data, index) => (
-                        <>
-                            <Box key={index} mt={8} ml="auto">
-                                <Heading size={"md"}>{data.label}</Heading>
-                                <Text mt={2}>{data.text}</Text>
-                            </Box>
-                        </>
-                    ))}
-                </Box>
                 <Box mt={8}>
                     <Heading size={"2xl"} mt={8}>About Us</Heading>
                     <Text mt={8}>PeelDB was founded by Nimay Desai, to help schools have an easy-to-use tool to find new partners they can work with and improve the quality of their schools. The website has stayed free for all users to make sure every school can use it</Text>
