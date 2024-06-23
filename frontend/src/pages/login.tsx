@@ -82,7 +82,7 @@ const Login = forwardRef<{}>(({ }) => {
                                         router.push(router.query.next)
                                     } else {
                                         // Else go to the home page
-                                        router.push('/')
+                                        router.push('/app?first=true')
                                     }
                                 }
                             }}>

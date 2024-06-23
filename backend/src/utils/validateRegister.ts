@@ -2,6 +2,17 @@ import { RegisterInput } from "src/resolvers/user";
 
 export const validateRegister = (options: RegisterInput) => {
   if (options.username!.length <= 2) {
+    if (!options.username) {
+      // No username supplied
+      return {
+        errors: [
+          {
+            field: "username",
+            message: "No username",
+          },
+        ],
+      };
+    }
     // Username too Short
     return {
       errors: [
@@ -13,7 +24,17 @@ export const validateRegister = (options: RegisterInput) => {
     };
   }
   if (!options.email?.includes("@")) {
-    // Email is Invalid
+    if (!options.email) {
+      // Email is Invalid
+      return {
+        errors: [
+          {
+            field: "email",
+            message: "No email supplied",
+          },
+        ],
+      };
+    }
     return {
       errors: [
         {
@@ -36,6 +57,17 @@ export const validateRegister = (options: RegisterInput) => {
   }
   if (options.password!.length <= 2) {
     // Password is too short
+    if (!options.password) {
+      // Email is Invalid
+      return {
+        errors: [
+          {
+            field: "password",
+            message: "No password supplied",
+          },
+        ],
+      };
+    }
     return {
       errors: [
         {

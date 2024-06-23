@@ -22,8 +22,9 @@ import { StarSection } from "../components/StarSection";
 import { Wrapper } from "../components/Wrapper";
 import { useDeleteOrganizationMutation, useMeQuery, useOrganizationsQuery } from "../gql/generated/graphql";
 import { withApollo } from "../utils/withApollo";
+import { useRouter } from 'next/router';
 
-const Index = () => {
+const Index = ({}) => {
   const { data, fetchMore, variables, refetch } = useOrganizationsQuery({
     variables: {
       limit: 10,
@@ -35,9 +36,11 @@ const Index = () => {
   const { data: meData } = useMeQuery()
   console.log(meData?.me?.id)
   const [deleteOrganization,] = useDeleteOrganizationMutation();
+  const router = useRouter();
   return (
     <Wrapper>
       <Heading size="xl">Organizations: </Heading>
+      { router.query.first ? <Heading size="md" mt={10}>Welcome Back: {meData?.me?.username}</Heading> : <div></div>}
       <br />
       <Formik onSubmit={async (values) => {
         // When User searches refetch data with new values
