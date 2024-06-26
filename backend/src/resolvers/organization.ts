@@ -176,7 +176,7 @@ export class OrganizationResolver {
     from organization o 
     inner join public.user u on u.id = o."creatorId"
     where LOWER(o.${searchOptions}) LIKE '%${searchValue}%'
-    ${userId ? `and o."creatorId" = ${userId}` : ""} // Test
+    ${userId ? `and o."creatorId" = ${userId}` : ""}
     ${cursor ? `and o."createdAt" < $${cursorIndex}` : ""}
     order by o."createdAt" DESC
     limit $1

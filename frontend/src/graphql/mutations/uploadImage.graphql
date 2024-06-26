@@ -1,0 +1,10 @@
+mutation UploadImage($imageUrl: String!) {
+  uploadImg(imageUrl: $imageUrl) {
+    user {
+      ...RegularUser
+    }
+    errors {
+      ...RegularError
+    }
+  }
+}

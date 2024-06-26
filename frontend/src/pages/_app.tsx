@@ -6,7 +6,7 @@ import { NavBar } from "../components/NavBar";
 import { withApollo } from "../utils/withApollo";
 import { Footer } from "../components/Footer";
 import Head from "next/head";
-
+import { EdgeStoreProvider } from "../lib/edgestore";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
@@ -15,9 +15,11 @@ function MyApp({ Component, pageProps }: AppProps) {
         <title>PeelDB</title>
       </Head>
       <ChakraProvider theme={theme}>
-        <NavBar />
-        <Component {...pageProps} />
-        <Footer />
+        <EdgeStoreProvider>
+          <NavBar />
+          <Component {...pageProps} />
+          <Footer />
+        </EdgeStoreProvider>
       </ChakraProvider>
     </>
   );

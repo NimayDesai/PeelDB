@@ -42,6 +42,7 @@ export type Mutation = {
   logout: Scalars['Boolean']['output'];
   register: UserResponse;
   updateOrganization?: Maybe<Organization>;
+  uploadImg: UserResponse;
   vote: Scalars['Boolean']['output'];
 };
 
@@ -86,6 +87,11 @@ export type MutationRegisterArgs = {
 export type MutationUpdateOrganizationArgs = {
   id: Scalars['Int']['input'];
   input: UpdateOrganizationInput;
+};
+
+
+export type MutationUploadImgArgs = {
+  imageUrl: Scalars['String']['input'];
 };
 
 
@@ -175,6 +181,7 @@ export type User = {
   createdAt: Scalars['String']['output'];
   email: Scalars['String']['output'];
   id: Scalars['Float']['output'];
+  imageUrl?: Maybe<Scalars['String']['output']>;
   updatedAt: Scalars['String']['output'];
   username: Scalars['String']['output'];
 };
@@ -194,14 +201,14 @@ export type OrganizationSnippetFragment = { __typename?: 'Organization', id: num
 
 export type RegularErrorFragment = { __typename?: 'FieldError', field: string, message: string };
 
-export type RegularUserFragment = { __typename?: 'User', username: string, email: string, id: number };
+export type RegularUserFragment = { __typename?: 'User', username: string, email: string, id: number, imageUrl?: string | null };
 
 export type ChangeInfoMutationVariables = Exact<{
   input: ChangeInfoInput;
 }>;
 
 
-export type ChangeInfoMutation = { __typename?: 'Mutation', changeInfo: { __typename?: 'UserResponse', errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null, user?: { __typename?: 'User', username: string, email: string, id: number } | null } };
+export type ChangeInfoMutation = { __typename?: 'Mutation', changeInfo: { __typename?: 'UserResponse', errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null, user?: { __typename?: 'User', username: string, email: string, id: number, imageUrl?: string | null } | null } };
 
 export type ChangePasswordMutationVariables = Exact<{
   token: Scalars['String']['input'];
@@ -210,7 +217,7 @@ export type ChangePasswordMutationVariables = Exact<{
 }>;
 
 
-export type ChangePasswordMutation = { __typename?: 'Mutation', changePassword: { __typename?: 'UserResponse', errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null, user?: { __typename?: 'User', username: string, email: string, id: number } | null } };
+export type ChangePasswordMutation = { __typename?: 'Mutation', changePassword: { __typename?: 'UserResponse', errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null, user?: { __typename?: 'User', username: string, email: string, id: number, imageUrl?: string | null } | null } };
 
 export type AddOrganizationMutationVariables = Exact<{
   input: OrganizationInput;
@@ -243,7 +250,7 @@ export type LoginMutationVariables = Exact<{
 }>;
 
 
-export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'UserResponse', errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null, user?: { __typename?: 'User', username: string, email: string, id: number } | null } };
+export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'UserResponse', errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null, user?: { __typename?: 'User', username: string, email: string, id: number, imageUrl?: string | null } | null } };
 
 export type LogoutMutationVariables = Exact<{ [key: string]: never; }>;
 
@@ -258,7 +265,7 @@ export type RegisterMutationVariables = Exact<{
 }>;
 
 
-export type RegisterMutation = { __typename?: 'Mutation', register: { __typename?: 'UserResponse', errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null, user?: { __typename?: 'User', username: string, email: string, id: number } | null } };
+export type RegisterMutation = { __typename?: 'Mutation', register: { __typename?: 'UserResponse', errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null, user?: { __typename?: 'User', username: string, email: string, id: number, imageUrl?: string | null } | null } };
 
 export type UpdateOrganizationMutationVariables = Exact<{
   id: Scalars['Int']['input'];
@@ -267,6 +274,13 @@ export type UpdateOrganizationMutationVariables = Exact<{
 
 
 export type UpdateOrganizationMutation = { __typename?: 'Mutation', updateOrganization?: { __typename?: 'Organization', id: number, createdAt: string, updatedAt: string, typeOfOrganization: string, name: string, email: string, phoneNumber: string, address: string, description: string } | null };
+
+export type UploadImageMutationVariables = Exact<{
+  imageUrl: Scalars['String']['input'];
+}>;
+
+
+export type UploadImageMutation = { __typename?: 'Mutation', uploadImg: { __typename?: 'UserResponse', user?: { __typename?: 'User', username: string, email: string, id: number, imageUrl?: string | null } | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
 
 export type VoteMutationVariables = Exact<{
   organizationId: Scalars['Int']['input'];
@@ -286,12 +300,12 @@ export type GetUserQueryVariables = Exact<{
 }>;
 
 
-export type GetUserQuery = { __typename?: 'Query', getUser: { __typename?: 'User', username: string, email: string, id: number } };
+export type GetUserQuery = { __typename?: 'Query', getUser: { __typename?: 'User', username: string, email: string, id: number, imageUrl?: string | null } };
 
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type MeQuery = { __typename?: 'Query', me?: { __typename?: 'User', username: string, email: string, id: number } | null };
+export type MeQuery = { __typename?: 'Query', me?: { __typename?: 'User', username: string, email: string, id: number, imageUrl?: string | null } | null };
 
 export type OrganizationQueryVariables = Exact<{
   id: Scalars['Int']['input'];
@@ -343,6 +357,7 @@ export const RegularUserFragmentDoc = gql`
   username
   email
   id
+  imageUrl
 }
     `;
 export const ChangeInfoDocument = gql`
@@ -717,6 +732,45 @@ export function useUpdateOrganizationMutation(baseOptions?: Apollo.MutationHookO
 export type UpdateOrganizationMutationHookResult = ReturnType<typeof useUpdateOrganizationMutation>;
 export type UpdateOrganizationMutationResult = Apollo.MutationResult<UpdateOrganizationMutation>;
 export type UpdateOrganizationMutationOptions = Apollo.BaseMutationOptions<UpdateOrganizationMutation, UpdateOrganizationMutationVariables>;
+export const UploadImageDocument = gql`
+    mutation UploadImage($imageUrl: String!) {
+  uploadImg(imageUrl: $imageUrl) {
+    user {
+      ...RegularUser
+    }
+    errors {
+      ...RegularError
+    }
+  }
+}
+    ${RegularUserFragmentDoc}
+${RegularErrorFragmentDoc}`;
+export type UploadImageMutationFn = Apollo.MutationFunction<UploadImageMutation, UploadImageMutationVariables>;
+
+/**
+ * __useUploadImageMutation__
+ *
+ * To run a mutation, you first call `useUploadImageMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUploadImageMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [uploadImageMutation, { data, loading, error }] = useUploadImageMutation({
+ *   variables: {
+ *      imageUrl: // value for 'imageUrl'
+ *   },
+ * });
+ */
+export function useUploadImageMutation(baseOptions?: Apollo.MutationHookOptions<UploadImageMutation, UploadImageMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UploadImageMutation, UploadImageMutationVariables>(UploadImageDocument, options);
+      }
+export type UploadImageMutationHookResult = ReturnType<typeof useUploadImageMutation>;
+export type UploadImageMutationResult = Apollo.MutationResult<UploadImageMutation>;
+export type UploadImageMutationOptions = Apollo.BaseMutationOptions<UploadImageMutation, UploadImageMutationVariables>;
 export const VoteDocument = gql`
     mutation Vote($organizationId: Int!, $value: Int!) {
   vote(organizationId: $organizationId, value: $value)

@@ -42,4 +42,8 @@ export class User extends BaseEntity {
 
   @OneToMany(() => Star, (star) => star.user)
   stars: Star[];
+
+  @Field(() => String, { nullable: true })
+  @Column({ type: "text", nullable: true })
+  imageUrl: string | null;
 }

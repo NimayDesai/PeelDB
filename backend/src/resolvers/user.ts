@@ -85,6 +85,16 @@ class UserResponse {
 
 @Resolver(User)
 export class UserResolver {
+  @Mutation(() => UserResponse)
+  async uploadImg(
+    @Ctx() { req }: MyContext,
+    @Arg("imageUrl", () => String) imageUrl: string
+  ): Promise<UserResponse> {
+    const userId = req.session.userId;
+    await User.update({ id: userId }, { imageUrl });
+    const user = await User.findOne({ where: { id: userId } });
+    return { user };
+  }
   @Query(() => User)
   async getUser(@Arg("id", () => Int) id: number): Promise<User | null> {
     const user = await dataSource
