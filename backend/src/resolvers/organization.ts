@@ -139,6 +139,7 @@ export class OrganizationResolver {
     @Arg("searchValue", () => String) searchValue: string,
     @Arg("searchOptions", () => String) searchOptions: string,
     @Arg("cursor", () => String, { nullable: true }) cursor: string | null,
+    @Arg("userId", () => Int, { nullable: true }) userId: number | null,
     @Ctx() { req }: MyContext
   ): Promise<PaginatedOrganizations> {
     const realLimit = Math.min(100, limit); // Cap limit at 100
@@ -175,7 +176,7 @@ export class OrganizationResolver {
     from organization o 
     inner join public.user u on u.id = o."creatorId"
     where LOWER(o.${searchOptions}) LIKE '%${searchValue}%'
-
+    ${userId ? `and o."creatorId" = ${userId}` : ""} 
     ${cursor ? `and o."createdAt" < $${cursorIndex}` : ""}
     order by o."createdAt" DESC
     limit $1
@@ -211,7 +212,6 @@ export class OrganizationResolver {
     from organization o
     inner join public.user u on u.id = o."creatorId"
     where o.id = ${id}
-
     `);
 
     return organizations[0];

@@ -3,12 +3,14 @@ query Organizations(
   $cursor: String
   $searchOptions: String!
   $searchValue: String!
+  $userId: Int
 ) {
   organizations(
     limit: $limit
     cursor: $cursor
     searchOptions: $searchOptions
     searchValue: $searchValue
+    userId: $userId
   ) {
     hasMore
     organizations {

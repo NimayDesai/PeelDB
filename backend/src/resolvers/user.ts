@@ -85,6 +85,18 @@ class UserResponse {
 
 @Resolver(User)
 export class UserResolver {
+  @Query(() => User)
+  async getUser(@Arg("id", () => Int) id: number): Promise<User | null> {
+    const user = await dataSource
+      .getRepository(User)
+      .findOne({ where: { id } });
+    if (!user) {
+      return null;
+    } else {
+      return user;
+    }
+  }
+
   @Mutation(() => UserResponse)
   async changePassword(
     @Arg("token") token: string,
@@ -320,6 +332,26 @@ export class UserResolver {
         ? { email: options.usernameOrEmail }
         : { username: options.usernameOrEmail },
     });
+    if (!options.usernameOrEmail) {
+      return {
+        errors: [
+          {
+            field: "usernameOrEmail",
+            message: "No username or email supplied",
+          },
+        ],
+      };
+    }
+    if (!options.password) {
+      return {
+        errors: [
+          {
+            field: "password",
+            message: "No password supplied",
+          },
+        ],
+      };
+    }
     if (!user) {
       // No user with the specified Username or Email
       return {
