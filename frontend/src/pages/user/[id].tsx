@@ -1,12 +1,4 @@
-import React from "react";
-import { useGetIntegerId } from "../../utils/useGetIntId";
-import { Wrapper } from "../../components/Wrapper";
-import {
-  useDeleteOrganizationMutation,
-  useGetUserQuery,
-  useMeQuery,
-  useOrganizationsQuery,
-} from "../../gql/generated/graphql";
+import { DeleteIcon, EditIcon } from "@chakra-ui/icons";
 import {
   Box,
   Button,
@@ -21,9 +13,17 @@ import {
   StackDivider,
   Text,
 } from "@chakra-ui/react";
-import { DeleteIcon, EditIcon } from "@chakra-ui/icons";
-import { StarSection } from "../../components/StarSection";
 import NextLink from "next/link";
+import React from "react";
+import { StarSection } from "../../components/StarSection";
+import { Wrapper } from "../../components/Wrapper";
+import {
+  useDeleteOrganizationMutation,
+  useGetUserQuery,
+  useMeQuery,
+  useOrganizationByUserQuery,
+} from "../../gql/generated/graphql";
+import { useGetIntegerId } from "../../utils/useGetIntId";
 
 const ViewUser: React.FC<{}> = ({}) => {
   const integerId = useGetIntegerId();
@@ -35,12 +35,10 @@ const ViewUser: React.FC<{}> = ({}) => {
   const { data: meData } = useMeQuery();
   const [deleteOrganization] = useDeleteOrganizationMutation();
 
-  const { data, fetchMore, variables } = useOrganizationsQuery({
+  const { data, fetchMore, variables } = useOrganizationByUserQuery({
     variables: {
       limit: 10,
       cursor: null,
-      searchValue: "",
-      searchOptions: "name",
       userId: integerId,
     },
     skip: integerId === -1,
@@ -54,15 +52,15 @@ const ViewUser: React.FC<{}> = ({}) => {
           <Box mt={8}>
             <Stack spacing={8}>
               {/* Display server error if no data but return no results found for empty data */}
-              {!data?.organizations ||
-              data!.organizations.organizations.length < 1 ? (
+              {!data?.organizationbyUser ||
+              data!.organizationbyUser.organizations.length < 1 ? (
                 <div>
-                  {!data?.organizations
+                  {!data?.organizationbyUser
                     ? "Server Error"
                     : "There are no search results availble"}
                 </div>
               ) : (
-                data?.organizations.organizations.map((o) => (
+                data?.organizationbyUser.organizations.map((o) => (
                   <Card key={o.id}>
                     <CardHeader flexDirection={"row"}>
                       <Flex align={"center"}>
@@ -144,7 +142,7 @@ const ViewUser: React.FC<{}> = ({}) => {
               )}
             </Stack>
 
-            {data && data.organizations.hasMore ? (
+            {data && data.organizationbyUser.hasMore ? (
               <Flex mt={8}>
                 <Button
                   my={8}
@@ -155,8 +153,8 @@ const ViewUser: React.FC<{}> = ({}) => {
                       variables: {
                         limit: variables?.limit,
                         cursor:
-                          data.organizations.organizations[
-                            data.organizations.organizations.length - 1
+                          data.organizationbyUser.organizations[
+                            data.organizationbyUser.organizations.length - 1
                           ].createdAt,
                       },
                     });

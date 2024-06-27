@@ -1,7 +1,7 @@
-import { Box, Button, Container, Input, Progress } from "@chakra-ui/react";
+import { Button, Container, Input, Progress } from "@chakra-ui/react";
 import React, { useState } from "react";
-import { useEdgeStore } from "../lib/edgestore";
 import { useUploadImageMutation } from "../gql/generated/graphql";
+import { useEdgeStore } from "../lib/edgestore";
 import { Wrapper } from "./Wrapper";
 
 export const ImageUpload: React.FC<{}> = ({}) => {

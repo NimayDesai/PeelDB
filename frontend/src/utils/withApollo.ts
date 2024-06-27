@@ -24,6 +24,21 @@ const client = new ApolloClient({
               };
             },
           },
+          organizationbyUser: {
+            keyArgs: [],
+            merge(
+              existing: PaginatedOrganizations | undefined,
+              incoming: PaginatedOrganizations
+            ): PaginatedOrganizations {
+              return {
+                ...incoming,
+                organizations: [
+                  ...(existing?.organizations || []),
+                  ...incoming.organizations,
+                ],
+              };
+            },
+          },
         },
       },
     },

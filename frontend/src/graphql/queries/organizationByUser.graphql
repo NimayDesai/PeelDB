@@ -1,0 +1,8 @@
+query OrganizationByUser($limit: Int!, $cursor: String, $userId: Int!) {
+  organizationbyUser(limit: $limit, cursor: $cursor, userId: $userId) {
+    hasMore
+    organizations {
+      ...OrganizationSnippet
+    }
+  }
+}

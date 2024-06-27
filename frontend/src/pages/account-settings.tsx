@@ -1,3 +1,4 @@
+import { DeleteIcon } from "@chakra-ui/icons";
 import {
   AlertDialog,
   AlertDialogBody,
@@ -17,7 +18,8 @@ import {
 } from "@chakra-ui/react";
 import { Form, Formik } from "formik";
 import { useRouter } from "next/router";
-import { forwardRef } from "react";
+import React, { forwardRef } from "react";
+import { ImageUpload } from "../components/ImageUpload";
 import { InputField } from "../components/InputField";
 import { PasswordField } from "../components/PasswordField";
 import { Wrapper } from "../components/Wrapper";
@@ -28,10 +30,6 @@ import {
 } from "../gql/generated/graphql";
 import { toErrorMap } from "../utils/toErrorMap";
 import { useIsAuth } from "../utils/useIsAuth";
-import { DeleteIcon } from "@chakra-ui/icons";
-import React from "react";
-import { ImageUpload } from "../components/ImageUpload";
-import Head from "next/head";
 
 const Register = forwardRef<HTMLInputElement, InputProps>(() => {
   const [changeInfo] = useChangeInfoMutation();

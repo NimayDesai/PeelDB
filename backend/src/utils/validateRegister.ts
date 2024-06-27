@@ -1,8 +1,13 @@
 import { RegisterInput } from "src/resolvers/user";
 
 export const validateRegister = (options: RegisterInput) => {
+  const regex = /[!@#$%^&*()\-+={}[\]:;"'<>,.?\/|\\]/;
+  const regexNums = /[^0-9]/;
+
   if (options.username!.length <= 2) {
+    // Username is too short
     if (!options.username) {
+      // Check if there is a username
       // No username supplied
       return {
         errors: [
@@ -25,7 +30,7 @@ export const validateRegister = (options: RegisterInput) => {
   }
   if (!options.email?.includes("@")) {
     if (!options.email) {
-      // Email is Invalid
+      // No email
       return {
         errors: [
           {
@@ -35,6 +40,7 @@ export const validateRegister = (options: RegisterInput) => {
         ],
       };
     }
+    // Email is Invalid
     return {
       errors: [
         {
@@ -58,7 +64,7 @@ export const validateRegister = (options: RegisterInput) => {
   if (options.password!.length <= 2) {
     // Password is too short
     if (!options.password) {
-      // Email is Invalid
+      // No password supplied
       return {
         errors: [
           {
@@ -68,6 +74,7 @@ export const validateRegister = (options: RegisterInput) => {
         ],
       };
     }
+    // Password is too short
     return {
       errors: [
         {
@@ -90,12 +97,34 @@ export const validateRegister = (options: RegisterInput) => {
   }
 
   if (options.username!.includes("@")) {
-    // Usrname is invalid
+    // Usrname is invalid (no at sign)
     return {
       errors: [
         {
           field: "username",
           message: "Username cannot include at sign",
+        },
+      ],
+    };
+  }
+  if (!regex.test(options.password)) {
+    // No sepcial character in password
+    return {
+      errors: [
+        {
+          field: "password",
+          message: "Password must contain at least one special character",
+        },
+      ],
+    };
+  }
+  if (!regexNums.test(options.password)) {
+    // No numbers in password
+    return {
+      errors: [
+        {
+          field: "password",
+          message: "Password must contain at least one number",
         },
       ],
     };

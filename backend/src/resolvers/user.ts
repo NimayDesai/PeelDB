@@ -85,15 +85,19 @@ class UserResponse {
 
 @Resolver(User)
 export class UserResolver {
+  // Uploads an image based on the passed imageUrl
   @Mutation(() => UserResponse)
   async uploadImg(
     @Ctx() { req }: MyContext,
     @Arg("imageUrl", () => String) imageUrl: string
   ): Promise<UserResponse> {
+    // Get userId from the session
     const userId = req.session.userId;
+    // Update the User based on the new ID
     await User.update({ id: userId }, { imageUrl });
+    // Refetch the user to return
     const user = await User.findOne({ where: { id: userId } });
-    return { user };
+    return { user }; // Return the user
   }
   @Query(() => User)
   async getUser(@Arg("id", () => Int) id: number): Promise<User | null> {

@@ -132,6 +132,61 @@ export class OrganizationResolver {
     }
     return true;
   }
+
+  @Query(() => PaginatedOrganizations)
+  async organizationbyUser(
+    @Arg("limit", () => Int) limit: number,
+    @Arg("cursor", () => String, { nullable: true }) cursor: string | null,
+    @Arg("userId", () => Int, { nullable: true }) userId: number | null,
+    @Ctx() { req }: MyContext
+  ) {
+    const realLimit = Math.min(100, limit); // Cap limit at 100
+    const extraLimit = realLimit + 1; // Fetch the next organization, but do not display it
+    const replacements: any[] = [extraLimit];
+
+    if (req.session.userId) {
+      // If there is al ogged in user
+      replacements.push(req.session.userId);
+    }
+
+    let cursorIndex = 99;
+
+    if (cursor) {
+      replacements.push(new Date(parseInt(cursor)));
+      cursorIndex = replacements.length;
+    }
+    // Get all organizations, passing in the cursor, and taking in the limit while filtering results by the search options
+    const organizations = await dataSource.query(
+      `
+    select o.*,
+    json_build_object(
+      'username', u.username,
+      'id', u.id,
+      'email', u.email,
+      'createdAt', u."createdAt",
+      'updatedAt', u."updatedAt"
+      ) creator,
+    ${
+      req.session.userId // If user is logged in get their voteStatus
+        ? '(select value from star where "userId" = $2 and "organizationId" = o.id) "voteStatus"'
+        : 'null as "voteStatus"'
+    }
+    from organization o 
+    inner join public.user u on u.id = o."creatorId"
+    where o."creatorId" = ${userId}
+    ${cursor ? `and o."createdAt" < $${cursorIndex}` : ""}
+    order by o."createdAt" DESC
+    limit $1
+    `,
+      replacements
+    );
+
+    return {
+      organizations: organizations.slice(0, realLimit), // Liimit number of Organizations based on the limit
+      hasMore: organizations.length === extraLimit,
+    };
+  }
+
   // Gets all organizations based on the cursor and limit
   @Query(() => PaginatedOrganizations)
   async organizations(
