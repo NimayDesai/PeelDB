@@ -1,4 +1,4 @@
-# For FBLA 2023-2024 CNLC (Individual)
+# For FBLA 2023-2024 NLC (Individual)
 
 ## By Nimay Desai
 
