@@ -169,6 +169,13 @@ export const NavBar = () => {
                         </Text>
                       </Link>
                     </NextLink>
+                    <NextLink href="/contact">
+                      <Link size={"4xl"}>
+                        <Text display="block" size="xl">
+                          Contact
+                        </Text>
+                      </Link>
+                    </NextLink>
                     {body}
                   </HStack>
                 </Box>
