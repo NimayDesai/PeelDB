@@ -16,6 +16,8 @@ import { isAuth } from "../middleware/isAuth";
 import { Star } from "../entities/Stars";
 import dataSource from "../db.config";
 import { contactUser } from "../utils/contact";
+import { User } from "../entities/User";
+import { withGpt } from "../utils/withGpt";
 
 // Input for creating an organization
 @InputType()
@@ -131,6 +133,17 @@ export class OrganizationResolver {
       });
     }
     return true;
+  }
+
+  @Query(() => String)
+  async askGpt(
+    @Arg("prompt", () => String) prompt: string,
+    @Ctx() { req }: MyContext
+  ): Promise<String> {
+    const userId = req.session.userId;
+    const user: User | null = await User.findOne({ where: { id: userId } });
+    const username: string = req.session.userId ? user!.username : "";
+    return withGpt(username, prompt);
   }
 
   @Query(() => PaginatedOrganizations)

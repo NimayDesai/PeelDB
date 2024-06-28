@@ -1,5 +1,6 @@
 import { DeleteIcon, EditIcon } from "@chakra-ui/icons";
 import {
+  Avatar,
   Box,
   Button,
   Card,
@@ -47,8 +48,22 @@ const ViewUser: React.FC<{}> = ({}) => {
     <Wrapper variant="regular">
       {userData?.getUser ? (
         <Box m="auto">
-          <Heading>User: {userData.getUser.username}</Heading>
-          <Heading>Organizations created</Heading>
+          <Flex dir="column" alignItems={"center"}>
+            <Avatar
+              name={userData.getUser.username}
+              h="96px"
+              w="96px"
+              src={
+                userData.getUser.imageUrl
+                  ? userData.getUser.imageUrl
+                  : undefined
+              }
+            />
+            <Heading ml={4}>{userData.getUser.username}</Heading>
+          </Flex>
+          <Heading m={"auto"} mt={8}>
+            Organizations created
+          </Heading>
           <Box mt={8}>
             <Stack spacing={8}>
               {/* Display server error if no data but return no results found for empty data */}

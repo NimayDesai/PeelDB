@@ -117,9 +117,7 @@ const Index = ({}) => {
                         <Heading size="lg">Name: {o.name} </Heading>
                       </Link>
                     </NextLink>
-                    {meData?.me ? (
-                      <StarSection isOnMainPage organization={o} />
-                    ) : null}
+                    <StarSection isOnMainPage organization={o} />
                     {meData?.me?.id === o.creatorId ? (
                       <IconButton
                         icon={<DeleteIcon />}

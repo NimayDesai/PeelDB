@@ -16,7 +16,6 @@ import { MyContext } from "./types";
 const main = async () => {
   await dataSource.initialize(); // Initialize the database
   // await dataSource.runMigrations();
-
   const app = express(); // Create express app
 
   const redis = new Redis(process.env.REDIS_URL); // Create redis store and redis client

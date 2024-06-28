@@ -1,0 +1,3 @@
+query AskGpt($prompt: String!) {
+  askGpt(prompt: $prompt)
+}

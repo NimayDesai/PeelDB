@@ -213,6 +213,15 @@ export const NavBar = () => {
                             </NextLink>
                           </MenuItem>
                           <MenuItem>
+                            <NextLink href="/contact">
+                              <Link size={"4xl"}>
+                                <Text display="block" size="xl">
+                                  Contact
+                                </Text>
+                              </Link>
+                            </NextLink>
+                          </MenuItem>
+                          <MenuItem>
                             <NextLink href="/about">
                               <Link size={"4xl"}>
                                 <Text display="block" size="xl">
@@ -239,6 +248,15 @@ export const NavBar = () => {
                               <Link size={"4xl"}>
                                 <Text display="block" size="xl">
                                   Help
+                                </Text>
+                              </Link>
+                            </NextLink>
+                          </MenuItem>
+                          <MenuItem>
+                            <NextLink href="/contact">
+                              <Link size={"4xl"}>
+                                <Text display="block" size="xl">
+                                  Contact
                                 </Text>
                               </Link>
                             </NextLink>

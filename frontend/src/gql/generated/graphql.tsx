@@ -134,12 +134,18 @@ export type PaginatedOrganizations = {
 
 export type Query = {
   __typename?: 'Query';
+  askGpt: Scalars['String']['output'];
   countUsers: Scalars['Int']['output'];
   getUser: User;
   me?: Maybe<User>;
   organization?: Maybe<Organization>;
   organizationbyUser: PaginatedOrganizations;
   organizations: PaginatedOrganizations;
+};
+
+
+export type QueryAskGptArgs = {
+  prompt: Scalars['String']['input'];
 };
 
 
@@ -297,6 +303,13 @@ export type VoteMutationVariables = Exact<{
 
 
 export type VoteMutation = { __typename?: 'Mutation', vote: boolean };
+
+export type AskGptQueryVariables = Exact<{
+  prompt: Scalars['String']['input'];
+}>;
+
+
+export type AskGptQuery = { __typename?: 'Query', askGpt: string };
 
 export type CountUsersQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -820,6 +833,44 @@ export function useVoteMutation(baseOptions?: Apollo.MutationHookOptions<VoteMut
 export type VoteMutationHookResult = ReturnType<typeof useVoteMutation>;
 export type VoteMutationResult = Apollo.MutationResult<VoteMutation>;
 export type VoteMutationOptions = Apollo.BaseMutationOptions<VoteMutation, VoteMutationVariables>;
+export const AskGptDocument = gql`
+    query AskGpt($prompt: String!) {
+  askGpt(prompt: $prompt)
+}
+    `;
+
+/**
+ * __useAskGptQuery__
+ *
+ * To run a query within a React component, call `useAskGptQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAskGptQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useAskGptQuery({
+ *   variables: {
+ *      prompt: // value for 'prompt'
+ *   },
+ * });
+ */
+export function useAskGptQuery(baseOptions: Apollo.QueryHookOptions<AskGptQuery, AskGptQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<AskGptQuery, AskGptQueryVariables>(AskGptDocument, options);
+      }
+export function useAskGptLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AskGptQuery, AskGptQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<AskGptQuery, AskGptQueryVariables>(AskGptDocument, options);
+        }
+export function useAskGptSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<AskGptQuery, AskGptQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<AskGptQuery, AskGptQueryVariables>(AskGptDocument, options);
+        }
+export type AskGptQueryHookResult = ReturnType<typeof useAskGptQuery>;
+export type AskGptLazyQueryHookResult = ReturnType<typeof useAskGptLazyQuery>;
+export type AskGptSuspenseQueryHookResult = ReturnType<typeof useAskGptSuspenseQuery>;
+export type AskGptQueryResult = Apollo.QueryResult<AskGptQuery, AskGptQueryVariables>;
 export const CountUsersDocument = gql`
     query countUsers {
   countUsers
